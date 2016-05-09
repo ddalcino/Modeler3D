@@ -6,19 +6,27 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 
+#include "primitivedefinition.h"
+
 class GeometryEngine : protected QOpenGLFunctions
 {
 public:
-    GeometryEngine();
+    GeometryEngine(PrimitiveDefinition::Types t);
     virtual ~GeometryEngine();
 
-    void drawCubeGeometry(QOpenGLShaderProgram *program);
+    //void drawCubeGeometry(QOpenGLShaderProgram *program);
+
+    void drawPrimGeometry(QOpenGLShaderProgram * program);
 
 private:
-    void initCubeGeometry();
+    //void initCubeGeometry();
+
+    void initPrimGeometry(PrimitiveDefinition::Types t);
 
     QOpenGLBuffer arrayBuf;
     QOpenGLBuffer indexBuf;
+
+    PrimitiveDefinition* prim;
 };
 
 #endif // GEOMETRYENGINE_H

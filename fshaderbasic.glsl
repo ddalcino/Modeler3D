@@ -34,9 +34,9 @@ void main()
   float Ks = pow( max(dot(N, H), -dot(N, H)), Shininess );
   vec4  specular = Ks * SpecularProduct;
 
-//  if( dot(L, N) < 0.0 ) {
-//    specular = vec4(0.0, 0.0, 0.0, 1.0);
-//  }
+  if( dot(L, N) < 0.0 ) {
+    specular = vec4(0.0, 0.0, 0.0, 1.0);
+  }
 
   gl_FragColor = ambient + diffuse + specular;
 }

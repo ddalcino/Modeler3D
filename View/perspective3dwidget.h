@@ -1,6 +1,8 @@
 #ifndef PERSPECTIVE3DWIDGET_H
 #define PERSPECTIVE3DWIDGET_H
 
+
+// QT includes
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <QMatrix4x4>
@@ -12,6 +14,7 @@
 #include <QOpenGLTexture>
 
 #include "geometryengine.h"
+#include "primitivedefinition.h"
 
 /**
  * @brief The Perspective3DWidget class
@@ -52,6 +55,7 @@ private:
     QVector4D lightPosition;
 //    qreal angularSpeed;
     QQuaternion rotation;
+
 
 signals:
 

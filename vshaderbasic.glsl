@@ -7,7 +7,7 @@
 
 // inputs come from graphics card memory
 attribute  vec4 a_position;
-//attribute  vec3 vNormal;
+attribute  vec4 a_normal;
 
 // inputs come directly from C++ code
 uniform mat4 ModelView;
@@ -45,13 +45,13 @@ void main()
     vec3 pos = vec4(ModelView * a_position).xyz;
 
     // We don't have normals yet, so fake them:
-    vec4 a_normal = vec4(0.7, 0.0, 0.7, 1.0);
+    //vec4 a_normal = vec4(0.7, 0.0, 0.7, 1.0);
 
     Light = normalize( LightPosition.xyz - pos );
     View = normalize( -pos );
 
     // Transform vertex normal into eye coordinates
-    Normal = vec4(normalize( ModelView*a_normal )).xyz;
+    Normal = vec4(normalize( ModelView* a_normal )).xyz;
 
     // Calculate vertex position in screen space
     gl_Position = Projection * ModelView * a_position;

@@ -92,7 +92,9 @@ void Perspective3DWidget::initializeGL()
     // Enable back face culling
     glEnable(GL_CULL_FACE);
 
-    geometries = new GeometryEngine;
+
+    //geometries = new GeometryEngine;
+    geometries = new GeometryEngine(PrimitiveDefinition::CONE);
 }
 
 void Perspective3DWidget::initShaders()
@@ -170,6 +172,6 @@ void Perspective3DWidget::paintGL()
 
 
     // Draw cube geometry
-    geometries->drawCubeGeometry(&program);
+    geometries->drawPrimGeometry(&program);
 }
 

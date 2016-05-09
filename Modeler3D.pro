@@ -14,12 +14,18 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     View/perspective3dwidget.cpp \
-    View/geometryengine.cpp
+    View/geometryengine.cpp \
+    View/primitivedefinition.cpp \
+    View/globject.cpp
+#    View/scenegl.cpp
 #    View/mainwindow.cpp
 
 HEADERS  += \
     View/perspective3dwidget.h \
-    View/geometryengine.h
+    View/geometryengine.h \
+    View/primitivedefinition.h \
+    View/globject.h
+#    View/scenegl.h
 #    View/mainwindow.h
 
 #FORMS    += mainwindow.ui
