@@ -94,7 +94,7 @@ void Perspective3DWidget::initializeGL()
 
 
     //geometries = new GeometryEngine;
-    geometries = new GeometryEngine(PrimitiveDefinition::CONE);
+    geometries = new GeometryEngine(PrimitiveDefinition::CUBE);
 }
 
 void Perspective3DWidget::initShaders()

@@ -64,6 +64,7 @@ void SceneGl::addPrimitive(PrimitiveDefinition::Types t)
  */
 int SceneGl::getIndexOfPrim(PrimitiveDefinition::Types t) const {
     int i = 0;
+//TODO: This runs in O(n) time, but it should run in constant time. Use Hashmap, or translate t into an integer?
     for (const PrimitiveDefinition& p : primitives) {
         if (p.getType() == t) { return i; }
         ++i;
