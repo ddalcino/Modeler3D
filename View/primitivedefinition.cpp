@@ -83,11 +83,16 @@ PrimitiveDefinition::PrimitiveDefinition(Types t, int numVerticesPerCircle,
             float x = cos(startAngle) * radius;
             float z = sin(startAngle) * radius;
             float y = height;
+
+            // Both normals should be: normal( tangent (to circle, in xz plane) cross QVector3D(-x, y, -z) )
+            // But since it's a 45 degree angle, we can take the shortcut:
+            QVector3D normal(x, radius, z); normal.normalize();
+
             vertices.push_back(VertexData(QVector3D(x, 0, z),
-                                          QVector3D(x, 0, z)));
+                                          normal));
             indices.push_back(vertices.size()-1); //2*i);
             vertices.push_back(VertexData(QVector3D(0, y, 0),
-                                          QVector3D(0, 1.0, 0)));
+                                          normal));
             indices.push_back(vertices.size()-1); //2*i + 1);
         }
         // duplicate the last index to end the triangle strip

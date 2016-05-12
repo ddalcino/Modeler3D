@@ -16,7 +16,7 @@ public:
 
     //void drawCubeGeometry(QOpenGLShaderProgram *program);
 
-    void drawPrimGeometry(QOpenGLShaderProgram * program);
+    void drawPrimGeometry(QOpenGLShaderProgram * program, bool isWireframeMode);
 
 private:
     //void initCubeGeometry();

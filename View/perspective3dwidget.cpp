@@ -7,7 +7,8 @@ Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     texture(NULL),
     rotationAxis(0, 0, 0),
     cameraPosition(0, 0, -5),
-    lightPosition(-5, 5, -5, 1.0)
+    lightPosition(-5, 5, -5, 1.0),
+    isWireframeMode(false)
 {
     qDebug() << "Perspective3DWidget constructor called";
 }
@@ -155,7 +156,7 @@ void Perspective3DWidget::paintGL()
     matrix.translate(cameraPosition);
     matrix.rotate(rotation);
 
-//    // Set modelview and projection matrix
+    // Set modelview and projection matrices
     program.setUniformValue("Projection", projection);
     program.setUniformValue("ModelView", matrix);
     program.setUniformValue("LightPosition", lightPosition);
@@ -164,7 +165,7 @@ void Perspective3DWidget::paintGL()
 //    // Use texture unit 0 which contains nothing, yet
 //    program.setUniformValue("vertex_color", QVector3D(0.2, 0.6, 0.8));
 
-//    // Set Ambient, Diffuse, Specular products, and Shininess for Phong-Blinn shader
+    // Set Ambient, Diffuse, Specular products, and Shininess for Phong-Blinn shader
     program.setUniformValue("AmbientProduct", QVector4D( 0.2, 0.2, 0.2, 1.0 ));
     program.setUniformValue("DiffuseProduct", QVector4D( 0.7, 0.7, 0.7, 1.0 ));
     program.setUniformValue("SpecularProduct", QVector4D( 0.1, 0.1, 0.1, 1.0 ));
@@ -172,6 +173,6 @@ void Perspective3DWidget::paintGL()
 
 
     // Draw cube geometry
-    geometries->drawPrimGeometry(&program);
+    geometries->drawPrimGeometry(&program, isWireframeMode);
 }
 

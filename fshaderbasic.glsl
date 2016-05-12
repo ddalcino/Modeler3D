@@ -27,8 +27,9 @@ void main()
   // Compute terms in the illumination equation
   vec4 ambient = AmbientProduct;
 
-  // two-sided lighting
-  float Kd = max( dot(L, N), -dot(L, N) );
+//  // two-sided lighting
+//  float Kd = max( dot(L, N), -dot(L, N) );
+  float Kd = dot(L, N);
   vec4  diffuse = Kd * DiffuseProduct;
 
   float Ks = pow( max(dot(N, H), -dot(N, H)), Shininess );

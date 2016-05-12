@@ -114,7 +114,7 @@ void GeometryEngine::initPrimGeometry(PrimitiveDefinition::Types t)
     indexBuf.allocate(prim->getIndices(), prim->getNumIndices() * sizeof(GLushort));
 }
 
-void GeometryEngine::drawPrimGeometry(QOpenGLShaderProgram *program)
+void GeometryEngine::drawPrimGeometry(QOpenGLShaderProgram *program, bool isWireframeMode)
 {
     // Tell OpenGL which VBOs to use
     arrayBuf.bind();
@@ -137,5 +137,6 @@ void GeometryEngine::drawPrimGeometry(QOpenGLShaderProgram *program)
     program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(_VertexData));
 
     // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLE_STRIP, prim->getNumIndices(), GL_UNSIGNED_SHORT, 0);
+    glDrawElements(isWireframeMode ? GL_LINE_STRIP : GL_TRIANGLE_STRIP,
+                   prim->getNumIndices(), GL_UNSIGNED_SHORT, 0);
 }

@@ -56,6 +56,7 @@ private:
 //    qreal angularSpeed;
     QQuaternion rotation;
 
+    bool isWireframeMode;
 
 signals:
 
