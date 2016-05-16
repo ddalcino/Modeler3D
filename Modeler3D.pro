@@ -16,7 +16,10 @@ SOURCES += main.cpp\
     View/perspective3dwidget.cpp \
     View/geometryengine.cpp \
     View/primitivedefinition.cpp \
-    View/globject.cpp
+    View/globject.cpp \
+    View/perspectivewindow.cpp \
+    View/editcameradialog.cpp \
+    View/editobjectdialog.cpp
 #    View/scenegl.cpp
 #    View/mainwindow.cpp
 
@@ -24,7 +27,11 @@ HEADERS  += \
     View/perspective3dwidget.h \
     View/geometryengine.h \
     View/primitivedefinition.h \
-    View/globject.h
+    View/globject.h \
+    View/perspectivewindow.h \
+    View/trackball.h \
+    View/editcameradialog.h \
+    View/editobjectdialog.h
 #    View/scenegl.h
 #    View/mainwindow.h
 
@@ -36,4 +43,9 @@ RESOURCES += \
     shaders.qrc
 
 CONFIG += c++11
+
+FORMS += \
+    View/perspectivewindow.ui \
+    View/editcameradialog.ui \
+    View/editobjectdialog.ui
 

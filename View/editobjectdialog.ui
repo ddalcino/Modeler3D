@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EditObjectDialog</class>
+ <widget class="QDialog" name="EditObjectDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>402</width>
+    <height>504</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Edit Object Dialog</string>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>480</y>
+     <width>401</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>401</width>
+     <height>477</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutPosX">
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinPosX">
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPosX">
+        <property name="text">
+         <string>Pos X</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hSliderPosX">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutPosY">
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinPosY">
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPosY">
+        <property name="text">
+         <string>Pos Y</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hSliderPosY">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutPosZ">
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinPosZ">
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPosZ">
+        <property name="text">
+         <string>Pos Z</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hSliderPosZ">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutRotX">
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinRotX"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblRotX">
+        <property name="text">
+         <string>Rot Axis X</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hSliderRotX">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutRotY">
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinRotY"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblRotY">
+        <property name="text">
+         <string>Rot Axis Y</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hSliderRotY">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutRotZ">
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinRotZ"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblRotZ">
+        <property name="text">
+         <string>Rot Axis Z</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hSliderRotZ">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutRotAngle">
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinRotAngle"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblRotationAngle">
+        <property name="text">
+         <string>Rot Angle</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hSliderRotAngle">
+        <property name="maximum">
+         <number>360</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutScaleX">
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinScaleX">
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblScaleX">
+        <property name="text">
+         <string>Scale X</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hSliderScaleX">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutScaleY">
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinScaleY">
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblScaleY">
+        <property name="text">
+         <string>Scale Y</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hSliderScaleY">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutScaleZ">
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinScaleZ">
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblScaleZ">
+        <property name="text">
+         <string>Scale Z</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hSliderScaleZ">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutSkewX">
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinSkewX"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSkewX">
+        <property name="text">
+         <string>Skew X</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hSliderSkewX">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutSkewY">
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinSkewY"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSkewY">
+        <property name="text">
+         <string>Skew Y</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hSliderSkewY">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutSkewZ">
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinSkewZ"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSkewZ">
+        <property name="text">
+         <string>Skew Z</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hSliderSkewZ">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>EditObjectDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>EditObjectDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

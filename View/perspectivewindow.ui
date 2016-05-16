@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PerspectiveWindow</class>
+ <widget class="QMainWindow" name="PerspectiveWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="Perspective3DWidget" name="perspectiveGLWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>576</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_Edit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="actionEdit_Camera"/>
+    <addaction name="actionEdit_Object"/>
+   </widget>
+   <widget class="QMenu" name="menuPrimitive">
+    <property name="title">
+     <string>&amp;Primitive</string>
+    </property>
+    <addaction name="action_Cube"/>
+    <addaction name="action_Sphere"/>
+    <addaction name="actionC_ylinder"/>
+    <addaction name="actionC_one"/>
+   </widget>
+   <addaction name="menu_File"/>
+   <addaction name="menu_Edit"/>
+   <addaction name="menuPrimitive"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionEdit_Camera">
+   <property name="text">
+    <string>Edit &amp;Camera...</string>
+   </property>
+  </action>
+  <action name="actionEdit_Object">
+   <property name="text">
+    <string>Edit &amp;Object...</string>
+   </property>
+  </action>
+  <action name="action_Cube">
+   <property name="text">
+    <string>&amp;Cube</string>
+   </property>
+  </action>
+  <action name="action_Sphere">
+   <property name="text">
+    <string>&amp;Sphere</string>
+   </property>
+  </action>
+  <action name="actionC_ylinder">
+   <property name="text">
+    <string>C&amp;ylinder</string>
+   </property>
+  </action>
+  <action name="actionC_one">
+   <property name="text">
+    <string>C&amp;one</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Perspective3DWidget</class>
+   <extends>QOpenGLWidget</extends>
+   <header>View/perspective3dwidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

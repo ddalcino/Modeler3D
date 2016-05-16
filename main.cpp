@@ -4,25 +4,24 @@
 #include <QSurfaceFormat>
 
 #ifndef QT_NO_OPENGL
-#include "View/perspective3dwidget.h"
+//#include "View/perspective3dwidget.h"
+#include "View/perspectivewindow.h"
 #endif
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-//    MainWindow w;
-//    w.show();
 
 
-    QSurfaceFormat format;
-    format.setDepthBufferSize(24);
-    QSurfaceFormat::setDefaultFormat(format);
+//    QSurfaceFormat format;
+//    format.setDepthBufferSize(24);
+//    QSurfaceFormat::setDefaultFormat(format);
 
-    a.setApplicationName("Modeler3D");
-    a.setApplicationVersion("0.0.1");
+//    a.setApplicationName("Modeler3D");
+//    a.setApplicationVersion("0.0.1");
 #ifndef QT_NO_OPENGL
-    Perspective3DWidget widget;
-    widget.show();
+    PerspectiveWindow w;
+    w.show();
 #else
     QLabel note("OpenGL Support required");
     note.show();

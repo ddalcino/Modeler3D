@@ -5,6 +5,7 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
+#include <QVector3D>
 
 #include "primitivedefinition.h"
 
@@ -18,6 +19,15 @@ public:
 
     void drawPrimGeometry(QOpenGLShaderProgram * program, bool isWireframeMode);
 
+    void setScale(const QVector3D& s) {scale = s;}
+    void setTranslation(const QVector3D& s) {translation = s;}
+    void setRotation(const QVector3D& s, float theta) {rotation = s;
+                                                       rotationAngle=theta;}
+    const QVector3D& getScale() const {return scale;}
+    const QVector3D& getTranslation() const {return translation;}
+    const QVector3D& getRotation(float& theta) const {theta=rotationAngle;
+                                                return rotation;}
+
 private:
     //void initCubeGeometry();
 
@@ -27,6 +37,9 @@ private:
     QOpenGLBuffer indexBuf;
 
     PrimitiveDefinition* prim;
+
+    QVector3D translation, scale, rotation;
+    float rotationAngle;
 };
 
 #endif // GEOMETRYENGINE_H

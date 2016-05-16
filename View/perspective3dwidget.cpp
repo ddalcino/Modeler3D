@@ -1,6 +1,7 @@
 #include "perspective3dwidget.h"
 #include <QMouseEvent>
 #include <QDebug>
+#include <QPoint>
 
 Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     QOpenGLWidget(parent),
@@ -8,6 +9,7 @@ Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     rotationAxis(0, 0, 0),
     cameraPosition(0, 0, -5),
     lightPosition(-5, 5, -5, 1.0),
+    trackball(),
     isWireframeMode(false)
 {
     qDebug() << "Perspective3DWidget constructor called";
@@ -18,6 +20,13 @@ Perspective3DWidget::~Perspective3DWidget()
     if (texture) {
         delete texture;
         texture = NULL;
+    }
+}
+
+void Perspective3DWidget::mouseMoveEvent(QMouseEvent *e) {
+    if (e->buttons() & Qt::LeftButton) {
+        trackball.dragMouse(e->pos());
+        update();
     }
 }
 
@@ -33,18 +42,22 @@ void Perspective3DWidget::mousePressEvent(QMouseEvent *e) {
 //        rotation.setZ(rotation.z() + 30.0);
 //    }
 //    static const float MULTIPLIER = 6.0;
-    rotationAxis.setX(/*rotationAxis.x() +
-                      MULTIPLIER */ (e->buttons() & Qt::LeftButton) ? 1 : 0);
-    rotationAxis.setY(/*rotationAxis.y() +
-                      MULTIPLIER */ (e->buttons() & Qt::RightButton) ? 1 : 0);
-    rotationAxis.setZ(/*rotationAxis.z() +
-                      MULTIPLIER */ (e->buttons() & Qt::MiddleButton) ? 1 : 0);
 
-    rotation = QQuaternion::fromAxisAndAngle(rotationAxis, 20.0) * rotation;
-    qDebug() << "Buttons pressed: " << e->buttons() << ", rotationAxis: "
-             << rotationAxis << ", rotation: " << rotation;
+    if (e->buttons() & Qt::LeftButton) {
+        trackball.startMouse(e->pos());
+    }
+//    rotationAxis.setX(/*rotationAxis.x() +
+//                      MULTIPLIER */ (e->buttons() & Qt::LeftButton) ? 1 : 0);
+//    rotationAxis.setY(/*rotationAxis.y() +
+//                      MULTIPLIER */ (e->buttons() & Qt::RightButton) ? 1 : 0);
+//    rotationAxis.setZ(/*rotationAxis.z() +
+//                      MULTIPLIER */ (e->buttons() & Qt::MiddleButton) ? 1 : 0);
 
-    update();
+//    rotation = QQuaternion::fromAxisAndAngle(rotationAxis, 20.0) * rotation;
+//    qDebug() << "Buttons pressed: " << e->buttons() << ", rotationAxis: "
+//             << rotationAxis << ", rotation: " << rotation;
+
+//    update();
 }
 
 void Perspective3DWidget::mouseReleaseEvent(QMouseEvent *e) {
@@ -96,6 +109,8 @@ void Perspective3DWidget::initializeGL()
 
     //geometries = new GeometryEngine;
     geometries = new GeometryEngine(PrimitiveDefinition::CUBE);
+
+    qDebug() << "made geometry engine";
 }
 
 void Perspective3DWidget::initShaders()
@@ -127,6 +142,12 @@ void Perspective3DWidget::initShaders()
     qDebug() << "initShaders() finished successfully";
 }
 
+void Perspective3DWidget::changeObject(PrimitiveDefinition::Types t)
+{
+    delete geometries;
+    geometries = new GeometryEngine(t);
+}
+
 void Perspective3DWidget::resizeGL(int w, int h)
 {
     qDebug() << "resizeGL(" << w << "," << h << ") called";
@@ -134,13 +155,16 @@ void Perspective3DWidget::resizeGL(int w, int h)
     qreal aspect = qreal(w) / qreal(h ? h : 1);
 
     // Set near plane to 3.0, far plane to 7.0, field of view 45 degrees
-    static const qreal zNear = 3.0, zFar = 7.0, fov = 45.0;
+    static const qreal zNear = 0.1, zFar = 10.0, fov = 45.0;
 
     // Reset projection
     projection.setToIdentity();
 
     // Set perspective projection
     projection.perspective(fov, aspect, zNear, zFar);
+
+    this->resize(w, h);
+    trackball.recenter(this->size());
 }
 
 void Perspective3DWidget::paintGL()
@@ -154,11 +178,14 @@ void Perspective3DWidget::paintGL()
     // Calculate model view transformation
     QMatrix4x4 matrix;
     matrix.translate(cameraPosition);
-    matrix.rotate(rotation);
+    matrix.rotate(trackball.getQnow());
+    //matrix.rotate(rotation);
 
     // Set modelview and projection matrices
-    program.setUniformValue("Projection", projection);
-    program.setUniformValue("ModelView", matrix);
+    program.setUniformValue("mProjection", projection);
+    program.setUniformValue("mView", matrix);
+    qDebug() << "mView matrix:" << matrix;
+
     program.setUniformValue("LightPosition", lightPosition);
     program.setUniformValue("mvp_matrix", projection * matrix);
 

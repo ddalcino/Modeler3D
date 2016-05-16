@@ -2,6 +2,8 @@
 
 #include <QVector2D>
 #include <QVector3D>
+#include <QMatrix4x4>
+#include <QDebug>
 
 struct _VertexData
 {
@@ -10,7 +12,11 @@ struct _VertexData
 };
 
 GeometryEngine::GeometryEngine(PrimitiveDefinition::Types t)
-    : indexBuf(QOpenGLBuffer::IndexBuffer)
+    : indexBuf(QOpenGLBuffer::IndexBuffer),
+      translation(0,0,0),
+      scale(1,1,1),
+      rotation(0,0,0),
+      rotationAngle(0.0)
 {
     initializeOpenGLFunctions();
 
@@ -136,6 +142,14 @@ void GeometryEngine::drawPrimGeometry(QOpenGLShaderProgram *program, bool isWire
     program->enableAttributeArray(normalLocation);
     program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(_VertexData));
 
+    QMatrix4x4 mat;
+    mat.setToIdentity();
+    mat.rotate(rotationAngle, rotation);
+    mat.translate(translation);
+    mat.scale(scale);
+    qDebug() << "Model matrix:" << mat;
+
+    program->setUniformValue("mModel", mat);
     // Draw cube geometry using indices from VBO 1
     glDrawElements(isWireframeMode ? GL_LINE_STRIP : GL_TRIANGLE_STRIP,
                    prim->getNumIndices(), GL_UNSIGNED_SHORT, 0);

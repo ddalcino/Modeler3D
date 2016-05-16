@@ -12,9 +12,11 @@
 #include <QVector4D>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLTexture>
+#include <QGraphicsSceneMouseEvent>
 
 #include "geometryengine.h"
 #include "primitivedefinition.h"
+#include "trackball.h"
 
 /**
  * @brief The Perspective3DWidget class
@@ -29,6 +31,7 @@ public:
     explicit Perspective3DWidget(QWidget *parent = 0);
     ~Perspective3DWidget();
 
+    void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
@@ -40,6 +43,11 @@ public:
     void initShaders();
     //void initTextures();
 
+    GeometryEngine* getGeometryEngine() {
+        qDebug() << "Geometries: " << geometries;
+        return geometries;}
+
+    void changeObject(PrimitiveDefinition::Types);
 
 private:
     QOpenGLShaderProgram program;
@@ -55,6 +63,8 @@ private:
     QVector4D lightPosition;
 //    qreal angularSpeed;
     QQuaternion rotation;
+
+    Trackball trackball;
 
     bool isWireframeMode;
 

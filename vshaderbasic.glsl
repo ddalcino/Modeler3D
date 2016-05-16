@@ -10,8 +10,9 @@ attribute  vec4 a_position;
 attribute  vec4 a_normal;
 
 // inputs come directly from C++ code
-uniform mat4 ModelView;
-uniform mat4 Projection;
+uniform mat4 mModel;
+uniform mat4 mView;
+uniform mat4 mProjection;
 uniform vec4 LightPosition;
 uniform mat4 mvp_matrix;
 
@@ -42,7 +43,7 @@ varying vec3 Light, View, Normal;
 void main()
 {
     // Transform vertex  position into eye coordinates
-    vec3 pos = vec4(ModelView * a_position).xyz;
+    vec3 pos = vec4(mView * mModel * a_position).xyz;
 
     // We don't have normals yet, so fake them:
     //vec4 a_normal = vec4(0.7, 0.0, 0.7, 1.0);
@@ -51,10 +52,10 @@ void main()
     View = normalize( -pos );
 
     // Transform vertex normal into eye coordinates
-    Normal = vec4(normalize( ModelView* a_normal )).xyz;
+    Normal = vec4(normalize(mView * mModel* a_normal )).xyz;
 
     // Calculate vertex position in screen space
-    gl_Position = Projection * ModelView * a_position;
+    gl_Position = mProjection * mView * mModel * a_position;
     //gl_Position =  mvp_matrix * a_position;
 
 //    // Pass constant color to fragment shader
