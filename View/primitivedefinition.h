@@ -47,6 +47,17 @@ public:
     int getNumIndices() const { return indices.size(); }
     Types getType() const { return primType; }
 
+    static const char *toString(Types t) {
+        switch (t) {
+        case PrimitiveDefinition::CUBE: return "Cube";
+        case PrimitiveDefinition::CYLINDER: return "Cylinder";
+        case PrimitiveDefinition::CONE: return "Cone";
+        case PrimitiveDefinition::SPHERE: return "Sphere";
+        default: return "Default";
+        }
+    }
+    static QString toQString(Types t) { return QString(toString(t)); }
+
 protected:
     void addCircularFace(unsigned int numVerticesPerCircle, float y,
                          float radius, const QVector3D& normal);

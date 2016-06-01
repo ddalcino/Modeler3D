@@ -6,6 +6,7 @@
 #include "editcameradialog.h"
 #include "editobjectdialog.h"
 #include "geometryengine.h"
+#include "../Model/treemodel.h"
 
 namespace Ui {
 class PerspectiveWindow;
@@ -16,7 +17,7 @@ class PerspectiveWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit PerspectiveWindow(QWidget *parent = 0);
+    explicit PerspectiveWindow(TreeModel *model, QWidget *parent = NULL);
     ~PerspectiveWindow();
 
     void resizeEvent(QResizeEvent *e);
@@ -27,6 +28,9 @@ private:
     Ui::PerspectiveWindow *ui;
     EditCameraDialog *editCameraDlg;
     EditObjectDialog *editObjectDlg;
+
+    TreeModel *model;
+
     GeometryEngine *geometryEngine;
 
 public slots:

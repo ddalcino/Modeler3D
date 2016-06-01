@@ -3,14 +3,16 @@
 #include <QResizeEvent>
 #include <QSize>
 
-PerspectiveWindow::PerspectiveWindow(QWidget *parent) :
+PerspectiveWindow::PerspectiveWindow(TreeModel *model, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::PerspectiveWindow),
     editCameraDlg(new EditCameraDialog(this)),
-    editObjectDlg(new EditObjectDialog(this))
+    editObjectDlg(new EditObjectDialog(this)),
+    model(model)
 
 {
     ui->setupUi(this);
+    ui->perspectiveGLWidget->setTreeModel(model);
 }
 
 PerspectiveWindow::~PerspectiveWindow()

@@ -10,6 +10,7 @@
 //#include <glm/gtc/quaternion.hpp>
 #include <QPoint>
 #include <QSize>
+#include <QVector4D>
 #include <QVector3D>
 #include <QVector2D>
 #include <QQuaternion>
@@ -66,7 +67,28 @@ public:
     }
 
     QQuaternion getQnow() const { return qnow; }
-    QMatrix4x4 getMat4() const {return QMatrix4x4(qnow.toRotationMatrix());}
+
+    /**
+     * @brief getMat4
+     * In Qt 5.5 and above, this function simply returns
+     * "QMatrix4x4(qnow.toRotationMatrix())"
+     * In Qt 5.4 and below, we need to build the matrix by hand
+     * @return The matrix version of the quaternion
+     */
+    QMatrix4x4 getMat4() const {
+        QVector4D quat = qnow.toVector4D();
+        float qw = quat.w(), qx = quat.x(), qy = quat.y(), qz = quat.z();
+        /* Quaternion to Matrix is:
+         * 1 - 2*qy2 - 2*qz2,	2*qx*qy - 2*qz*qw,	2*qx*qz + 2*qy*qw,
+         * 2*qx*qy + 2*qz*qw,	1 - 2*qx2 - 2*qz2,	2*qy*qz - 2*qx*qw,
+         * 2*qx*qz - 2*qy*qw,	2*qy*qz + 2*qx*qw,	1 - 2*qx2 - 2*qy2,
+         */
+        return QMatrix4x4(
+                    1 - 2*qy*qy - 2*qz*qz, 2*qx*qy - 2*qz*qw,	  2*qx*qz + 2*qy*qw,     0,
+                    2*qx*qy + 2*qz*qw,	   1 - 2*qx*qx - 2*qz*qz, 2*qy*qz - 2*qx*qw,     0,
+                    2*qx*qz - 2*qy*qw,	   2*qy*qz + 2*qx*qw,	  1 - 2*qx*qx - 2*qy*qy, 0,
+                    0,                     0,                     0,                     1);
+    } // {return QMatrix4x4(qnow.toRotationMatrix());}
 
 private:
     QVector3D mouseToSphere ( QVector2D s0 ) {

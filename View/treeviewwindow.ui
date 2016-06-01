@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>414</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTreeView" name="treeView">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>411</width>
+      <height>561</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>414</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuObject">
+    <property name="title">
+     <string>&amp;Object</string>
+    </property>
+    <widget class="QMenu" name="menu_New">
+     <property name="title">
+      <string>&amp;New</string>
+     </property>
+     <addaction name="action_Cube"/>
+     <addaction name="actionC_ylinder"/>
+     <addaction name="action_Sphere"/>
+     <addaction name="actionC_one"/>
+     <addaction name="separator"/>
+     <addaction name="action_Group"/>
+    </widget>
+    <addaction name="menu_New"/>
+    <addaction name="action_Delete"/>
+    <addaction name="action_Copy"/>
+    <addaction name="action_Move"/>
+    <addaction name="separator"/>
+   </widget>
+   <addaction name="menu_File"/>
+   <addaction name="menuObject"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="action_Cube">
+   <property name="text">
+    <string>&amp;Cube</string>
+   </property>
+  </action>
+  <action name="actionC_ylinder">
+   <property name="text">
+    <string>C&amp;ylinder</string>
+   </property>
+  </action>
+  <action name="action_Sphere">
+   <property name="text">
+    <string>&amp;Sphere</string>
+   </property>
+  </action>
+  <action name="actionC_one">
+   <property name="text">
+    <string>C&amp;one</string>
+   </property>
+  </action>
+  <action name="action_Delete">
+   <property name="text">
+    <string>&amp;Delete</string>
+   </property>
+  </action>
+  <action name="action_Copy">
+   <property name="text">
+    <string>&amp;Copy</string>
+   </property>
+  </action>
+  <action name="action_Move">
+   <property name="text">
+    <string>&amp;Move</string>
+   </property>
+  </action>
+  <action name="action_Group">
+   <property name="text">
+    <string>&amp;Group</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

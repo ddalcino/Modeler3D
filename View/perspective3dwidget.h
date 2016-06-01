@@ -15,6 +15,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 #include "geometryengine.h"
+#include "../Model/treemodel.h"
 #include "primitivedefinition.h"
 #include "trackball.h"
 
@@ -41,6 +42,7 @@ public:
     void paintGL() Q_DECL_OVERRIDE;
 
     void initShaders();
+    void setTreeModel(TreeModel * model) {this->model = model; }
     //void initTextures();
 
     GeometryEngine* getGeometryEngine() {
@@ -52,6 +54,7 @@ public:
 private:
     QOpenGLShaderProgram program;
     GeometryEngine *geometries;
+    TreeModel *model;
 
     QOpenGLTexture *texture;
 
