@@ -3,14 +3,14 @@
 
 #include <QMainWindow>
 
-#include "editcameradialog.h"
-#include "editobjectdialog.h"
 #include "geometryengine.h"
 #include "../Model/treemodel.h"
 
 namespace Ui {
 class PerspectiveWindow;
 }
+class EditCameraDialog;
+class EditObjectDialog;
 
 class PerspectiveWindow : public QMainWindow
 {
@@ -23,6 +23,12 @@ public:
     void resizeEvent(QResizeEvent *e);
 
     void updateChildren();
+
+    const QVector3D& getCameraPos() const;
+    void setCameraPos(const QVector3D& pos);
+    float getFov() const;
+    void setFov(float f);
+
 
 private:
     Ui::PerspectiveWindow *ui;

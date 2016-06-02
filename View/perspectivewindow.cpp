@@ -1,5 +1,7 @@
 #include "perspectivewindow.h"
 #include "ui_perspectivewindow.h"
+#include "editcameradialog.h"
+#include "editobjectdialog.h"
 #include <QResizeEvent>
 #include <QSize>
 
@@ -29,6 +31,14 @@ void PerspectiveWindow::updateChildren()
 {
     ui->perspectiveGLWidget->update();
 }
+
+const QVector3D &PerspectiveWindow::getCameraPos() const { return ui->perspectiveGLWidget->getCameraPos(); }
+
+void PerspectiveWindow::setCameraPos(const QVector3D &pos) { ui->perspectiveGLWidget->setCameraPos(pos); }
+
+float PerspectiveWindow::getFov() const { return ui->perspectiveGLWidget->getFov(); }
+
+void PerspectiveWindow::setFov(float f) { ui->perspectiveGLWidget->setFov(f); }
 
 void PerspectiveWindow::on_actionEdit_Camera_triggered()
 {

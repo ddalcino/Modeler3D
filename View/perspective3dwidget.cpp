@@ -8,6 +8,7 @@ Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     texture(NULL),
     rotationAxis(0, 0, 0),
     cameraPosition(0, 0, -5),
+    fov(45.0),
     lightPosition(-5, 5, -5, 1.0),
     trackball(),
     isWireframeMode(false)
@@ -155,7 +156,7 @@ void Perspective3DWidget::resizeGL(int w, int h)
     qreal aspect = qreal(w) / qreal(h ? h : 1);
 
     // Set near plane to 3.0, far plane to 7.0, field of view 45 degrees
-    static const qreal zNear = 0.1, zFar = 10.0, fov = 45.0;
+    static const qreal zNear = 0.1, zFar = 10.0; //, fov = 45.0;
 
     // Reset projection
     projection.setToIdentity();

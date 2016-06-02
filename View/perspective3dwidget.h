@@ -51,6 +51,11 @@ public:
 
     void changeObject(PrimitiveDefinition::Types);
 
+    const QVector3D& getCameraPos() const { return cameraPosition; }
+    void setCameraPos(const QVector3D& pos) { cameraPosition = pos; update(); }
+    float getFov() const { return fov; }
+    void setFov(float f) { fov = f; resizeGL(width(), height()); update(); }
+
 private:
     QOpenGLShaderProgram program;
     GeometryEngine *geometries;
@@ -63,6 +68,7 @@ private:
 //    QVector2D mousePressPosition;
     QVector3D rotationAxis;
     QVector3D cameraPosition;
+    float fov;
     QVector4D lightPosition;
 //    qreal angularSpeed;
     QQuaternion rotation;
