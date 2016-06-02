@@ -33,10 +33,15 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const {
 
 Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid()){
         return 0;
-
-    return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
+    }
+    const GlObject *item = getItem(index);
+    if (item && !item->isPrimitive()) {
+        return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
+    } else {
+        return QAbstractItemModel::flags(index);
+    }
 }
 
 GlObject *TreeModel::getItem(const QModelIndex &index) const {
@@ -169,30 +174,105 @@ bool TreeModel::setHeaderData(int section, Qt::Orientation orientation,
     return result;
 }
 
-void TreeModel::addObject(PrimitiveDefinition::Types t)
+void TreeModel::addObject(PrimitiveDefinition::Types t, QModelIndex& parentIndex)
 {
     //    beginInsertRows(parent, position, position + rows - 1);
     //    success = parentItem->insertChildren(position, rows, 1);
     //    endInsertRows();
-    const QModelIndex parentIndex = QModelIndex();
-    beginInsertRows(parentIndex, rootItem->getNumChildren()-1,
-                    rootItem->getNumChildren());
-    rootItem->addChild(new GlPrimitiveObject(
-                           PrimitiveDefinition::toQString(t), rootItem));
+    if (!parentIndex.isValid()) { parentIndex = QModelIndex(); }
+    GlObject *parent = getItem(parentIndex);
+    int newChildIndex = parent->getNumChildren();
+    beginInsertRows(parentIndex, newChildIndex,
+                    newChildIndex);
+    parent->addChild(new GlPrimitiveObject(
+                         PrimitiveDefinition::toQString(t), parent));
     endInsertRows();
+}
+
+void TreeModel::addToRoot(GlObject *item)
+{
+    if (rootItem && item) {
+        beginInsertRows(QModelIndex(), rootItem->getNumChildren(),
+                        rootItem->getNumChildren());
+        item->setParent(rootItem);
+        endInsertRows();
+    }
+}
+
+QModelIndex TreeModel::addGroupToRoot()
+{
+    beginInsertRows(QModelIndex(), rootItem->getNumChildren(),
+                    rootItem->getNumChildren());
+    rootItem->addChild(new GlObject("Group", rootItem));
+    endInsertRows();
+    return index(rootItem->getNumChildren()-1, 0, QModelIndex());
+}
+
+bool TreeModel::moveItems(const QModelIndexList &toMove, const QModelIndex &dest)
+{
+    GlObject *destItem = getItem(dest);
+    bool itemsMoved = false;
+    // only allow movement into an item that's not a primitive
+    if (destItem->isPrimitive()) { return false; }
+
+    for (const QModelIndex& srcIndex : toMove) {
+        GlObject * srcItem = getItem(srcIndex);
+        // first, ensure that we're not moving a parent item into one
+        // of its children, and creating a cycle in the acyclic graph
+        if (!destItem->hasAncestor(srcItem)) {
+
+
+            qDebug() << " beginMoveRows(srcIndex.parent()= " << srcIndex.parent()
+                     << ", srcItem->getChildNumber()=" << srcItem->getChildNumber()
+                     << ", srcItem->getChildNumber()+1=" << srcItem->getChildNumber()+1
+                     << ", dest=" << dest
+                     << ", destItem->getNumChildren()=" <<destItem->getNumChildren()
+                     << " );";
+            beginMoveRows(srcIndex.parent(), srcItem->getChildNumber(),
+                          srcItem->getChildNumber(),
+                          dest, destItem->getNumChildren() );
+            srcItem->setParent(destItem);
+            endMoveRows();
+            itemsMoved = true;
+        }
+    }
+    return itemsMoved;
 }
 
 bool TreeModel::removeRow(int row, const QModelIndex &parent) {
     GlObject *parentItem = getItem(parent);
     bool success = true;
 
-    beginRemoveRows(parent, row, row+1);
+    beginRemoveRows(parent, row, row);
     //    success = parentItem->removeChildren(position, rows);
     success = parentItem->removeChild(row, true);
     endRemoveRows();
 
     return success;
 
+}
+
+bool TreeModel::removeRow(const QModelIndex &toRemove)
+{
+    // get the row number for toRemove:
+    const GlObject *item = (const GlObject *)(toRemove.internalPointer());
+    int row = item->getChildNumber();
+    return removeRow(row, toRemove.parent());
+}
+
+GlObject *TreeModel::copyObjectAt(const QModelIndex &index) {
+    if (!index.isValid()) { return NULL; }
+
+    const GlObject* toCopy = getItem(index);
+    if (!toCopy) { return NULL; }
+    GlObject* copy = new GlObject(*toCopy);
+    return copy;
+}
+
+bool TreeModel::isItemPrimitive(const QModelIndex &index) const {
+    GlObject *item = getItem(index);
+    if (item) { return item->isPrimitive(); }
+    else { return false; }
 }
 /*
 void TreeModel::setupModelData(const QStringList &lines, GlObject *parent)

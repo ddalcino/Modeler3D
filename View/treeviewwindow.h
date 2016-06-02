@@ -2,6 +2,8 @@
 #define TREEVIEWWINDOW_H
 
 #include <QMainWindow>
+#include <QItemSelectionModel>
+#include <QModelIndexList>
 
 #include "../Model/treemodel.h"
 
@@ -16,7 +18,8 @@ class TreeViewWindow : public QMainWindow
 
 public:
     explicit TreeViewWindow(QWidget *parent = NULL,
-                            TreeModel *model = new TreeModel());
+                            TreeModel *model = NULL);
+    ~TreeViewWindow();
 
 signals:
 
@@ -31,9 +34,23 @@ private slots:
 
     void on_actionC_one_triggered();
 
+    void on_action_Copy_triggered();
+
+    void on_action_Move_triggered();
+
+    void on_action_Paste_triggered();
+
+    void on_action_Group_triggered();
+
+    void on_action_Delete_triggered();
+
 private:
     Ui::MainWindow *ui;
     TreeModel *treeModel;
+    QItemSelectionModel selectionModel;
+    QModelIndexList itemsToMove;
+
+    QModelIndex getFirstSelectedIndex(bool noPrimitives=true) const;
 };
 
 #endif // TREEVIEWWINDOW_H

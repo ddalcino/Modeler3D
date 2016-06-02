@@ -47,9 +47,18 @@ public:
 //    bool removeRows(int position, int rows,
 //                    const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
 
-    void addObject(PrimitiveDefinition::Types t);
+    void addObject(PrimitiveDefinition::Types t,
+                   QModelIndex &parentIndex);
+    void addToRoot(GlObject *item);
+    QModelIndex addGroupToRoot();
+
+    bool moveItems(const QModelIndexList& toMove, const QModelIndex& dest);
 
     bool removeRow(int row, const QModelIndex &parent);
+    bool removeRow(const QModelIndex &toRemove);
+
+    GlObject* copyObjectAt(const QModelIndex &index);
+    bool isItemPrimitive(const QModelIndex &index) const;
 
 private:
     //void setupModelData(const QStringList &lines, GlObject *parent);

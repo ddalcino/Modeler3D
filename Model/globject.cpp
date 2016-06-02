@@ -3,7 +3,7 @@
 #include <QDebug>
 
 GlObject::GlObject(const GlObject &other)
-    : parent(other.parent), translation(other.translation), scale(other.scale),
+    : parent(NULL), translation(other.translation), scale(other.scale),
       rotation(other.rotation), _isPrimitive(other._isPrimitive),
       name(other.name) {
     // make new copies of all the children
@@ -26,10 +26,10 @@ GlObject::GlObject(const GlObject &other)
  * removed.
  */
 GlObject::~GlObject() {
-    if (parent != NULL) {
-        reparentChildren();
-        parent->removeChild(this);
-    } else {
+//    if (parent != NULL) {
+//        reparentChildren();
+//        parent->removeChild(this);
+//    } else {
         for (GlObject* child : children) {
             if (child == NULL) {
                 qDebug() << "Dtor for GlObject " << this << " found null child";
@@ -39,7 +39,7 @@ GlObject::~GlObject() {
                 child = NULL;
             }
         }
-    }
+//    }
 }
 
 /**
@@ -164,6 +164,16 @@ int GlObject::getIndexOfChild(const GlObject *child) const
         ++i;
     }
     return -1;
+}
+
+bool GlObject::hasAncestor(const GlObject *other) const
+{
+    const GlObject *ancestor = this->parent;
+    while (ancestor != NULL) {
+        if (ancestor == other) { return true; }
+        ancestor = ancestor->parent;
+    }
+    return false;
 }
 
 //bool GlObject::insertChildren(int position, int rowCount)

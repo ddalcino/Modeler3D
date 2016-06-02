@@ -59,6 +59,7 @@ public:
     int getIndexOfChild(const GlObject *child) const;
 //    bool insertChildren(int position, int rowCount);
 //    bool removeChildren(int position, int rowCount);
+    bool hasAncestor(const GlObject *other) const;
 
 
     void setTranslation(const QVector3D& t) {translation=t;}
