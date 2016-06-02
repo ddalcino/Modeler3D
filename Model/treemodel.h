@@ -9,6 +9,7 @@
 #include "../View/primitivedefinition.h"
 
 class GlObject;
+class DrawDirections;
 
 //! [0]
 class TreeModel : public QAbstractItemModel
@@ -59,6 +60,8 @@ public:
 
     GlObject* copyObjectAt(const QModelIndex &index);
     bool isItemPrimitive(const QModelIndex &index) const;
+
+    const GlObject *getRoot() const { return rootItem; }
 
 private:
     //void setupModelData(const QStringList &lines, GlObject *parent);

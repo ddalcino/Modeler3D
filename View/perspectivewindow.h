@@ -22,7 +22,6 @@ public:
 
     void resizeEvent(QResizeEvent *e);
 
-    void updateChildren();
 
     const QVector3D& getCameraPos() const;
     void setCameraPos(const QVector3D& pos);
@@ -40,6 +39,7 @@ private:
     GeometryEngine *geometryEngine;
 
 public slots:
+    void updateChildren();
 
 private slots:
     void on_actionEdit_Camera_triggered();

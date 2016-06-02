@@ -15,6 +15,13 @@ PerspectiveWindow::PerspectiveWindow(TreeModel *model, QWidget *parent) :
 {
     ui->setupUi(this);
     ui->perspectiveGLWidget->setTreeModel(model);
+
+    QObject::connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)),
+                     this, SLOT(updateChildren()));
+    QObject::connect(model, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
+                     this, SLOT(updateChildren()));
+    QObject::connect(model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+                     this, SLOT(updateChildren()));
 }
 
 PerspectiveWindow::~PerspectiveWindow()

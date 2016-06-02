@@ -29,6 +29,8 @@ class Perspective3DWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
 public:
+    enum MouseDragType {};
+
     explicit Perspective3DWidget(QWidget *parent = 0);
     ~Perspective3DWidget();
 

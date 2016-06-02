@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <QPoint>
 
+#include "../Model/globject.h" // for DrawingDirections
+
 Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     QOpenGLWidget(parent),
     texture(NULL),
@@ -32,33 +34,10 @@ void Perspective3DWidget::mouseMoveEvent(QMouseEvent *e) {
 }
 
 void Perspective3DWidget::mousePressEvent(QMouseEvent *e) {
-//    qDebug() << "Buttons pressed: " << e->buttons();
-//    if (e->buttons() & Qt::LeftButton) {
-//        rotation.setX(rotation.x() + 30.0);
-//    }
-//    if (e->buttons() & Qt::RightButton) {
-//        rotation.setY(rotation.y() + 30.0);
-//    }
-//    if (e->buttons() & Qt::MiddleButton) {
-//        rotation.setZ(rotation.z() + 30.0);
-//    }
-//    static const float MULTIPLIER = 6.0;
 
     if (e->buttons() & Qt::LeftButton) {
         trackball.startMouse(e->pos());
     }
-//    rotationAxis.setX(/*rotationAxis.x() +
-//                      MULTIPLIER */ (e->buttons() & Qt::LeftButton) ? 1 : 0);
-//    rotationAxis.setY(/*rotationAxis.y() +
-//                      MULTIPLIER */ (e->buttons() & Qt::RightButton) ? 1 : 0);
-//    rotationAxis.setZ(/*rotationAxis.z() +
-//                      MULTIPLIER */ (e->buttons() & Qt::MiddleButton) ? 1 : 0);
-
-//    rotation = QQuaternion::fromAxisAndAngle(rotationAxis, 20.0) * rotation;
-//    qDebug() << "Buttons pressed: " << e->buttons() << ", rotationAxis: "
-//             << rotationAxis << ", rotation: " << rotation;
-
-//    update();
 }
 
 void Perspective3DWidget::mouseReleaseEvent(QMouseEvent *e) {
@@ -145,8 +124,8 @@ void Perspective3DWidget::initShaders()
 
 void Perspective3DWidget::changeObject(PrimitiveDefinition::Types t)
 {
-    delete geometries;
-    geometries = new GeometryEngine(t);
+//    delete geometries;
+//    geometries = new GeometryEngine(t);
 }
 
 void Perspective3DWidget::resizeGL(int w, int h)
@@ -200,7 +179,18 @@ void Perspective3DWidget::paintGL()
     program.setUniformValue("Shininess", 200.0f);
 
 
-    // Draw cube geometry
-    geometries->drawPrimGeometry(&program, isWireframeMode);
+    // get list of directions
+    const GlObject *root = model->getRoot();
+    std::vector<DrawDirections> dirs;
+    DrawDirections next;
+    root->getDrawingDirections(dirs, next);
+
+    for (const DrawDirections &dir : dirs) {
+
+        // Draw geometry
+        geometries->drawPrimGeometry(dir, &program, isWireframeMode);
+
+    }
+
 }
 

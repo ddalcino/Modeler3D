@@ -1,9 +1,13 @@
 #include "geometryengine.h"
+#include "../Model/globject.h" // for DrawDirections
 
 #include <QVector2D>
 #include <QVector3D>
 #include <QMatrix4x4>
 #include <QDebug>
+
+bool GeometryEngine::initialized = false;
+std::map<QString, Vbos *> GeometryEngine::gpuData;
 
 struct _VertexData
 {
@@ -12,7 +16,7 @@ struct _VertexData
 };
 
 GeometryEngine::GeometryEngine(PrimitiveDefinition::Types t)
-    : indexBuf(QOpenGLBuffer::IndexBuffer),
+    : //indexBuf(QOpenGLBuffer::IndexBuffer),
       translation(0,0,0),
       scale(1,1,1),
       rotation(0,0,0),
@@ -20,26 +24,29 @@ GeometryEngine::GeometryEngine(PrimitiveDefinition::Types t)
 {
     initializeOpenGLFunctions();
 
-    // Generate 2 VBOs
-    arrayBuf.create();
-    indexBuf.create();
+    initGpu();
+
+
+//    // Generate 2 VBOs
+//    arrayBuf.create();
+//    indexBuf.create();
 
 
     // Initializes cube geometry and transfers it to VBOs
     //initCubeGeometry();
 
-    initPrimGeometry(t);
+//    initPrimGeometry(t);
 }
 
 GeometryEngine::~GeometryEngine()
 {
-    arrayBuf.destroy();
-    indexBuf.destroy();
+//    arrayBuf.destroy();
+//    indexBuf.destroy();
 
-    if (prim) { delete prim; }
+//    if (prim) { delete prim; }
 }
 
-
+/*
 //void GeometryEngine::initCubeGeometry()
 //{
 //    // For cube we would need only 8 vertices but we have to
@@ -107,50 +114,78 @@ GeometryEngine::~GeometryEngine()
 //    indexBuf.bind();
 //    indexBuf.allocate(indices, 34 * sizeof(GLushort));
 //}
+*/
 
-void GeometryEngine::initPrimGeometry(PrimitiveDefinition::Types t)
+void Vbos::initPrimGeometry(PrimitiveDefinition::Types t)
 {
-    prim = new PrimitiveDefinition(t);
+    PrimitiveDefinition prim(t);
 
     arrayBuf.bind();
-    arrayBuf.allocate(prim->getVertices(), prim->getNumVertices() * sizeof(VertexData));
+    arrayBuf.allocate(prim.getVertices(), prim.getNumVertices() * sizeof(VertexData));
 
     // Transfer index data to VBO 1
     indexBuf.bind();
-    indexBuf.allocate(prim->getIndices(), prim->getNumIndices() * sizeof(GLushort));
+    indexBuf.allocate(prim.getIndices(), prim.getNumIndices() * sizeof(GLushort));
+
+    numIndices = prim.getNumIndices();
 }
 
-void GeometryEngine::drawPrimGeometry(QOpenGLShaderProgram *program, bool isWireframeMode)
+void GeometryEngine::drawPrimGeometry(const DrawDirections &dir,
+                                      QOpenGLShaderProgram *program,
+                                      bool isWireframeMode)
 {
+
     // Tell OpenGL which VBOs to use
-    arrayBuf.bind();
-    indexBuf.bind();
+    try {
+        Vbos *vbo = gpuData.at(dir.def);
+        vbo->arrayBuf.bind();
+        vbo->indexBuf.bind();
 
-    // Offset for position
-    quintptr offset = 0;
+        //    arrayBuf.bind();
+        //    indexBuf.bind();
 
-    // Tell OpenGL programmable pipeline how to locate vertex position data
-    int vertexLocation = program->attributeLocation("a_position");
-    program->enableAttributeArray(vertexLocation);
-    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(_VertexData));
+        // Offset for position
+        quintptr offset = 0;
 
-    // Offset for texture coordinate
-    offset += sizeof(QVector3D);
+        // Tell OpenGL programmable pipeline how to locate vertex position data
+        int vertexLocation = program->attributeLocation("a_position");
+        program->enableAttributeArray(vertexLocation);
+        program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(_VertexData));
 
-    // Tell OpenGL programmable pipeline how to locate vertex normal coordinate data
-    int normalLocation = program->attributeLocation("a_normal");
-    program->enableAttributeArray(normalLocation);
-    program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(_VertexData));
+        // Offset for texture coordinate
+        offset += sizeof(QVector3D);
 
-    QMatrix4x4 mat;
-    mat.setToIdentity();
-    mat.rotate(rotationAngle, rotation);
-    mat.translate(translation);
-    mat.scale(scale);
-    qDebug() << "Model matrix:" << mat;
+        // Tell OpenGL programmable pipeline how to locate vertex normal coordinate data
+        int normalLocation = program->attributeLocation("a_normal");
+        program->enableAttributeArray(normalLocation);
+        program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(_VertexData));
 
-    program->setUniformValue("mModel", mat);
-    // Draw cube geometry using indices from VBO 1
-    glDrawElements(isWireframeMode ? GL_LINE_STRIP : GL_TRIANGLE_STRIP,
-                   prim->getNumIndices(), GL_UNSIGNED_SHORT, 0);
+        const QMatrix4x4 &mat = dir.mat;
+//        mat.setToIdentity();
+//        mat.rotate(rotationAngle, rotation);
+//        mat.translate(translation);
+//        mat.scale(scale);
+        qDebug() << "Model matrix:" << mat;
+
+        program->setUniformValue("mModel", mat);
+        // Draw cube geometry using indices from VBO 1
+        glDrawElements(isWireframeMode ? GL_LINE_STRIP : GL_TRIANGLE_STRIP,
+                       vbo->numIndices, GL_UNSIGNED_SHORT, 0);
+    } catch(const std::out_of_range &ex) {
+        qDebug() << "Tried to draw an object of type " << dir.def
+                 << ", but none was found in my gpuData. Error=" << ex.what();
+    }
+}
+
+void GeometryEngine::initGpu()
+{
+    if (!initialized) {
+
+        // set up gpuData to have references to all the geometry we could possibly need
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Cube"), new Vbos(PrimitiveDefinition::CUBE) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Cylinder"), new Vbos(PrimitiveDefinition::CYLINDER) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Sphere"), new Vbos(PrimitiveDefinition::SPHERE) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Cone"), new Vbos(PrimitiveDefinition::CONE) ));
+    }
+    initialized = true;
 }

@@ -274,6 +274,7 @@ bool TreeModel::isItemPrimitive(const QModelIndex &index) const {
     if (item) { return item->isPrimitive(); }
     else { return false; }
 }
+
 /*
 void TreeModel::setupModelData(const QStringList &lines, GlObject *parent)
 {
