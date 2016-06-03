@@ -1,4 +1,5 @@
 #include "perspective3dwidget.h"
+#include "perspectivewindow.h"
 #include <QMouseEvent>
 #include <QDebug>
 #include <QPoint>
@@ -15,7 +16,7 @@ Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     trackball(),
     isWireframeMode(false)
 {
-    qDebug() << "Perspective3DWidget constructor called";
+//    qDebug() << "Perspective3DWidget constructor called";
 }
 
 Perspective3DWidget::~Perspective3DWidget()
@@ -40,34 +41,34 @@ void Perspective3DWidget::mousePressEvent(QMouseEvent *e) {
     }
 }
 
-void Perspective3DWidget::mouseReleaseEvent(QMouseEvent *e) {
-    qDebug() << "Buttons released: " << e->buttons();
-    rotationAxis.setX(0);
-    rotationAxis.setY(0);
-    rotationAxis.setZ(0);
-}
+//void Perspective3DWidget::mouseReleaseEvent(QMouseEvent *e) {
+//    qDebug() << "Buttons released: " << e->buttons();
+//    rotationAxis.setX(0);
+//    rotationAxis.setY(0);
+//    rotationAxis.setZ(0);
+//}
 
-void Perspective3DWidget::keyPressEvent(QKeyEvent *e)
-{
-    float scale = 0.0;
-    rotationAxis.setX(0);
-    rotationAxis.setY(0);
-    rotationAxis.setZ(0);
-    if (e->key() == Qt::Key_Left) {
-        rotationAxis.setY(1); scale = -1.0;
-    } else if (e->key() == Qt::Key_Right) {
-        rotationAxis.setY(1); scale = 1.0;
-    } else if (e->key() == Qt::Key_Up) {
-        rotationAxis.setX(1); scale = 1.0;
-    } else if (e->key() == Qt::Key_Down) {
-        rotationAxis.setX(1); scale = -1.0;
-    }
-    rotation = QQuaternion::fromAxisAndAngle(rotationAxis, scale*6) * rotation;
-    qDebug() << "Buttons pressed: " << e->key() << ", rotationAxis: "
-             << rotationAxis << ", rotation: " << rotation;
-    update();
+//void Perspective3DWidget::keyPressEvent(QKeyEvent *e)
+//{
+//    float scale = 0.0;
+//    rotationAxis.setX(0);
+//    rotationAxis.setY(0);
+//    rotationAxis.setZ(0);
+//    if (e->key() == Qt::Key_Left) {
+//        rotationAxis.setY(1); scale = -1.0;
+//    } else if (e->key() == Qt::Key_Right) {
+//        rotationAxis.setY(1); scale = 1.0;
+//    } else if (e->key() == Qt::Key_Up) {
+//        rotationAxis.setX(1); scale = 1.0;
+//    } else if (e->key() == Qt::Key_Down) {
+//        rotationAxis.setX(1); scale = -1.0;
+//    }
+//    rotation = QQuaternion::fromAxisAndAngle(rotationAxis, scale*6) * rotation;
+//    qDebug() << "Buttons pressed: " << e->key() << ", rotationAxis: "
+//             << rotationAxis << ", rotation: " << rotation;
+//    update();
 
-}
+//}
 
 
 void Perspective3DWidget::initializeGL()
@@ -87,10 +88,12 @@ void Perspective3DWidget::initializeGL()
     glEnable(GL_CULL_FACE);
 
 
-    //geometries = new GeometryEngine;
-    geometries = new GeometryEngine(PrimitiveDefinition::CUBE);
+    geometries = new GeometryEngine(this);
 
-    qDebug() << "made geometry engine";
+    //geometries = ((PerspectiveWindow *)(this->parent()))->getTvWindow()->getGEngine(); //  gEngine; //new GeometryEngine(PrimitiveDefinition::CUBE);
+
+    //geometries->init();
+    qDebug() << "got geometry engine";
 }
 
 void Perspective3DWidget::initShaders()
@@ -149,7 +152,7 @@ void Perspective3DWidget::resizeGL(int w, int h)
 
 void Perspective3DWidget::paintGL()
 {
-    qDebug() << "paintGL() called";
+//    qDebug() << "paintGL() called";
     // Clear color and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -164,7 +167,7 @@ void Perspective3DWidget::paintGL()
     // Set modelview and projection matrices
     program.setUniformValue("mProjection", projection);
     program.setUniformValue("mView", matrix);
-    qDebug() << "mView matrix:" << matrix;
+//    qDebug() << "mView matrix:" << matrix;
 
     program.setUniformValue("LightPosition", lightPosition);
     program.setUniformValue("mvp_matrix", projection * matrix);

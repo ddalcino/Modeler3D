@@ -72,7 +72,7 @@ void PerspectiveWindow::on_actionEdit_Object_triggered()
            == NULL) {
         qDebug() << "No geometries yet!!";
     }
-    editObjectDlg->init(geometryEngine);
+    editObjectDlg->init();//geometryEngine);
 
 }
 

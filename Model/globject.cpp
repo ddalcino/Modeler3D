@@ -6,6 +6,7 @@ GlObject::GlObject(const GlObject &other)
     : parent(NULL), glData(other.glData),
       // translation(other.translation), scale(other.scale), rotation(other.rotation),
       _isPrimitive(other._isPrimitive),
+      _isSelected(false),
       name(other.name) {
     // make new copies of all the children
     for (const GlObject *c : other.children) {

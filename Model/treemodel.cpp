@@ -45,17 +45,17 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 }
 
 GlObject *TreeModel::getItem(const QModelIndex &index) const {
-    qDebug() << "getItem(): Index is: " << index << ", and it's valid=" << index.isValid();
+//    qDebug() << "getItem(): Index is: " << index << ", and it's valid=" << index.isValid();
     if (index.isValid()) {
-        qDebug() << "Index is: " << index << ", and it's valid=" << index.isValid();
+//        qDebug() << "Index is: " << index << ", and it's valid=" << index.isValid();
 
         GlObject *item = static_cast<GlObject*>(index.internalPointer());
 
-        const GlObject *itemC = item;
-        if (itemC) {
-            const GlData * data = itemC->getGlData();
-            qDebug() << "Data at index is: " << data->toString();
-        }
+//        const GlObject *itemC = item;
+//        if (itemC) {
+//            const GlData * data = itemC->getGlData();
+//            qDebug() << "Data at index is: " << data->toString();
+//        }
 
 
         if (item)
@@ -68,8 +68,8 @@ const GlData *TreeModel::getGlDataAt(const QModelIndex &index) const {
     if (index.isValid()) {
         const GlObject *item = getItem(index);
         if (item) {
-            const GlData * data = item->getGlData();
-            qDebug() << "Selected data is: " << data->toString();
+//            const GlData * data = item->getGlData();
+//            qDebug() << "Selected data is: " << data->toString();
             return getItem(index)->getGlData();
         }
     }
@@ -263,12 +263,12 @@ bool TreeModel::moveItems(const QModelIndexList &toMove, const QModelIndex &dest
         if (!destItem->hasAncestor(srcItem)) {
 
 
-            qDebug() << " beginMoveRows(srcIndex.parent()= " << srcIndex.parent()
-                     << ", srcItem->getChildNumber()=" << srcItem->getChildNumber()
-                     << ", srcItem->getChildNumber()+1=" << srcItem->getChildNumber()+1
-                     << ", dest=" << dest
-                     << ", destItem->getNumChildren()=" <<destItem->getNumChildren()
-                     << " );";
+//            qDebug() << " beginMoveRows(srcIndex.parent()= " << srcIndex.parent()
+//                     << ", srcItem->getChildNumber()=" << srcItem->getChildNumber()
+//                     << ", srcItem->getChildNumber()+1=" << srcItem->getChildNumber()+1
+//                     << ", dest=" << dest
+//                     << ", destItem->getNumChildren()=" <<destItem->getNumChildren()
+//                     << " );";
             beginMoveRows(srcIndex.parent(), srcItem->getChildNumber(),
                           srcItem->getChildNumber(),
                           dest, destItem->getNumChildren() );

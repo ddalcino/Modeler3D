@@ -51,6 +51,9 @@ protected:
 //    QQuaternion rotation;
     bool _isPrimitive;
 
+
+    bool _isSelected;
+
     QString name;
 public:
 
@@ -90,7 +93,7 @@ public:
     const QVector3D& getScale() const {return glData.scale;}
     const QQuaternion& getRotation() const {return glData.rotation;}
     const GlData *getGlData() const {
-        qDebug() << "GlObject::glData is: " << glData.toString();
+//        qDebug() << "GlObject::glData is: " << glData.toString();
         return &glData;
     }
     bool isPrimitive() const {return _isPrimitive;}

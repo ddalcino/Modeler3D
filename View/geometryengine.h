@@ -6,6 +6,7 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QVector3D>
+#include <QObject>
 
 #include <map>
 
@@ -37,10 +38,11 @@ struct Vbos {
  * @brief The GeometryEngine class
  * This class handles all OpenGl calls, period.
  */
-class GeometryEngine : protected QOpenGLFunctions
+class GeometryEngine : public QObject, protected QOpenGLFunctions
 {
+    Q_OBJECT
 public:
-    GeometryEngine(PrimitiveDefinition::Types t);
+    GeometryEngine(QObject *parent=0);
     virtual ~GeometryEngine();
 
     //void drawCubeGeometry(QOpenGLShaderProgram *program);
@@ -57,7 +59,7 @@ public:
     const QVector3D& getRotation(float& theta) const {theta=rotationAngle;
                                                 return rotation;}
 
-    static void initGpu();
+    static void init();
 
 private:
     //void initCubeGeometry();

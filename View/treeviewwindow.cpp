@@ -1,4 +1,5 @@
 #include "treeviewwindow.h"
+#include "perspectivewindow.h"
 #include "ui_treeviewwindow.h"
 #include "../Model/treemodel.h"
 #include "../Model/globject.h"
@@ -10,6 +11,7 @@ TreeViewWindow::TreeViewWindow(QWidget *parent, TreeModel *model)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
       treeModel(model),
+      gEngine(NULL),
       selectionModel(model)
 {
     ui->setupUi(this);
@@ -19,21 +21,33 @@ TreeViewWindow::TreeViewWindow(QWidget *parent, TreeModel *model)
     ui->treeView->setSelectionModel(&selectionModel);
     ui->treeView->setSelectionMode(QAbstractItemView::SingleSelection);
 
+    gEngine = NULL; // new GeometryEngine(this);
+
     //ui->setupUi(this);
     //ui->
+    PerspectiveWindow *p = new PerspectiveWindow(this);
+    p->show();
+
+    // Connect selectionModel, selectionChanged to editobjectdialog
 }
 
 TreeViewWindow::~TreeViewWindow()
 {
     delete ui;
+    delete gEngine;
 }
 
 const GlData *TreeViewWindow::getGlDataAtSelection() const {
+//    qDebug() << "TreeViewWindow::getGlDataAtSelection(): "
+//             << "hasSelection()=" << selectionModel.hasSelection()
+//             << "currentIndex()=" << selectionModel.currentIndex();
+
+
     if (selectionModel.hasSelection()) {
-        const QModelIndex &index = selectionModel.selectedRows().first();
+        const QModelIndex index = selectionModel.currentIndex(); // selectionModel.selectedRows().first();
         if (index.isValid()) {
             const GlData *data = treeModel->getGlDataAt(index);
-            qDebug() << "Selected data is: " << data->toString();
+//            qDebug() << "Selected data is: " << data->toString();
             return data;  //  ->getItem(index)
         }
     }
@@ -42,7 +56,7 @@ const GlData *TreeViewWindow::getGlDataAtSelection() const {
 
 void TreeViewWindow::setTranslationAtSel(const QVector3D &t) {
     if (selectionModel.hasSelection()) {
-        const QModelIndex &index = selectionModel.selectedRows().first();
+        const QModelIndex index = selectionModel.selectedRows().first();
         if (index.isValid()) {
             treeModel->setTranslationAt(index, t);
         }
@@ -53,7 +67,7 @@ void TreeViewWindow::setTranslationAtSel(const QVector3D &t) {
 void TreeViewWindow::setScaleAtSel(const QVector3D &s)
 {
     if (selectionModel.hasSelection()) {
-        const QModelIndex &index = selectionModel.selectedRows().first();
+        const QModelIndex index = selectionModel.selectedRows().first();
         if (index.isValid()) {
             treeModel->setScaleAt(index, s);
         }
@@ -64,7 +78,7 @@ void TreeViewWindow::setScaleAtSel(const QVector3D &s)
 void TreeViewWindow::setRotationAtSel(const QVector3D &r, float theta)
 {
     if (selectionModel.hasSelection()) {
-        const QModelIndex &index = selectionModel.selectedRows().first();
+        const QModelIndex index = selectionModel.selectedRows().first();
         if (index.isValid()) {
             treeModel->setRotationAt(index, r, theta);
         }
@@ -100,12 +114,15 @@ void TreeViewWindow::on_action_Copy_triggered()
 {
     qDebug() << "Copy";
     // figure out who's selected
+    const QModelIndex index = selectionModel.currentIndex();
+    treeModel->addToRoot(treeModel->copyObjectAt(index));
 
-    QModelIndexList list = selectionModel.selectedIndexes();
-    for (const QModelIndex& index : list) {
-        qDebug() << "Copying item at index " << index;
-        treeModel->addToRoot(treeModel->copyObjectAt(index));
-    }
+
+//    QModelIndexList list = selectionModel.selectedIndexes();
+//    for (const QModelIndex& index : list) {
+//        qDebug() << "Copying item at index " << index;
+//        treeModel->addToRoot(treeModel->copyObjectAt(index));
+//    }
     emit model_changed();
 }
 
@@ -114,8 +131,8 @@ void TreeViewWindow::on_action_Move_triggered()
     qDebug() << "Move";
 
     // save who's selected
-    itemsToMove.clear();
-    itemsToMove = selectionModel.selectedIndexes();
+    //itemsToMove.clear();
+    itemsToMove.push_back(getFirstSelectedIndex()); //selectionModel.selectedIndexes();
 
     // unselect everybody
     selectionModel.clearSelection();
@@ -163,12 +180,19 @@ void TreeViewWindow::on_action_Group_triggered()
 
 QModelIndex TreeViewWindow::getFirstSelectedIndex(bool noPrimitives) const
 {
-    if (selectionModel.selectedIndexes().size() == 1) {
-        QModelIndex index = selectionModel.selectedIndexes().first();
-        if (!(noPrimitives && treeModel->isItemPrimitive(index))) {
-            return index;
-        }
+    //selectionModel.
+    if (selectionModel.currentIndex().isValid()) {
+//        qDebug() << "TreeViewWindow::getFirstSelectedIndex() got current index";
+        return selectionModel.currentIndex();
     }
+//    qDebug() << "TreeViewWindow::getFirstSelectedIndex() no current index";
+
+//    if (selectionModel.selectedIndexes().size() == 1) {
+//        QModelIndex index = selectionModel.selectedIndexes().first();
+//        if (!(noPrimitives && treeModel->isItemPrimitive(index))) {
+//            return index;
+//        }
+//    }
     return QModelIndex();
 }
 
@@ -201,3 +225,8 @@ void TreeViewWindow::on_action_Delete_triggered()
 //        //treeModel->addToRoot(treeModel->copyObjectAt(index));
 //    }
 
+
+//void TreeViewWindow::on_action_New_Perspective_Window_triggered() {
+//    PerspectiveWindow *p = new PerspectiveWindow(this);
+//    p->show();
+//}

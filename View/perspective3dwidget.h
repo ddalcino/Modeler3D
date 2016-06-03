@@ -36,8 +36,8 @@ public:
 
     void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
-    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
+//    void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+//    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
 
     void initializeGL() Q_DECL_OVERRIDE;
     void resizeGL(int w, int h) Q_DECL_OVERRIDE;

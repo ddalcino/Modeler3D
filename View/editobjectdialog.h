@@ -19,8 +19,10 @@ public:
     explicit EditObjectDialog(PerspectiveWindow *parent = 0);
     ~EditObjectDialog();
 
-    void init(GeometryEngine *e);
+    void init();
 
+public slots:
+    void setSliders();
 
 private slots:
     void on_hSliderPosX_sliderMoved(int position);
@@ -58,6 +60,12 @@ private:
 
     float hSliderPosScale, hSliderScaleScale, hSliderRotScale;
 
+    struct Constraints {
+        bool x, y, z;
+        Constraints() : x(false), y(false), z(false) {}
+    };
+    Constraints constraintPos, constraintScale;
+
     enum Axis {X, Y, Z};
     void setTranslation(Axis ax, double amt);
     void setScale(Axis ax, double amt);
@@ -66,6 +74,9 @@ private:
     const QVector3D *getSelectedTranslation() const;
     const QVector3D *getSelectedScale() const;
     QVector3D getSelectedRotation(float &theta) const;
+
+    void updateConstraintsPos();
+    void updateConstraintsScale();
 
     //void setRotationAngle(double amt);
 };

@@ -115,6 +115,38 @@
      </layout>
     </item>
     <item>
+     <layout class="QHBoxLayout" name="hLayoutConstrainPos">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Constrain</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="ckConstrainPosX">
+        <property name="text">
+         <string>X</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="ckConstrainPosY">
+        <property name="text">
+         <string>Y</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="ckConstrainPosZ">
+        <property name="text">
+         <string>Z</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="hLayoutRotX">
       <item>
        <widget class="QDoubleSpinBox" name="doubleSpinRotX"/>
@@ -271,6 +303,38 @@
        <widget class="QSlider" name="hSliderScaleZ">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hLayoutConstrainScale">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Constrain</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="ckConstrainScaleX">
+        <property name="text">
+         <string>X</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="ckConstrainScaleY">
+        <property name="text">
+         <string>Y</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="ckConstrainScaleZ">
+        <property name="text">
+         <string>Z</string>
         </property>
        </widget>
       </item>

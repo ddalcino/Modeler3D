@@ -12,6 +12,7 @@ class MainWindow;
 }
 
 class GlData;
+class GeometryEngine;
 
 class TreeViewWindow : public QMainWindow
 {
@@ -30,6 +31,9 @@ public:
 
 
     const TreeModel *getTreeModel() const {return treeModel;}
+    GeometryEngine *getGEngine() { return gEngine; }
+
+    const QItemSelectionModel *getSelectionModel() const {return &selectionModel; }
 
 signals:
     void model_changed();
@@ -55,9 +59,12 @@ private slots:
 
     void on_action_Delete_triggered();
 
+//    void on_action_New_Perspective_Window_triggered();
+
 private:
     Ui::MainWindow *ui;
     TreeModel *treeModel;
+    GeometryEngine *gEngine;
     QItemSelectionModel selectionModel;
     QModelIndexList itemsToMove;
 

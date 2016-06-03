@@ -14,6 +14,10 @@ EditObjectDialog::EditObjectDialog(PerspectiveWindow *parent) :
     hSliderRotScale(180)
 {
     ui->setupUi(this);
+
+    connect(parent->getTvWindow()->getSelectionModel(),
+            SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(setSliders()));
 }
 
 EditObjectDialog::~EditObjectDialog()
@@ -21,87 +25,90 @@ EditObjectDialog::~EditObjectDialog()
     delete ui;
 }
 
-void EditObjectDialog::init(GeometryEngine *e)
+void EditObjectDialog::init()
 {
-    if (e == NULL) {
-        qDebug() << "No geometry yet!!";
-        return;
-    }
+
+    ui->doubleSpinPosX->setRange(-hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE,
+                                 hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE);
+    ui->hSliderPosX->setMinimum(-hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
+    ui->hSliderPosX->setMaximum(hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
+    ui->doubleSpinPosY->setRange(-hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE,
+                                 hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE);
+    ui->hSliderPosY->setMinimum(-hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
+    ui->hSliderPosY->setMaximum(hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
+    ui->doubleSpinPosZ->setRange(-hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE,
+                                 hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE);
+    ui->hSliderPosZ->setMinimum(-hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
+    ui->hSliderPosZ->setMaximum(hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
+    ui->doubleSpinScaleX->setRange(0, hSliderScaleScale);
+    ui->hSliderScaleX->setMinimum(0);
+    ui->hSliderScaleX->setMaximum(hSliderScaleScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
+    ui->doubleSpinScaleY->setRange(0, hSliderScaleScale);
+    ui->hSliderScaleY->setMinimum(0);
+    ui->hSliderScaleY->setMaximum(hSliderScaleScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
+    ui->doubleSpinScaleZ->setRange(0, hSliderScaleScale);
+    ui->hSliderScaleZ->setMinimum(0);
+    ui->hSliderScaleZ->setMaximum(hSliderScaleScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
+    ui->doubleSpinRotAngle->setRange(-180, 180);
+    ui->hSliderRotAngle->setMinimum(-180);
+    ui->hSliderRotAngle->setMaximum(180);
+    ui->doubleSpinRotX->setRange(-180, 180);
+    ui->doubleSpinRotY->setRange(-180, 180);
+    ui->hSliderRotX->setMinimum(-hSliderRotScale);
+    ui->hSliderRotX->setMaximum(hSliderRotScale);
+    ui->hSliderRotY->setMinimum(-hSliderRotScale);
+    ui->hSliderRotY->setMaximum(hSliderRotScale);
+    ui->doubleSpinRotZ->setRange(-180, 180);
+    ui->hSliderRotZ->setMinimum(-hSliderRotScale);
+    ui->hSliderRotZ->setMaximum(hSliderRotScale);
+
+
+}
+
+void EditObjectDialog::setSliders()
+{
     const GlData *selectedData = parent->getTvWindow()->getGlDataAtSelection();
     if (!selectedData) {
-        qDebug() << "No data at selection!!";
+        qDebug() << "EditObjectDialog::init(): No data at selection!!";
         return;
     }
-    //geometryEngine=e;
 
     const QVector3D &translation = selectedData->translation; //geometryEngine->getTranslation();
     ui->hSliderPosX->setValue((int)translation.x());
-    ui->doubleSpinPosX->setRange(-hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE,
-                                 hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE);
     ui->doubleSpinPosX->setValue(translation.x());
-    ui->hSliderPosX->setMinimum(-hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
-    ui->hSliderPosX->setMaximum(hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
 
     ui->hSliderPosY->setValue((int)translation.y());
-    ui->doubleSpinPosY->setRange(-hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE,
-                                 hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE);
     ui->doubleSpinPosY->setValue(translation.y());
-    ui->hSliderPosY->setMinimum(-hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
-    ui->hSliderPosY->setMaximum(hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
 
     ui->hSliderPosZ->setValue((int)translation.z());
-    ui->doubleSpinPosZ->setRange(-hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE,
-                                 hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE);
     ui->doubleSpinPosZ->setValue(translation.z());
-    ui->hSliderPosZ->setMinimum(-hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
-    ui->hSliderPosZ->setMaximum(hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
 
     const QVector3D &scale = selectedData->scale; //geometryEngine->getScale();
-    ui->doubleSpinScaleX->setRange(0, hSliderScaleScale);
     ui->doubleSpinScaleX->setValue(scale.x());
     ui->hSliderScaleX->setValue((int)scale.x()* SLIDER_NOTCHES_PER_UNIT_SPACE);
-    ui->hSliderScaleX->setMinimum(0);
-    ui->hSliderScaleX->setMaximum(hSliderScaleScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
 
-    ui->doubleSpinScaleY->setRange(0, hSliderScaleScale);
     ui->doubleSpinScaleY->setValue(scale.y());
     ui->hSliderScaleY->setValue((int)scale.y()* SLIDER_NOTCHES_PER_UNIT_SPACE);
-    ui->hSliderScaleY->setMinimum(0);
-    ui->hSliderScaleY->setMaximum(hSliderScaleScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
 
-    ui->doubleSpinScaleZ->setRange(0, hSliderScaleScale);
     ui->doubleSpinScaleZ->setValue(scale.z());
     ui->hSliderScaleZ->setValue((int)scale.z()* SLIDER_NOTCHES_PER_UNIT_SPACE);
-    ui->hSliderScaleZ->setMinimum(0);
-    ui->hSliderScaleZ->setMaximum(hSliderScaleScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
 
     const QQuaternion &quat = selectedData->rotation;
     QVector4D rot4 = quat.toVector4D();
     float theta = rot4.w();
     QVector3D rotAngle = rot4.toVector3D();  //geometryEngine->getRotation(theta);
-    ui->doubleSpinRotAngle->setRange(-180, 180);
     ui->doubleSpinRotAngle->setValue(theta);
     ui->hSliderRotAngle->setValue(theta/PI * 180);
-    ui->hSliderRotAngle->setMinimum(-180);
-    ui->hSliderRotAngle->setMaximum(180);
 
-    ui->doubleSpinRotX->setRange(-180, 180);
     ui->doubleSpinRotX->setValue(rotAngle.x()* 180.0 / PI);
     ui->hSliderRotX->setValue((int)(rotAngle.x()* 180.0 / PI));
-    ui->hSliderRotX->setMinimum(-hSliderRotScale);
-    ui->hSliderRotX->setMaximum(hSliderRotScale);
 
-    ui->doubleSpinRotY->setRange(-180, 180);
     ui->doubleSpinRotY->setValue(rotAngle.y()* 180.0 / PI);
     ui->hSliderRotY->setValue((int)(rotAngle.y()* 180.0 / PI));
-    ui->hSliderRotY->setMinimum(-hSliderRotScale);
-    ui->hSliderRotY->setMaximum(hSliderRotScale);
 
-    ui->doubleSpinRotZ->setRange(-180, 180);
     ui->doubleSpinRotZ->setValue(rotAngle.z()* 180.0 / PI);
     ui->hSliderRotZ->setValue((int)(rotAngle.z()* 180.0 / PI));
-    ui->hSliderRotZ->setMinimum(-hSliderRotScale);
-    ui->hSliderRotZ->setMaximum(hSliderRotScale);
+
 }
 
 void EditObjectDialog::on_hSliderPosX_sliderMoved(int position)
@@ -159,13 +166,10 @@ void EditObjectDialog::setTranslation(EditObjectDialog::Axis ax, double amt)
 
 void EditObjectDialog::setScale(EditObjectDialog::Axis ax, double amt)
 {
-//    GlData *selectedData = parent->getTvWindow()->getGlDataAtSelection();
-//    if (!selectedData) {
-//        qDebug() << "setScale failed: No data at selection!!";
-//        return;
-//    }
-    const QVector3D *scalep = getSelectedScale(); // selectedData->scale;
+    updateConstraintsScale();
 
+    // should we just pull this data from the spin boxes? could be a lot faster
+    const QVector3D *scalep = getSelectedScale(); // selectedData->scale;
     if (!scalep) {
         return;
     }
@@ -234,7 +238,7 @@ const QVector3D *EditObjectDialog::getSelectedTranslation() const
         qDebug() << "getSelectedTranslation failed: No data at selection!!";
         return NULL;
     }
-    qDebug() << "Got GlData=" << selectedData->toString();
+//    qDebug() << "Got GlData=" << selectedData->toString();
     return &selectedData->translation;
 }
 
@@ -255,7 +259,7 @@ QVector3D EditObjectDialog::getSelectedRotation(float &theta) const {
         theta = -1;
         return QVector3D();
     }
-    qDebug() << "Selected data is: " << selectedData->toString();
+//    qDebug() << "Selected data is: " << selectedData->toString();
 
     const QQuaternion *quat = &selectedData->rotation;
     if (quat) {
@@ -266,6 +270,18 @@ QVector3D EditObjectDialog::getSelectedRotation(float &theta) const {
         qDebug() << "There's no quaternion there.";
         return QVector3D();
     }
+}
+
+void EditObjectDialog::updateConstraintsPos() {
+    constraintPos.x = ui->ckConstrainPosX->isChecked();
+    constraintPos.y = ui->ckConstrainPosY->isChecked();
+    constraintPos.z = ui->ckConstrainPosZ->isChecked();
+}
+
+void EditObjectDialog::updateConstraintsScale() {
+    constraintPos.x = ui->ckConstrainScaleX->isChecked();
+    constraintPos.y = ui->ckConstrainScaleY->isChecked();
+    constraintPos.z = ui->ckConstrainScaleZ->isChecked();
 }
 
 void EditObjectDialog::on_hSliderScaleX_sliderMoved(int position)

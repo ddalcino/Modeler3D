@@ -61,8 +61,15 @@
     <addaction name="separator"/>
     <addaction name="action_Paste"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="action_New_Perspective_Window"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menuObject"/>
+   <addaction name="menuView"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_Cube">
@@ -126,6 +133,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="action_New_Perspective_Window">
+   <property name="text">
+    <string>&amp;New Perspective Window</string>
    </property>
   </action>
  </widget>

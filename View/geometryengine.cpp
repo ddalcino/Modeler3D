@@ -15,8 +15,9 @@ struct _VertexData
     QVector3D normal;
 };
 
-GeometryEngine::GeometryEngine(PrimitiveDefinition::Types t)
+GeometryEngine::GeometryEngine(QObject *parent)
     : //indexBuf(QOpenGLBuffer::IndexBuffer),
+      QObject(parent),
       translation(0,0,0),
       scale(1,1,1),
       rotation(0,0,0),
@@ -24,8 +25,7 @@ GeometryEngine::GeometryEngine(PrimitiveDefinition::Types t)
 {
     initializeOpenGLFunctions();
 
-    initGpu();
-
+    init();
 
 //    // Generate 2 VBOs
 //    arrayBuf.create();
@@ -165,7 +165,7 @@ void GeometryEngine::drawPrimGeometry(const DrawDirections &dir,
 //        mat.rotate(rotationAngle, rotation);
 //        mat.translate(translation);
 //        mat.scale(scale);
-        qDebug() << "Model matrix:" << mat;
+//        qDebug() << "Model matrix:" << mat;
 
         program->setUniformValue("mModel", mat);
         // Draw cube geometry using indices from VBO 1
@@ -177,9 +177,10 @@ void GeometryEngine::drawPrimGeometry(const DrawDirections &dir,
     }
 }
 
-void GeometryEngine::initGpu()
+void GeometryEngine::init()
 {
     if (!initialized) {
+        //initializeOpenGLFunctions();
 
         // set up gpuData to have references to all the geometry we could possibly need
         gpuData.insert(std::pair<QString, Vbos *>(QString("Cube"), new Vbos(PrimitiveDefinition::CUBE) ));
