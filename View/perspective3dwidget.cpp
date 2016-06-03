@@ -4,7 +4,8 @@
 #include <QDebug>
 #include <QPoint>
 
-#include "../Model/globject.h" // for DrawingDirections
+//#include "../Model/globject.h" // for DrawingDirections
+#include "../shared_structs.h" // for DrawingDirections
 
 Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     QOpenGLWidget(parent),
@@ -13,8 +14,10 @@ Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     cameraPosition(0, 0, -5),
     fov(45.0),
     lightPosition(-5, 5, -5, 1.0),
-    trackball(),
-    isWireframeMode(false)
+    trackballCam(),
+    isWireframeMode(false),
+    showGrid(true),
+    showAxes(false)
 {
 //    qDebug() << "Perspective3DWidget constructor called";
 }
@@ -29,7 +32,7 @@ Perspective3DWidget::~Perspective3DWidget()
 
 void Perspective3DWidget::mouseMoveEvent(QMouseEvent *e) {
     if (e->buttons() & Qt::LeftButton) {
-        trackball.dragMouse(e->pos());
+        trackballCam.dragMouse(e->pos());
         update();
     }
 }
@@ -37,7 +40,7 @@ void Perspective3DWidget::mouseMoveEvent(QMouseEvent *e) {
 void Perspective3DWidget::mousePressEvent(QMouseEvent *e) {
 
     if (e->buttons() & Qt::LeftButton) {
-        trackball.startMouse(e->pos());
+        trackballCam.startMouse(e->pos());
     }
 }
 
@@ -122,6 +125,7 @@ void Perspective3DWidget::initShaders()
         qDebug() << "failed to bind shaders";
         close();
     }
+
     qDebug() << "initShaders() finished successfully";
 }
 
@@ -147,7 +151,7 @@ void Perspective3DWidget::resizeGL(int w, int h)
     projection.perspective(fov, aspect, zNear, zFar);
 
     this->resize(w, h);
-    trackball.recenter(this->size());
+    trackballCam.recenter(this->size());
 }
 
 void Perspective3DWidget::paintGL()
@@ -161,7 +165,7 @@ void Perspective3DWidget::paintGL()
     // Calculate model view transformation
     QMatrix4x4 matrix;
     matrix.translate(cameraPosition);
-    matrix.rotate(trackball.getQnow());
+    matrix.rotate(trackballCam.getQnow());
     //matrix.rotate(rotation);
 
     // Set modelview and projection matrices
@@ -183,17 +187,37 @@ void Perspective3DWidget::paintGL()
 
 
     // get list of directions
-    const GlObject *root = model->getRoot();
+    //const GlObject *root = model->getRoot();
     std::vector<DrawDirections> dirs;
     DrawDirections next;
-    root->getDrawingDirections(dirs, next);
+    model->getDrawingDirections(dirs, next);
+
+    if (showGrid) {
+        program.setUniformValue("wireframe_color", QVector4D(0.2f, 1.0f, 1.0f, 1.0f));
+        geometries->drawGrid(&program);
+    }
 
     for (const DrawDirections &dir : dirs) {
-
         // Draw geometry
-        geometries->drawPrimGeometry(dir, &program, isWireframeMode);
+        if (isWireframeMode) {
+            program.setUniformValue("wireframe_color", QVector4D(1.0f, 1.0f, 1.0f, 1.0f));
+            geometries->drawPrimGeometry(dir, &program, isWireframeMode);
+        } else {
+            program.setUniformValue("wireframe_color", QVector4D());
+            geometries->drawPrimGeometry(dir, &program, isWireframeMode);
+        }
+        if (showAxes) {
+            // Disable depth buffer
+            glDisable(GL_DEPTH_TEST);
 
+            // Draw axes on top of objects
+            geometries->drawAxes(dir, &program);
+
+            // Enable depth buffer
+            glEnable(GL_DEPTH_TEST);
+        }
     }
+
 
 }
 

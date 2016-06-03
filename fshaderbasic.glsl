@@ -11,6 +11,7 @@ uniform vec4 AmbientProduct;
 uniform vec4 DiffuseProduct;
 uniform vec4 SpecularProduct;
 uniform float Shininess;
+uniform vec4 wireframe_color;
 
 // inputs from the vertex shader code
 // these are all in eye coords
@@ -18,28 +19,33 @@ varying vec3 Light, View, Normal;
 
 void main()
 {
-  vec4 color;
-  vec3 L = normalize(Light);
-  vec3 V = normalize(View);
-  vec3 N = normalize(Normal);
-  vec3 H = normalize ( L + V );
+    if (wireframe_color.w > 0.0) {
+        gl_FragColor = wireframe_color;
+    } else {
 
-  // Compute terms in the illumination equation
-  vec4 ambient = AmbientProduct;
+        vec4 color;
+        vec3 L = normalize(Light);
+        vec3 V = normalize(View);
+        vec3 N = normalize(Normal);
+        vec3 H = normalize ( L + V );
 
-//  // two-sided lighting
-//  float Kd = max( dot(L, N), -dot(L, N) );
-  float Kd = dot(L, N);
-  vec4  diffuse = Kd * DiffuseProduct;
+        // Compute terms in the illumination equation
+        vec4 ambient = AmbientProduct;
 
-  float Ks = pow( max(dot(N, H), -dot(N, H)), Shininess );
-  vec4  specular = Ks * SpecularProduct;
+        //// two-sided lighting
+        //float Kd = max( dot(L, N), -dot(L, N) );
+        float Kd = dot(L, N);
+        vec4  diffuse = Kd * DiffuseProduct;
 
-  if( dot(L, N) < 0.0 ) {
-    specular = vec4(0.0, 0.0, 0.0, 1.0);
-  }
+        float Ks = pow( max(dot(N, H), -dot(N, H)), Shininess );
+        vec4  specular = Ks * SpecularProduct;
 
-  gl_FragColor = ambient + diffuse + specular;
+        if( dot(L, N) < 0.0 ) {
+            specular = vec4(0.0, 0.0, 0.0, 1.0);
+        }
+
+        gl_FragColor = ambient + diffuse + specular;
+    }
 }
 
 //varying vec3 color;

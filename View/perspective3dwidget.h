@@ -16,7 +16,7 @@
 
 #include "geometryengine.h"
 #include "../Model/treemodel.h"
-#include "primitivedefinition.h"
+//#include "primitivedefinition.h"
 #include "trackball.h"
 
 /**
@@ -29,7 +29,10 @@ class Perspective3DWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
 public:
-    enum MouseDragType {};
+    enum MouseDragType {RotCam, RotObj,
+                        TrCamXY, TrCamYZ, TrCamXZ,
+                        TrObjXY, TrObjYZ, TrObjXZ,
+                        ScaleObjXY, ScaleObjYZ, ScaleObjXZ };
 
     explicit Perspective3DWidget(QWidget *parent = 0);
     ~Perspective3DWidget();
@@ -57,9 +60,15 @@ public:
     void setCameraPos(const QVector3D& pos) { cameraPosition = pos; update(); }
     float getFov() const { return fov; }
     void setFov(float f) { fov = f; resizeGL(width(), height()); update(); }
+    void setWireframeMode(bool b) { isWireframeMode = b; }
+    void setShowGrid(bool b) { showGrid = b; }
+    void setShowAxes(bool b) { showAxes = b; }
+    void setMouseDragType(MouseDragType t) { dragType = t;  qDebug() << "Set mousedragtype to " << t;}
+    MouseDragType getMouseDragType() const { return dragType; }
 
 private:
     QOpenGLShaderProgram program;
+    //QOpenGLShaderProgram wireProgram;
     GeometryEngine *geometries;
     const TreeModel *model;
 
@@ -75,10 +84,14 @@ private:
 //    qreal angularSpeed;
     QQuaternion rotation;
 
-    Trackball trackball;
+    Trackball trackballCam;
+    Trackball obj;
 
     bool isWireframeMode;
+    bool showGrid;
+    bool showAxes;
 
+    MouseDragType dragType;
 signals:
 
 public slots:

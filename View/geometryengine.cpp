@@ -1,6 +1,7 @@
 #include "geometryengine.h"
-#include "../Model/globject.h" // for DrawDirections
-
+//#include "../Model/globject.h" // for DrawDirections
+#include "../shared_structs.h" // for DrawDirections
+#include "primitivedefinition.h"
 #include <QVector2D>
 #include <QVector3D>
 #include <QMatrix4x4>
@@ -116,7 +117,7 @@ GeometryEngine::~GeometryEngine()
 //}
 */
 
-void Vbos::initPrimGeometry(PrimitiveDefinition::Types t)
+void Vbos::initPrimGeometry(GlData::Types t)
 {
     PrimitiveDefinition prim(t);
 
@@ -177,16 +178,109 @@ void GeometryEngine::drawPrimGeometry(const DrawDirections &dir,
     }
 }
 
+void GeometryEngine::drawGrid(QOpenGLShaderProgram *program) {
+    Vbos *vbo = gpuData.at("Grid");
+    vbo->arrayBuf.bind();
+    vbo->indexBuf.bind();
+
+    // Offset for position
+    quintptr offset = 0;
+
+    // Tell OpenGL programmable pipeline how to locate vertex position data
+    int vertexLocation = program->attributeLocation("a_position");
+    program->enableAttributeArray(vertexLocation);
+    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(_VertexData));
+
+    // Offset for texture coordinate
+    offset += sizeof(QVector3D);
+
+    // Tell OpenGL programmable pipeline how to locate vertex normal coordinate data
+    int normalLocation = program->attributeLocation("a_normal");
+    program->enableAttributeArray(normalLocation);
+    program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(_VertexData));
+
+    QMatrix4x4 matRot, matPos;
+
+    for (int i = 0; i < 3; ++i) {
+        //matRot.rotate(90.0f, 1.0f, 0.0f, 0.0f);
+        program->setUniformValue("mModel", matRot * matPos);
+        glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
+        matPos.translate(0.0f, -8.0f, 0.0f);
+        program->setUniformValue("mModel", matRot * matPos);
+        glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
+        matPos.translate(-8.0f, 8.0f, 0.0f);
+        program->setUniformValue("mModel", matRot * matPos);
+        glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
+        matPos.translate(0.0f, -8.0f, 0.0f);
+        program->setUniformValue("mModel", matRot * matPos);
+        glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
+        matPos.translate(8.0f, 8.0f, 0.0f);
+
+
+        if (i == 0) {
+            matRot.rotate(90.0f, 0.0f, 1.0f, 0.0f);
+        } else if (i == 1) {
+            matRot.rotate(-90.0f, 0.0f, 1.0f, 0.0f);
+            matRot.rotate(90.0f, 1.0f, 0.0f, 0.0f);
+        }
+    }
+}
+
+void GeometryEngine::drawAxes(const DrawDirections &dir,
+                              QOpenGLShaderProgram *program) {
+    Vbos *vbo = gpuData.at("Line Arrow");
+    vbo->arrayBuf.bind();
+    vbo->indexBuf.bind();
+
+    // Offset for position
+    quintptr offset = 0;
+
+    // Tell OpenGL programmable pipeline how to locate vertex position data
+    int vertexLocation = program->attributeLocation("a_position");
+    program->enableAttributeArray(vertexLocation);
+    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(_VertexData));
+
+    // Offset for texture coordinate
+    offset += sizeof(QVector3D);
+
+    // Tell OpenGL programmable pipeline how to locate vertex normal coordinate data
+    int normalLocation = program->attributeLocation("a_normal");
+    program->enableAttributeArray(normalLocation);
+    program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(_VertexData));
+
+    // the X axis
+    program->setUniformValue("mModel", dir.rot);
+    program->setUniformValue("wireframe_color", QVector4D(1.0f, 0.0f, 0.0f, 1.0f));
+    glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
+
+    // the Y axis
+    QMatrix4x4 matRot;
+    matRot.rotate(90.0f, 0,0,1);
+    program->setUniformValue("mModel", matRot * dir.rot);
+    program->setUniformValue("wireframe_color", QVector4D(0.0f, 1.0f, 0.0f, 1.0f));
+    glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
+
+    // the Z axis
+    matRot.setToIdentity();
+    matRot.rotate(90.0f, 0,1,0);
+    program->setUniformValue("mModel", matRot * dir.rot);
+    program->setUniformValue("wireframe_color", QVector4D(0.0f, 0.0f, 1.0f, 1.0f));
+    glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
+
+}
+
 void GeometryEngine::init()
 {
     if (!initialized) {
         //initializeOpenGLFunctions();
 
         // set up gpuData to have references to all the geometry we could possibly need
-        gpuData.insert(std::pair<QString, Vbos *>(QString("Cube"), new Vbos(PrimitiveDefinition::CUBE) ));
-        gpuData.insert(std::pair<QString, Vbos *>(QString("Cylinder"), new Vbos(PrimitiveDefinition::CYLINDER) ));
-        gpuData.insert(std::pair<QString, Vbos *>(QString("Sphere"), new Vbos(PrimitiveDefinition::SPHERE) ));
-        gpuData.insert(std::pair<QString, Vbos *>(QString("Cone"), new Vbos(PrimitiveDefinition::CONE) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Cube"), new Vbos(GlData::CUBE) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Cylinder"), new Vbos(GlData::CYLINDER) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Sphere"), new Vbos(GlData::SPHERE) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Cone"), new Vbos(GlData::CONE) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Grid"), new Vbos(GlData::GRID) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Line Arrow"), new Vbos(GlData::LINE_ARROW) ));
     }
     initialized = true;
 }

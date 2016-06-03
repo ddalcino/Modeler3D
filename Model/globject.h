@@ -10,7 +10,8 @@
 #include <QString>
 #include <QTextStream>
 
-#include "../View/primitivedefinition.h"
+//#include "../View/primitivedefinition.h"
+#include "../shared_structs.h"
 
 #ifndef NULL
 #define NULL 0
@@ -18,27 +19,27 @@
 
 typedef QString PrimDefinition;
 
-struct DrawDirections {
-    QMatrix4x4 mat;
-    PrimDefinition def;
-    DrawDirections() : mat(QMatrix4x4()), def() {}
-};
+//struct DrawDirections {
+//    QMatrix4x4 mat;
+//    PrimDefinition def;
+//    DrawDirections() : mat(QMatrix4x4()), def() {}
+//};
 
-struct GlData {
-    QVector3D translation, scale;
-    QQuaternion rotation;
-    GlData() : translation(0,0,0), scale(1,1,1), rotation() {}
-    QString toString() const {
-        QString str; // = QString();
-        QTextStream ts(&str); //, QIODevice::ReadWrite);
-        ts << "Trans=(" << translation.x() << "," << translation.y() << ","
-                        << translation.z()
-           << "), Scale=(" << scale.x() << "," << scale.y() << "," << scale.z()
-           << "), Rot=(" << rotation.scalar() << "," << rotation.x() << ","
-                         << rotation.y() << "," << rotation.z() << ")";
-        return str;
-    }
-};
+//struct GlData {
+//    QVector3D translation, scale;
+//    QQuaternion rotation;
+//    GlData() : translation(0,0,0), scale(1,1,1), rotation() {}
+//    QString toString() const {
+//        QString str; // = QString();
+//        QTextStream ts(&str); //, QIODevice::ReadWrite);
+//        ts << "Trans=(" << translation.x() << "," << translation.y() << ","
+//                        << translation.z()
+//           << "), Scale=(" << scale.x() << "," << scale.y() << "," << scale.z()
+//           << "), Rot=(" << rotation.scalar() << "," << rotation.x() << ","
+//                         << rotation.y() << "," << rotation.z() << ")";
+//        return str;
+//    }
+//};
 
 
 

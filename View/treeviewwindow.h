@@ -6,6 +6,7 @@
 #include <QModelIndexList>
 
 #include "../Model/treemodel.h"
+#include "../shared_structs.h"
 
 namespace Ui {
 class MainWindow;

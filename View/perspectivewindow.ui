@@ -51,19 +51,31 @@
     </property>
     <addaction name="actionEdit_Camera"/>
     <addaction name="actionEdit_Object"/>
+    <addaction name="separator"/>
+    <addaction name="action_Wireframe"/>
+    <addaction name="actionShow_Grid"/>
+    <addaction name="actionShow_Axes"/>
    </widget>
-   <widget class="QMenu" name="menuPrimitive">
+   <widget class="QMenu" name="menu_Mouse_Behavior">
     <property name="title">
-     <string>&amp;Primitive</string>
+     <string>&amp;Mouse Behavior</string>
     </property>
-    <addaction name="action_Cube"/>
-    <addaction name="action_Sphere"/>
-    <addaction name="actionC_ylinder"/>
-    <addaction name="actionC_one"/>
+    <addaction name="actionRotate_Camera"/>
+    <addaction name="actionTranslate_Camera_XY"/>
+    <addaction name="actionTranslate_Camera_YZ"/>
+    <addaction name="actionTranslate_Camera_X_Z"/>
+    <addaction name="separator"/>
+    <addaction name="action_Rotate_Selected_Object"/>
+    <addaction name="actionScale_Object_XY"/>
+    <addaction name="actionScale_O_bject_YZ"/>
+    <addaction name="actionScale_Ob_ject_XZ"/>
+    <addaction name="actionTranslate_Obj_ect_XY"/>
+    <addaction name="actionTranslate_Obje_ct_YZ"/>
+    <addaction name="actionTranslate_Objec_t_XZ"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
-   <addaction name="menuPrimitive"/>
+   <addaction name="menu_Mouse_Behavior"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionEdit_Camera">
@@ -76,24 +88,122 @@
     <string>Edit &amp;Object...</string>
    </property>
   </action>
-  <action name="action_Cube">
+  <action name="action_Wireframe">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>&amp;Cube</string>
+    <string>&amp;Wireframe</string>
    </property>
   </action>
-  <action name="action_Sphere">
+  <action name="actionShow_Grid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>&amp;Sphere</string>
+    <string>Show &amp;Grid</string>
    </property>
   </action>
-  <action name="actionC_ylinder">
+  <action name="actionShow_Axes">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>C&amp;ylinder</string>
+    <string>Show &amp;Axes</string>
    </property>
   </action>
-  <action name="actionC_one">
+  <action name="actionRotate_Camera">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>C&amp;one</string>
+    <string>Rotate Ca&amp;mera</string>
+   </property>
+  </action>
+  <action name="actionTranslate_Camera_XY">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Translate Camera &amp;XY</string>
+   </property>
+  </action>
+  <action name="actionTranslate_Camera_YZ">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Translate Camera &amp;YZ</string>
+   </property>
+  </action>
+  <action name="actionTranslate_Camera_X_Z">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Translate Camera X&amp;Z</string>
+   </property>
+  </action>
+  <action name="action_Rotate_Selected_Object">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Rotate Selected Object</string>
+   </property>
+  </action>
+  <action name="actionScale_Object_XY">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Scale &amp;Object XY</string>
+   </property>
+  </action>
+  <action name="actionScale_O_bject_YZ">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Scale O&amp;bject YZ</string>
+   </property>
+  </action>
+  <action name="actionScale_Ob_ject_XZ">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Scale Ob&amp;ject XZ</string>
+   </property>
+  </action>
+  <action name="actionTranslate_Obj_ect_XY">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Translate Obj&amp;ect XY</string>
+   </property>
+  </action>
+  <action name="actionTranslate_Obje_ct_YZ">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Translate Obje&amp;ct YZ</string>
+   </property>
+  </action>
+  <action name="actionTranslate_Objec_t_XZ">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Translate Objec&amp;t XZ</string>
    </property>
   </action>
  </widget>

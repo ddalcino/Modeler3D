@@ -5,6 +5,8 @@
 
 #include "geometryengine.h"
 #include "treeviewwindow.h"
+#include "perspective3dwidget.h"
+
 //#include "../Model/treemodel.h"
 
 namespace Ui {
@@ -41,6 +43,8 @@ private:
 
     GeometryEngine *geometryEngine;
 
+    void validateMouseBehaviorType(Perspective3DWidget::MouseDragType newest);
+
 public slots:
     void updateChildren();
 
@@ -51,6 +55,11 @@ private slots:
 //    void on_action_Sphere_triggered();
 //    void on_actionC_ylinder_triggered();
 //    void on_actionC_one_triggered();
+    void on_action_Wireframe_toggled(bool arg1);
+    void on_actionShow_Grid_toggled(bool arg1);
+    void on_actionShow_Axes_toggled(bool arg1);
+    void on_action_Rotate_Selected_Object_toggled(bool arg1);
+    void on_actionRotate_Camera_toggled(bool arg1);
 };
 
 #endif // PERSPECTIVEWINDOW_H

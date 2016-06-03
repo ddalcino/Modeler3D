@@ -11,7 +11,7 @@
 #include <map>
 
 
-#include "primitivedefinition.h"
+#include "../shared_structs.h" //"primitivedefinition.h"
 
 struct DrawDirections;
 
@@ -20,9 +20,9 @@ struct Vbos {
     QOpenGLBuffer indexBuf;
     int numIndices;
 
-    void initPrimGeometry(PrimitiveDefinition::Types t);
+    void initPrimGeometry(GlData::Types t);
 
-    Vbos(PrimitiveDefinition::Types t) : indexBuf(QOpenGLBuffer::IndexBuffer) {
+    Vbos(GlData::Types t) : indexBuf(QOpenGLBuffer::IndexBuffer) {
         arrayBuf.create();
         indexBuf.create();
         initPrimGeometry(t);
@@ -49,6 +49,9 @@ public:
 
     void drawPrimGeometry(const DrawDirections &dir,
                           QOpenGLShaderProgram * program, bool isWireframeMode);
+
+    void drawGrid(QOpenGLShaderProgram *program);
+    void drawAxes(const DrawDirections &dir, QOpenGLShaderProgram *program);
 
     void setScale(const QVector3D& s) {scale = s;}
     void setTranslation(const QVector3D& s) {translation = s;}

@@ -2,7 +2,7 @@
 #include "perspectivewindow.h"
 #include "ui_treeviewwindow.h"
 #include "../Model/treemodel.h"
-#include "../Model/globject.h"
+//#include "../Model/globject.h"
 
 #include <QItemSelectionModel>
 #include <QDebug>
@@ -88,25 +88,25 @@ void TreeViewWindow::setRotationAtSel(const QVector3D &r, float theta)
 
 void TreeViewWindow::on_action_Cube_triggered() {
     QModelIndex parent = getFirstSelectedIndex();
-    treeModel->addObject(PrimitiveDefinition::CUBE, parent);
+    treeModel->addObject(GlData::CUBE, parent);
     emit model_changed();
 }
 
 void TreeViewWindow::on_actionC_ylinder_triggered() {
     QModelIndex parent = getFirstSelectedIndex();
-    treeModel->addObject(PrimitiveDefinition::CYLINDER, parent);
+    treeModel->addObject(GlData::CYLINDER, parent);
     emit model_changed();
 }
 
 void TreeViewWindow::on_action_Sphere_triggered() {
     QModelIndex parent = getFirstSelectedIndex();
-    treeModel->addObject(PrimitiveDefinition::SPHERE, parent);
+    treeModel->addObject(GlData::SPHERE, parent);
     emit model_changed();
 }
 
 void TreeViewWindow::on_actionC_one_triggered() {
     QModelIndex parent = getFirstSelectedIndex();
-    treeModel->addObject(PrimitiveDefinition::CONE, parent);
+    treeModel->addObject(GlData::CONE, parent);
     emit model_changed();
 }
 
@@ -132,7 +132,7 @@ void TreeViewWindow::on_action_Move_triggered()
 
     // save who's selected
     //itemsToMove.clear();
-    itemsToMove.push_back(getFirstSelectedIndex()); //selectionModel.selectedIndexes();
+    itemsToMove.push_back(getFirstSelectedIndex(false)); //selectionModel.selectedIndexes();
 
     // unselect everybody
     selectionModel.clearSelection();
@@ -144,19 +144,21 @@ void TreeViewWindow::on_action_Move_triggered()
 
 void TreeViewWindow::on_action_Paste_triggered()
 {
-    //TODO LATER!!
+    qDebug() << "Paste";
+
 
     // Only proceed if there's one item selected, and something to move
-    QModelIndexList destList = selectionModel.selectedIndexes();
-    if (destList.size() == 1 && itemsToMove.size() > 0) {
-        QModelIndex dest = destList.first();
+//    QModelIndexList destList = selectionModel.selectedIndexes();
+//    if (destList.size() == 1 && itemsToMove.size() > 0) {
+    QModelIndex dest = getFirstSelectedIndex();
+    if(dest.isValid() && itemsToMove.size() > 0) {
         treeModel->moveItems(itemsToMove, dest);
         itemsToMove.clear();
+        ui->action_Paste->setEnabled(false);
+        emit model_changed();
     }
     //ui->treeView->repaint();
 
-    ui->action_Paste->setEnabled(false);
-    emit model_changed();
 }
 
 void TreeViewWindow::on_action_Group_triggered()
@@ -180,19 +182,12 @@ void TreeViewWindow::on_action_Group_triggered()
 
 QModelIndex TreeViewWindow::getFirstSelectedIndex(bool noPrimitives) const
 {
-    //selectionModel.
-    if (selectionModel.currentIndex().isValid()) {
-//        qDebug() << "TreeViewWindow::getFirstSelectedIndex() got current index";
-        return selectionModel.currentIndex();
+    QModelIndex index = selectionModel.currentIndex();
+    if (index.isValid()) {
+        if (!(noPrimitives && treeModel->isItemPrimitive(index))) {
+            return index;
+        }
     }
-//    qDebug() << "TreeViewWindow::getFirstSelectedIndex() no current index";
-
-//    if (selectionModel.selectedIndexes().size() == 1) {
-//        QModelIndex index = selectionModel.selectedIndexes().first();
-//        if (!(noPrimitives && treeModel->isItemPrimitive(index))) {
-//            return index;
-//        }
-//    }
     return QModelIndex();
 }
 

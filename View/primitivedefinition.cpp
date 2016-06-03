@@ -9,12 +9,12 @@
 // TODO: The Cone normals are not normal to the plane of the triangles. This
 // should be fixed.
 
-PrimitiveDefinition::PrimitiveDefinition(Types t, int numVerticesPerCircle,
+PrimitiveDefinition::PrimitiveDefinition(GlData::Types t, int numVerticesPerCircle,
                                          float radius, float height) :
     primType(t)
 {
     switch (t) {
-    case CYLINDER:
+    case GlData::CYLINDER:
         // start by defining the curved surface
         for (int i = 0; i <= numVerticesPerCircle; ++i) {
             float startAngle = (2*PI * i) / numVerticesPerCircle;
@@ -75,7 +75,7 @@ PrimitiveDefinition::PrimitiveDefinition(Types t, int numVerticesPerCircle,
 //                        DrawData(GL_TRIANGLE_FAN, indices.size()));
         }
         break;
-    case CONE:
+    case GlData::CONE:
         // start by defining the curved surface
         for (int i = 0; i <= numVerticesPerCircle; ++i) {
             float startAngle = (2*PI * i) / numVerticesPerCircle;
@@ -97,10 +97,10 @@ PrimitiveDefinition::PrimitiveDefinition(Types t, int numVerticesPerCircle,
         }
         // duplicate the last index to end the triangle strip
         indices.push_back(vertices.size()-1); //2*numVerticesPerCircle +1);
-indices.push_back(vertices.size()-1);
+        indices.push_back(vertices.size()-1);
         addCircularFace(numVerticesPerCircle, 0, radius, QVector3D(0,-1,0));
         break;
-    case SPHERE:
+    case GlData::SPHERE:
         // each i represents an 'orange wedge' shaped triangle strip, from top to bottom
         for (int i = 0; i < numVerticesPerCircle; ++i) {
             double startAngle = (2*PI * i) / numVerticesPerCircle;
@@ -135,8 +135,50 @@ indices.push_back(vertices.size()-1);
             indices.push_back(vertices.size()-1);
         }
         break;
+    case GlData::GRID:
+        static const float gridDensity = 0.25f;
+        static const int numRows = 32;
+        static const int numHorizontalRepeats = numRows >> 1;
+        // horizontal rows
+        for (int row = 0; row < numRows; ++row) {
+            // start a new segment
+            //if (row>0) {
+            //indices.push_back(vertices.size());
+            for (int i = 0; i < numHorizontalRepeats; ++i) {
+                // Line strip: draw up, right, down, right
+                vertices.push_back(VertexData(QVector3D(gridDensity*2*i, gridDensity*row, 0.0f), QVector3D()));
+                indices.push_back(vertices.size()-1);
+                vertices.push_back(VertexData(QVector3D(gridDensity*2*i, gridDensity*(row+1), 0.0f), QVector3D()));
+                indices.push_back(vertices.size()-1);
+                vertices.push_back(VertexData(QVector3D(gridDensity*(2*i+1), gridDensity*(row+1), 0.0f), QVector3D()));
+                indices.push_back(vertices.size()-1);
+                vertices.push_back(VertexData(QVector3D(gridDensity*(2*i+1), gridDensity*row, 0.0f), QVector3D()));
+                indices.push_back(vertices.size()-1);
+            }
+            // end the segment
+            vertices.push_back(VertexData(QVector3D(gridDensity*(2*numHorizontalRepeats), gridDensity*row, 0.0f), QVector3D()));
+            indices.push_back(vertices.size()-1);
+            vertices.push_back(VertexData(QVector3D(gridDensity*(2*numHorizontalRepeats), gridDensity*(row+1), 0.0f), QVector3D()));
+            indices.push_back(vertices.size()-1);
+        }
+        break;
+    case GlData::LINE_ARROW:
+        static const float arrowLength = 0.75f;
+        static const float tipHalfWidth = 0.25f;
+
+        vertices.push_back(VertexData(QVector3D(0.0f, 0.0f, 0.0f), QVector3D()));
+        vertices.push_back(VertexData(QVector3D(arrowLength, 0.0f, 0.0f), QVector3D()));
+        vertices.push_back(VertexData(QVector3D(arrowLength-tipHalfWidth, tipHalfWidth, 0.0f), QVector3D()));
+        vertices.push_back(VertexData(QVector3D(arrowLength-tipHalfWidth, -tipHalfWidth, 0.0f), QVector3D()));
+        indices.push_back(0);
+        indices.push_back(1);
+        indices.push_back(2);
+        indices.push_back(1);
+        indices.push_back(3);
+
+        break;
     default:
-    case CUBE:
+    case GlData::CUBE:
             // For cube we would need only 8 vertices but we have to
             // duplicate vertex for each face because texture coordinate
             // is different.

@@ -190,7 +190,9 @@ void GlObject::getDrawingDirections(std::vector<DrawDirections> &dir,
 
     // apply rotation, translation, and scale transformations
     current.mat.rotate(glData.rotation);
+    current.rot.rotate(glData.rotation);
     current.mat.translate(glData.translation);
+    current.rot.translate(glData.translation);
     current.mat.scale(glData.scale);
 
     // loop through all the children and call getDrawingDirections on them
@@ -210,7 +212,9 @@ void GlPrimitiveObject::getDrawingDirections(std::vector<DrawDirections> &dir,
 
     // apply rotation, translation, and scale transformations
     current.mat.rotate(glData.rotation);
+    current.rot.rotate(glData.rotation);
     current.mat.translate(glData.translation);
+    current.rot.translate(glData.translation);
     current.mat.scale(glData.scale);
 
     // set definition to whatever this object if defined as

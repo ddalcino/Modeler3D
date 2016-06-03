@@ -6,11 +6,12 @@
 #include <QModelIndex>
 #include <QVariant>
 
-#include "../View/primitivedefinition.h"
+//#include "../View/primitivedefinition.h"
+#include "../shared_structs.h"
 
 class GlObject;
 struct GlData;
-class DrawDirections;
+//class DrawDirections;
 
 //! [0]
 class TreeModel : public QAbstractItemModel
@@ -49,7 +50,7 @@ public:
 //    bool removeRows(int position, int rows,
 //                    const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
 
-    void addObject(PrimitiveDefinition::Types t,
+    void addObject(GlData::Types t,
                    QModelIndex &parentIndex);
     void addToRoot(GlObject *item);
     QModelIndex addGroupToRoot();
@@ -67,6 +68,12 @@ public:
     void setTranslationAt(const QModelIndex &index, const QVector3D &t);
     void setScaleAt(const QModelIndex &index, const QVector3D &s);
     void setRotationAt(const QModelIndex &index, const QVector3D &rAxis, float theta);
+
+//    std::vector<DrawDirections> dirs;
+//    DrawDirections next;
+//    root->getDrawingDirections(dirs, next);
+    void getDrawingDirections(std::vector<DrawDirections> &dirs,
+                              DrawDirections &next) const;
 
 
 private:

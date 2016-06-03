@@ -5,6 +5,8 @@
 #include <QVector3D>
 #include <QOpenGLFunctions>
 
+#include "../shared_structs.h"
+
 struct VertexData {
     QVector3D position, normal;
     VertexData(QVector3D pos, QVector3D norm) : position(pos), normal(norm) {}
@@ -25,17 +27,17 @@ struct DrawData {
 class PrimitiveDefinition
 {
 public:
-    enum Types { CUBE, CYLINDER, CONE, SPHERE };
+    //enum Types { CUBE, CYLINDER, CONE, SPHERE, GRID };
 
 private:
     std::vector<VertexData> vertices;
     std::vector<GLushort> indices;
     std::vector<DrawData> drawingPrimitives;
-    Types primType;
+    GlData::Types primType;
 
 public:
 
-    PrimitiveDefinition(Types t, int numVerticesPerCircle=20,
+    PrimitiveDefinition(GlData::Types t, int numVerticesPerCircle=20,
                         float radius=1, float height=1);
 
 //    const std::vector<VertexData>* getVertices() const { return &vertices; }
@@ -45,18 +47,19 @@ public:
 
     int getNumVertices() const { return vertices.size(); }
     int getNumIndices() const { return indices.size(); }
-    Types getType() const { return primType; }
+    GlData::Types getType() const { return primType; }
 
-    static const char *toString(Types t) {
-        switch (t) {
-        case PrimitiveDefinition::CUBE: return "Cube";
-        case PrimitiveDefinition::CYLINDER: return "Cylinder";
-        case PrimitiveDefinition::CONE: return "Cone";
-        case PrimitiveDefinition::SPHERE: return "Sphere";
-        default: return "Default";
-        }
-    }
-    static QString toQString(Types t) { return QString(toString(t)); }
+//    static const char *toString(Types t) {
+//        switch (t) {
+//        case GlData::CUBE: return "Cube";
+//        case GlData::CYLINDER: return "Cylinder";
+//        case GlData::CONE: return "Cone";
+//        case GlData::SPHERE: return "Sphere";
+//        case GlData::GRID: return "Grid";
+//        default: return "Default";
+//        }
+//    }
+//    static QString toQString(Types t) { return QString(toString(t)); }
 
 protected:
     void addCircularFace(unsigned int numVerticesPerCircle, float y,

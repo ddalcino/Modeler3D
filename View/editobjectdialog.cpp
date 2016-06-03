@@ -1,7 +1,8 @@
 #include "editobjectdialog.h"
 #include "ui_editobjectdialog.h"
 #include "perspectivewindow.h"
-#include "../Model/globject.h"
+//#include "../Model/globject.h"
+#include "../shared_structs.h"
 
 #define PI 3.14159265
 
