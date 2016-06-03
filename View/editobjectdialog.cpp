@@ -128,6 +128,9 @@ void EditObjectDialog::on_hSliderPosZ_sliderMoved(int position)
 
 void EditObjectDialog::setTranslation(EditObjectDialog::Axis ax, double amt)
 {
+//    updateConstraintsPos();
+
+    // should we just pull this data from the spin boxes? could be a lot faster
     const QVector3D *translationp = getSelectedTranslation(); // selectedData->scale;
 
     if (!translationp) {
@@ -135,28 +138,42 @@ void EditObjectDialog::setTranslation(EditObjectDialog::Axis ax, double amt)
     }
     QVector3D translation = *translationp;
 
-//    //QVector3D translation = geometryEngine->getTranslation();
-//    GlData *selectedData = parent->getTvWindow()->getGlDataAtSelection();
-//    if (!selectedData) {
-//        qDebug() << "setTranslation failed: No data at selection!!";
-//        return;
-//    }
-//    const QVector3D &translation = selectedData->translation;
     switch(ax) {
     case X:
-        translation.setX(amt);
-        ui->doubleSpinPosX->setValue(amt);
-        ui->hSliderPosX->setValue(amt*SLIDER_NOTCHES_PER_UNIT_SPACE);
+        setUiControls(PosX, amt, &translation);
+//        if (constraintPos.x && constraintPos.y) {
+//            set(PosY, amt, &translation);
+//        }
+//        if (constraintPos.x && constraintPos.z) {
+//            set(PosZ, amt, &translation);
+//        }
+//        translation.setX(amt);
+//        ui->doubleSpinPosX->setValue(amt);
+//        ui->hSliderPosX->setValue(amt*SLIDER_NOTCHES_PER_UNIT_SPACE);
         break;
     case Y:
-        translation.setY(amt);
-        ui->doubleSpinPosY->setValue(amt);
-        ui->hSliderPosY->setValue(amt*SLIDER_NOTCHES_PER_UNIT_SPACE);
+        setUiControls(PosY, amt, &translation);
+//        if (constraintPos.y && constraintPos.x) {
+//            set(PosX, amt, &translation);
+//        }
+//        if (constraintPos.y && constraintPos.z) {
+//            set(PosZ, amt, &translation);
+//        }
+//        translation.setY(amt);
+//        ui->doubleSpinPosY->setValue(amt);
+//        ui->hSliderPosY->setValue(amt*SLIDER_NOTCHES_PER_UNIT_SPACE);
         break;
     case Z:
-        translation.setZ(amt);
-        ui->doubleSpinPosZ->setValue(amt);
-        ui->hSliderPosZ->setValue(amt*SLIDER_NOTCHES_PER_UNIT_SPACE);
+        setUiControls(PosZ, amt, &translation);
+//        if (constraintPos.z && constraintPos.x) {
+//            set(PosX, amt, &translation);
+//        }
+//        if (constraintPos.z && constraintPos.y) {
+//            set(PosY, amt, &translation);
+//        }
+//        translation.setZ(amt);
+//        ui->doubleSpinPosZ->setValue(amt);
+//        ui->hSliderPosZ->setValue(amt*SLIDER_NOTCHES_PER_UNIT_SPACE);
         break;
     }
     parent->getTvWindow()->setTranslationAtSel(translation);
@@ -166,7 +183,7 @@ void EditObjectDialog::setTranslation(EditObjectDialog::Axis ax, double amt)
 
 void EditObjectDialog::setScale(EditObjectDialog::Axis ax, double amt)
 {
-    updateConstraintsScale();
+//    updateConstraintsScale();
 
     // should we just pull this data from the spin boxes? could be a lot faster
     const QVector3D *scalep = getSelectedScale(); // selectedData->scale;
@@ -178,19 +195,31 @@ void EditObjectDialog::setScale(EditObjectDialog::Axis ax, double amt)
     //QVector3D scale = geometryEngine->getScale();
     switch(ax) {
     case X:
-        scale.setX(amt);
-        ui->doubleSpinScaleX->setValue(amt);
-        ui->hSliderScaleX->setValue(amt * SLIDER_NOTCHES_PER_UNIT_SPACE);
+        setUiControls(ScaleX, amt, &scale);
+//        if (constraintScale.x && constraintScale.y) {
+//            set(ScaleY, amt, &scale);
+//        }
+//        if (constraintScale.x && constraintScale.z) {
+//            set(ScaleZ, amt, &scale);
+//        }
         break;
     case Y:
-        scale.setY(amt);
-        ui->doubleSpinScaleY->setValue(amt);
-        ui->hSliderScaleY->setValue(amt * SLIDER_NOTCHES_PER_UNIT_SPACE);
+        setUiControls(ScaleY, amt, &scale);
+//        if (constraintScale.y && constraintScale.x) {
+//            set(ScaleX, amt, &scale);
+//        }
+//        if (constraintScale.y && constraintScale.z) {
+//            set(ScaleZ, amt, &scale);
+//        }
         break;
     case Z:
-        scale.setZ(amt);
-        ui->doubleSpinScaleZ->setValue(amt);
-        ui->hSliderScaleZ->setValue(amt * SLIDER_NOTCHES_PER_UNIT_SPACE);
+        setUiControls(ScaleZ, amt, &scale);
+//        if (constraintScale.z && constraintScale.x) {
+//            set(ScaleX, amt, &scale);
+//        }
+//        if (constraintScale.z && constraintScale.y) {
+//            set(ScaleY, amt, &scale);
+//        }
         break;
     }
     parent->getTvWindow()->setScaleAtSel(scale);
@@ -229,6 +258,45 @@ void EditObjectDialog::setRotation(EditObjectDialog::Axis ax, double amt)
     parent->getTvWindow()->setRotationAtSel(rotAxis, theta);
     //geometryEngine->setRotation(rotAxis, theta);
     //((PerspectiveWindow*)parent)->updateChildren();
+}
+
+void EditObjectDialog::setTranslation(EditObjectDialog::Axis dest,
+                                      EditObjectDialog::Axis src)
+{
+    QVector3D pos = *getSelectedTranslation();
+    double amt = (src == X) ? pos.x() :
+                 (src == Y) ? pos.y() : pos.z();
+    switch(dest) {
+    case X:
+        setUiControls(PosX, amt, &pos);
+        break;
+    case Y:
+        setUiControls(PosY, amt, &pos);
+        break;
+    case Z:
+        setUiControls(PosZ, amt, &pos);
+        break;
+    }
+    parent->getTvWindow()->setTranslationAtSel(pos);
+}
+
+void EditObjectDialog::setScale(EditObjectDialog::Axis dest, EditObjectDialog::Axis src)
+{
+    QVector3D scale = *getSelectedScale();
+    double amt = (src == X) ? scale.x() :
+                 (src == Y) ? scale.y() : scale.z();
+    switch(dest) {
+    case X:
+        setUiControls(ScaleX, amt, &scale);
+        break;
+    case Y:
+        setUiControls(ScaleY, amt, &scale);
+        break;
+    case Z:
+        setUiControls(ScaleZ, amt, &scale);
+        break;
+    }
+    parent->getTvWindow()->setScaleAtSel(scale);
 }
 
 const QVector3D *EditObjectDialog::getSelectedTranslation() const
@@ -272,16 +340,62 @@ QVector3D EditObjectDialog::getSelectedRotation(float &theta) const {
     }
 }
 
-void EditObjectDialog::updateConstraintsPos() {
-    constraintPos.x = ui->ckConstrainPosX->isChecked();
-    constraintPos.y = ui->ckConstrainPosY->isChecked();
-    constraintPos.z = ui->ckConstrainPosZ->isChecked();
-}
+//void EditObjectDialog::updateConstraintsPos() {
+//    constraintPos.x = ui->ckConstrainPosX->isChecked();
+//    constraintPos.y = ui->ckConstrainPosY->isChecked();
+//    constraintPos.z = ui->ckConstrainPosZ->isChecked();
+//}
 
-void EditObjectDialog::updateConstraintsScale() {
-    constraintPos.x = ui->ckConstrainScaleX->isChecked();
-    constraintPos.y = ui->ckConstrainScaleY->isChecked();
-    constraintPos.z = ui->ckConstrainScaleZ->isChecked();
+//void EditObjectDialog::updateConstraintsScale() {
+//    constraintPos.x = ui->ckConstrainScaleX->isChecked();
+//    constraintPos.y = ui->ckConstrainScaleY->isChecked();
+//    constraintPos.z = ui->ckConstrainScaleZ->isChecked();
+//}
+
+void EditObjectDialog::setUiControls(EditObjectDialog::EditVals v, double amt,
+                                     QVector3D *vec)
+{
+    //ScaleX, ScaleY, ScaleZ, PosX, PosY, PosZ, RotX, RotY, RotZ, RotTheta
+    switch(v) {
+    case ScaleX:
+        vec->setX(amt);
+        ui->doubleSpinScaleX->setValue(amt);
+        ui->hSliderScaleX->setValue(amt * SLIDER_NOTCHES_PER_UNIT_SPACE);
+        break;
+    case ScaleY:
+        vec->setY(amt);
+        ui->doubleSpinScaleY->setValue(amt);
+        ui->hSliderScaleY->setValue(amt * SLIDER_NOTCHES_PER_UNIT_SPACE);
+        break;
+    case ScaleZ:
+        vec->setZ(amt);
+        ui->doubleSpinScaleZ->setValue(amt);
+        ui->hSliderScaleZ->setValue(amt * SLIDER_NOTCHES_PER_UNIT_SPACE);
+        break;
+    case PosX:
+        vec->setX(amt);
+        ui->doubleSpinPosX->setValue(amt);
+        ui->hSliderPosX->setValue(amt*SLIDER_NOTCHES_PER_UNIT_SPACE);
+        break;
+    case PosY:
+        vec->setY(amt);
+        ui->doubleSpinPosY->setValue(amt);
+        ui->hSliderPosY->setValue(amt*SLIDER_NOTCHES_PER_UNIT_SPACE);
+        break;
+    case PosZ:
+        vec->setZ(amt);
+        ui->doubleSpinPosZ->setValue(amt);
+        ui->hSliderPosZ->setValue(amt*SLIDER_NOTCHES_PER_UNIT_SPACE);
+        break;
+    case RotX:
+        break;
+    case RotY:
+        break;
+    case RotZ:
+        break;
+    case RotTheta:
+        break;
+    }
 }
 
 void EditObjectDialog::on_hSliderScaleX_sliderMoved(int position)
@@ -372,4 +486,54 @@ void EditObjectDialog::on_doubleSpinRotY_valueChanged(double arg1)
 void EditObjectDialog::on_doubleSpinRotZ_valueChanged(double arg1)
 {
     setRotation(Z, arg1);
+}
+
+void EditObjectDialog::on_setposXY_clicked() {
+    setTranslation(X,Y);
+}
+
+void EditObjectDialog::on_setposXZ_clicked() {
+    setTranslation(X,Z);
+}
+
+void EditObjectDialog::on_setposYX_clicked() {
+    setTranslation(Y,X);
+}
+
+void EditObjectDialog::on_setposYZ_clicked() {
+    setTranslation(Y,Z);
+}
+
+void EditObjectDialog::on_setposZX_clicked() {
+    setTranslation(Z,X);
+}
+
+void EditObjectDialog::on_setposZY_clicked() {
+    setTranslation(Z,Y);
+}
+
+
+
+void EditObjectDialog::on_setscaleXY_clicked() {
+    setScale(X,Y);
+}
+
+void EditObjectDialog::on_setscaleXZ_clicked() {
+    setScale(X,Z);
+}
+
+void EditObjectDialog::on_setscaleYX_clicked() {
+    setScale(Y,X);
+}
+
+void EditObjectDialog::on_setscaleYZ_clicked() {
+    setScale(Y,Z);
+}
+
+void EditObjectDialog::on_setscaleZX_clicked() {
+    setScale(Z,X);
+}
+
+void EditObjectDialog::on_setscaleZY_clicked() {
+    setScale(Z,Y);
 }

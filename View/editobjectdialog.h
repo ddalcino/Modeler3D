@@ -51,6 +51,30 @@ private slots:
     void on_doubleSpinRotZ_valueChanged(double arg1);
     void on_doubleSpinRotAngle_valueChanged(double arg1);
 
+    void on_setposXY_clicked();
+
+    void on_setposXZ_clicked();
+
+    void on_setposYX_clicked();
+
+    void on_setposYZ_clicked();
+
+    void on_setposZX_clicked();
+
+    void on_setposZY_clicked();
+
+    void on_setscaleXY_clicked();
+
+    void on_setscaleXZ_clicked();
+
+    void on_setscaleYX_clicked();
+
+    void on_setscaleYZ_clicked();
+
+    void on_setscaleZX_clicked();
+
+    void on_setscaleZY_clicked();
+
 private:
     Ui::EditObjectDialog *ui;
     //GeometryEngine *geometryEngine;
@@ -60,23 +84,29 @@ private:
 
     float hSliderPosScale, hSliderScaleScale, hSliderRotScale;
 
-    struct Constraints {
-        bool x, y, z;
-        Constraints() : x(false), y(false), z(false) {}
-    };
-    Constraints constraintPos, constraintScale;
+//    struct Constraints {
+//        bool x, y, z;
+//        Constraints() : x(false), y(false), z(false) {}
+//    };
+//    Constraints constraintPos, constraintScale;
 
     enum Axis {X, Y, Z};
     void setTranslation(Axis ax, double amt);
     void setScale(Axis ax, double amt);
     void setRotation(Axis ax, double amt);
 
+    void setTranslation(Axis dest, Axis src);
+    void setScale(Axis dest, Axis src);
+
     const QVector3D *getSelectedTranslation() const;
     const QVector3D *getSelectedScale() const;
     QVector3D getSelectedRotation(float &theta) const;
 
-    void updateConstraintsPos();
-    void updateConstraintsScale();
+//    void updateConstraintsPos();
+//    void updateConstraintsScale();
+
+    enum EditVals {ScaleX, ScaleY, ScaleZ, PosX, PosY, PosZ, RotX, RotY, RotZ, RotTheta};
+    void setUiControls(EditVals v, double amt, QVector3D *vec);
 
     //void setRotationAngle(double amt);
 };

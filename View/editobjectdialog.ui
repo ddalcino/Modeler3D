@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>402</width>
+    <width>537</width>
     <height>504</height>
    </rect>
   </property>
@@ -34,11 +34,21 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>401</width>
-     <height>477</height>
+     <width>536</width>
+     <height>486</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Position</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
     <item>
      <layout class="QHBoxLayout" name="hLayoutPosX">
       <item>
@@ -117,30 +127,44 @@
     <item>
      <layout class="QHBoxLayout" name="hLayoutConstrainPos">
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QPushButton" name="setposXY">
         <property name="text">
-         <string>Constrain</string>
+         <string>Set X=Y</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="ckConstrainPosX">
+       <widget class="QPushButton" name="setposXZ">
         <property name="text">
-         <string>X</string>
+         <string>Set X=Z</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="ckConstrainPosY">
+       <widget class="QPushButton" name="setposYX">
         <property name="text">
-         <string>Y</string>
+         <string>Set Y=X</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="ckConstrainPosZ">
+       <widget class="QPushButton" name="setposYZ">
         <property name="text">
-         <string>Z</string>
+         <string>Set Y=Z</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="setposZX">
+        <property name="text">
+         <string>Set Z=X</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="setposZY">
+        <property name="text">
+         <string>Set Z=Y</string>
         </property>
        </widget>
       </item>
@@ -234,6 +258,16 @@
      </layout>
     </item>
     <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Scale</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="hLayoutScaleX">
       <item>
        <widget class="QDoubleSpinBox" name="doubleSpinScaleX">
@@ -311,30 +345,44 @@
     <item>
      <layout class="QHBoxLayout" name="hLayoutConstrainScale">
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QPushButton" name="setscaleXY">
         <property name="text">
-         <string>Constrain</string>
+         <string>Set X=Y</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="ckConstrainScaleX">
+       <widget class="QPushButton" name="setscaleXZ">
         <property name="text">
-         <string>X</string>
+         <string>Set X=Z</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="ckConstrainScaleY">
+       <widget class="QPushButton" name="setscaleYX">
         <property name="text">
-         <string>Y</string>
+         <string>Set Y=X</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="ckConstrainScaleZ">
+       <widget class="QPushButton" name="setscaleYZ">
         <property name="text">
-         <string>Z</string>
+         <string>Set Y=Z</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="setscaleZX">
+        <property name="text">
+         <string>Set Z=X</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="setscaleZY">
+        <property name="text">
+         <string>Set Z=Y</string>
         </property>
        </widget>
       </item>
