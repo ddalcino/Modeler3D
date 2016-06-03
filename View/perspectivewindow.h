@@ -4,7 +4,8 @@
 #include <QMainWindow>
 
 #include "geometryengine.h"
-#include "../Model/treemodel.h"
+#include "treeviewwindow.h"
+//#include "../Model/treemodel.h"
 
 namespace Ui {
 class PerspectiveWindow;
@@ -17,7 +18,7 @@ class PerspectiveWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit PerspectiveWindow(TreeModel *model, QWidget *parent = NULL);
+    explicit PerspectiveWindow(TreeViewWindow *parent=NULL);
     ~PerspectiveWindow();
 
     void resizeEvent(QResizeEvent *e);
@@ -28,13 +29,15 @@ public:
     float getFov() const;
     void setFov(float f);
 
+    TreeViewWindow *getTvWindow();
 
 private:
     Ui::PerspectiveWindow *ui;
     EditCameraDialog *editCameraDlg;
     EditObjectDialog *editObjectDlg;
 
-    TreeModel *model;
+    //TreeModel *model;
+    TreeViewWindow *tvWindow;
 
     GeometryEngine *geometryEngine;
 
@@ -44,10 +47,10 @@ public slots:
 private slots:
     void on_actionEdit_Camera_triggered();
     void on_actionEdit_Object_triggered();
-    void on_action_Cube_triggered();
-    void on_action_Sphere_triggered();
-    void on_actionC_ylinder_triggered();
-    void on_actionC_one_triggered();
+//    void on_action_Cube_triggered();
+//    void on_action_Sphere_triggered();
+//    void on_actionC_ylinder_triggered();
+//    void on_actionC_one_triggered();
 };
 
 #endif // PERSPECTIVEWINDOW_H

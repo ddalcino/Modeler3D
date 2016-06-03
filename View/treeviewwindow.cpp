@@ -1,6 +1,7 @@
 #include "treeviewwindow.h"
 #include "ui_treeviewwindow.h"
 #include "../Model/treemodel.h"
+#include "../Model/globject.h"
 
 #include <QItemSelectionModel>
 #include <QDebug>
@@ -27,24 +28,72 @@ TreeViewWindow::~TreeViewWindow()
     delete ui;
 }
 
+const GlData *TreeViewWindow::getGlDataAtSelection() const {
+    if (selectionModel.hasSelection()) {
+        const QModelIndex &index = selectionModel.selectedRows().first();
+        if (index.isValid()) {
+            const GlData *data = treeModel->getGlDataAt(index);
+            qDebug() << "Selected data is: " << data->toString();
+            return data;  //  ->getItem(index)
+        }
+    }
+    return NULL;
+}
+
+void TreeViewWindow::setTranslationAtSel(const QVector3D &t) {
+    if (selectionModel.hasSelection()) {
+        const QModelIndex &index = selectionModel.selectedRows().first();
+        if (index.isValid()) {
+            treeModel->setTranslationAt(index, t);
+        }
+    }
+    emit model_changed();
+}
+
+void TreeViewWindow::setScaleAtSel(const QVector3D &s)
+{
+    if (selectionModel.hasSelection()) {
+        const QModelIndex &index = selectionModel.selectedRows().first();
+        if (index.isValid()) {
+            treeModel->setScaleAt(index, s);
+        }
+    }
+    emit model_changed();
+}
+
+void TreeViewWindow::setRotationAtSel(const QVector3D &r, float theta)
+{
+    if (selectionModel.hasSelection()) {
+        const QModelIndex &index = selectionModel.selectedRows().first();
+        if (index.isValid()) {
+            treeModel->setRotationAt(index, r, theta);
+        }
+    }
+    emit model_changed();
+}
+
 void TreeViewWindow::on_action_Cube_triggered() {
     QModelIndex parent = getFirstSelectedIndex();
     treeModel->addObject(PrimitiveDefinition::CUBE, parent);
+    emit model_changed();
 }
 
 void TreeViewWindow::on_actionC_ylinder_triggered() {
     QModelIndex parent = getFirstSelectedIndex();
     treeModel->addObject(PrimitiveDefinition::CYLINDER, parent);
+    emit model_changed();
 }
 
 void TreeViewWindow::on_action_Sphere_triggered() {
     QModelIndex parent = getFirstSelectedIndex();
     treeModel->addObject(PrimitiveDefinition::SPHERE, parent);
+    emit model_changed();
 }
 
 void TreeViewWindow::on_actionC_one_triggered() {
     QModelIndex parent = getFirstSelectedIndex();
     treeModel->addObject(PrimitiveDefinition::CONE, parent);
+    emit model_changed();
 }
 
 void TreeViewWindow::on_action_Copy_triggered()
@@ -57,6 +106,7 @@ void TreeViewWindow::on_action_Copy_triggered()
         qDebug() << "Copying item at index " << index;
         treeModel->addToRoot(treeModel->copyObjectAt(index));
     }
+    emit model_changed();
 }
 
 void TreeViewWindow::on_action_Move_triggered()
@@ -72,6 +122,7 @@ void TreeViewWindow::on_action_Move_triggered()
 
     ui->action_Paste->setEnabled(true);
 
+    emit model_changed();
 }
 
 void TreeViewWindow::on_action_Paste_triggered()
@@ -88,6 +139,7 @@ void TreeViewWindow::on_action_Paste_triggered()
     //ui->treeView->repaint();
 
     ui->action_Paste->setEnabled(false);
+    emit model_changed();
 }
 
 void TreeViewWindow::on_action_Group_triggered()
@@ -106,6 +158,7 @@ void TreeViewWindow::on_action_Group_triggered()
         treeModel->moveItems(itemsToMove, groupIndex);
         itemsToMove.clear();
     }
+    emit model_changed();
 }
 
 QModelIndex TreeViewWindow::getFirstSelectedIndex(bool noPrimitives) const
@@ -132,14 +185,13 @@ void TreeViewWindow::on_action_Delete_triggered()
         if (index.isValid()) {
             qDebug() << "Deleting item with name " << index.data();
             treeModel->removeRow(index);
-
+            emit model_changed();
         } else {
-            qDebug() << "Can't deleting item with name " << index.data()
+            qDebug() << "Can't delete item with name " << index.data()
                      << ": index invalid";
-
         }
-
     }
+}
 
 //    while (selectionModel.hasSelection()) { //selectedIndexes().isEmpty()) {
 //        const QModelIndex& index = selectionModel.selectedIndexes().first();
@@ -149,4 +201,3 @@ void TreeViewWindow::on_action_Delete_triggered()
 //        //treeModel->addToRoot(treeModel->copyObjectAt(index));
 //    }
 
-}

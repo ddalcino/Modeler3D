@@ -45,12 +45,53 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 }
 
 GlObject *TreeModel::getItem(const QModelIndex &index) const {
+    qDebug() << "getItem(): Index is: " << index << ", and it's valid=" << index.isValid();
     if (index.isValid()) {
+        qDebug() << "Index is: " << index << ", and it's valid=" << index.isValid();
+
         GlObject *item = static_cast<GlObject*>(index.internalPointer());
+
+        const GlObject *itemC = item;
+        if (itemC) {
+            const GlData * data = itemC->getGlData();
+            qDebug() << "Data at index is: " << data->toString();
+        }
+
+
         if (item)
             return item;
     }
     return rootItem;
+}
+
+const GlData *TreeModel::getGlDataAt(const QModelIndex &index) const {
+    if (index.isValid()) {
+        const GlObject *item = getItem(index);
+        if (item) {
+            const GlData * data = item->getGlData();
+            qDebug() << "Selected data is: " << data->toString();
+            return getItem(index)->getGlData();
+        }
+    }
+    return NULL;
+}
+
+void TreeModel::setTranslationAt(const QModelIndex &index, const QVector3D &t) {
+    if (index.isValid()) {
+        getItem(index)->setTranslation(t);
+    }
+}
+
+void TreeModel::setScaleAt(const QModelIndex &index, const QVector3D &s) {
+    if (index.isValid()) {
+        getItem(index)->setScale(s);
+    }
+}
+
+void TreeModel::setRotationAt(const QModelIndex &index, const QVector3D &rAxis, float theta) {
+    if (index.isValid()) {
+        getItem(index)->setRotation(QQuaternion(theta, rAxis));
+    }
 }
 
 QVariant TreeModel::headerData(int, Qt::Orientation orientation,

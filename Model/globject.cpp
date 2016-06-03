@@ -3,8 +3,9 @@
 #include <QDebug>
 
 GlObject::GlObject(const GlObject &other)
-    : parent(NULL), translation(other.translation), scale(other.scale),
-      rotation(other.rotation), _isPrimitive(other._isPrimitive),
+    : parent(NULL), glData(other.glData),
+      // translation(other.translation), scale(other.scale), rotation(other.rotation),
+      _isPrimitive(other._isPrimitive),
       name(other.name) {
     // make new copies of all the children
     for (const GlObject *c : other.children) {
@@ -17,13 +18,8 @@ GlObject::GlObject(const GlObject &other)
 /**
  * @brief GlObject::~GlObject
  * Virtual destructor
- * If this object has no parents, this destructor recursively calls the
+ * This destructor recursively calls the
  * destructor for each of this object's children, deleting them all.
- *
- * If this object's parent is not null, then it is assumed that the children
- * of this object should be reparented to this object's parent before this
- * object is deleted. Any references to this object in it's parent will be
- * removed.
  */
 GlObject::~GlObject() {
 //    if (parent != NULL) {
@@ -192,9 +188,9 @@ void GlObject::getDrawingDirections(std::vector<DrawDirections> &dir,
     DrawDirections current = next;
 
     // apply rotation, translation, and scale transformations
-    current.mat.rotate(rotation);
-    current.mat.translate(translation);
-    current.mat.scale(scale);
+    current.mat.rotate(glData.rotation);
+    current.mat.translate(glData.translation);
+    current.mat.scale(glData.scale);
 
     // loop through all the children and call getDrawingDirections on them
     for (const GlObject* child : children) {
@@ -212,9 +208,9 @@ void GlPrimitiveObject::getDrawingDirections(std::vector<DrawDirections> &dir,
     DrawDirections current = next;
 
     // apply rotation, translation, and scale transformations
-    current.mat.rotate(rotation);
-    current.mat.translate(translation);
-    current.mat.scale(scale);
+    current.mat.rotate(glData.rotation);
+    current.mat.translate(glData.translation);
+    current.mat.scale(glData.scale);
 
     // set definition to whatever this object if defined as
     current.def = this->definition;

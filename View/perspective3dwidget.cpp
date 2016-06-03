@@ -122,11 +122,11 @@ void Perspective3DWidget::initShaders()
     qDebug() << "initShaders() finished successfully";
 }
 
-void Perspective3DWidget::changeObject(PrimitiveDefinition::Types t)
-{
-//    delete geometries;
-//    geometries = new GeometryEngine(t);
-}
+//void Perspective3DWidget::changeObject(PrimitiveDefinition::Types t)
+//{
+////    delete geometries;
+////    geometries = new GeometryEngine(t);
+//}
 
 void Perspective3DWidget::resizeGL(int w, int h)
 {

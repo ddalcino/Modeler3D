@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     TreeViewWindow tw(NULL, &model);
     tw.show();
 
-    PerspectiveWindow w(&model, &tw);
+    PerspectiveWindow w(&tw);
     w.show();
 
 #else

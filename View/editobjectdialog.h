@@ -16,7 +16,7 @@ class EditObjectDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit EditObjectDialog(QWidget *parent = 0);
+    explicit EditObjectDialog(PerspectiveWindow *parent = 0);
     ~EditObjectDialog();
 
     void init(GeometryEngine *e);
@@ -51,8 +51,8 @@ private slots:
 
 private:
     Ui::EditObjectDialog *ui;
-    GeometryEngine *geometryEngine;
-    QWidget *parent;
+    //GeometryEngine *geometryEngine;
+    PerspectiveWindow *parent;
 
     static const float constexpr SLIDER_NOTCHES_PER_UNIT_SPACE = 100.0;
 
@@ -62,6 +62,11 @@ private:
     void setTranslation(Axis ax, double amt);
     void setScale(Axis ax, double amt);
     void setRotation(Axis ax, double amt);
+
+    const QVector3D *getSelectedTranslation() const;
+    const QVector3D *getSelectedScale() const;
+    QVector3D getSelectedRotation(float &theta) const;
+
     //void setRotationAngle(double amt);
 };
 

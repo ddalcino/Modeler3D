@@ -8,6 +8,7 @@
 #include <QQuaternion>
 
 #include <QString>
+#include <QTextStream>
 
 #include "../View/primitivedefinition.h"
 
@@ -23,12 +24,31 @@ struct DrawDirections {
     DrawDirections() : mat(QMatrix4x4()), def() {}
 };
 
+struct GlData {
+    QVector3D translation, scale;
+    QQuaternion rotation;
+    GlData() : translation(0,0,0), scale(1,1,1), rotation() {}
+    QString toString() const {
+        QString str; // = QString();
+        QTextStream ts(&str); //, QIODevice::ReadWrite);
+        ts << "Trans=(" << translation.x() << "," << translation.y() << ","
+                        << translation.z()
+           << "), Scale=(" << scale.x() << "," << scale.y() << "," << scale.z()
+           << "), Rot=(" << rotation.scalar() << "," << rotation.x() << ","
+                         << rotation.y() << "," << rotation.z() << ")";
+        return str;
+    }
+};
+
+
+
 class GlObject {
 protected:
     std::vector<GlObject*> children;
     GlObject* parent;
-    QVector3D translation, scale;
-    QQuaternion rotation;
+    GlData glData;
+//    QVector3D translation, scale;
+//    QQuaternion rotation;
     bool _isPrimitive;
 
     QString name;
@@ -36,7 +56,7 @@ public:
 
 
     GlObject(QString name="Default", GlObject* parent = NULL, bool isPrimitive=false)
-        : parent(parent), translation(0,0,0), scale(1,1,1), rotation(),
+        : parent(parent), glData(), //translation(0,0,0), scale(1,1,1), rotation(),
           _isPrimitive(isPrimitive), name(name) {}
     GlObject(const GlObject& other);
 
@@ -62,13 +82,17 @@ public:
     bool hasAncestor(const GlObject *other) const;
 
 
-    void setTranslation(const QVector3D& t) {translation=t;}
-    void setScale(const QVector3D& s) {scale=s;}
-    void setRotation(const QQuaternion& r) {rotation=r;}
+    void setTranslation(const QVector3D& t) {glData.translation=t;}
+    void setScale(const QVector3D& s) {glData.scale=s;}
+    void setRotation(const QQuaternion& r) {glData.rotation=r;}
 
-    const QVector3D& getTranslation() const {return translation;}
-    const QVector3D& getScale() const {return scale;}
-    const QQuaternion& getRotation() const {return rotation;}
+    const QVector3D& getTranslation() const {return glData.translation;}
+    const QVector3D& getScale() const {return glData.scale;}
+    const QQuaternion& getRotation() const {return glData.rotation;}
+    const GlData *getGlData() const {
+        qDebug() << "GlObject::glData is: " << glData.toString();
+        return &glData;
+    }
     bool isPrimitive() const {return _isPrimitive;}
     const std::vector<GlObject*>& getChildren() const { return children; }
     std::vector<GlObject*>& getChildren() { return children; }

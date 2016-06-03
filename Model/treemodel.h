@@ -9,6 +9,7 @@
 #include "../View/primitivedefinition.h"
 
 class GlObject;
+struct GlData;
 class DrawDirections;
 
 //! [0]
@@ -62,6 +63,11 @@ public:
     bool isItemPrimitive(const QModelIndex &index) const;
 
     const GlObject *getRoot() const { return rootItem; }
+    const GlData *getGlDataAt(const QModelIndex &index) const;
+    void setTranslationAt(const QModelIndex &index, const QVector3D &t);
+    void setScaleAt(const QModelIndex &index, const QVector3D &s);
+    void setRotationAt(const QModelIndex &index, const QVector3D &rAxis, float theta);
+
 
 private:
     //void setupModelData(const QStringList &lines, GlObject *parent);

@@ -1,10 +1,11 @@
 #include "editobjectdialog.h"
 #include "ui_editobjectdialog.h"
 #include "perspectivewindow.h"
+#include "../Model/globject.h"
 
 #define PI 3.14159265
 
-EditObjectDialog::EditObjectDialog(QWidget *parent) :
+EditObjectDialog::EditObjectDialog(PerspectiveWindow *parent) :
     QDialog(parent),
     ui(new Ui::EditObjectDialog),
     parent(parent),
@@ -24,9 +25,16 @@ void EditObjectDialog::init(GeometryEngine *e)
 {
     if (e == NULL) {
         qDebug() << "No geometry yet!!";
+        return;
     }
-    geometryEngine=e;
-    QVector3D translation = geometryEngine->getTranslation();
+    const GlData *selectedData = parent->getTvWindow()->getGlDataAtSelection();
+    if (!selectedData) {
+        qDebug() << "No data at selection!!";
+        return;
+    }
+    //geometryEngine=e;
+
+    const QVector3D &translation = selectedData->translation; //geometryEngine->getTranslation();
     ui->hSliderPosX->setValue((int)translation.x());
     ui->doubleSpinPosX->setRange(-hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE,
                                  hSliderPosScale* SLIDER_NOTCHES_PER_UNIT_SPACE);
@@ -48,7 +56,7 @@ void EditObjectDialog::init(GeometryEngine *e)
     ui->hSliderPosZ->setMinimum(-hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
     ui->hSliderPosZ->setMaximum(hSliderPosScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
 
-    QVector3D scale = geometryEngine->getScale();
+    const QVector3D &scale = selectedData->scale; //geometryEngine->getScale();
     ui->doubleSpinScaleX->setRange(0, hSliderScaleScale);
     ui->doubleSpinScaleX->setValue(scale.x());
     ui->hSliderScaleX->setValue((int)scale.x()* SLIDER_NOTCHES_PER_UNIT_SPACE);
@@ -67,8 +75,10 @@ void EditObjectDialog::init(GeometryEngine *e)
     ui->hSliderScaleZ->setMinimum(0);
     ui->hSliderScaleZ->setMaximum(hSliderScaleScale * SLIDER_NOTCHES_PER_UNIT_SPACE);
 
-    float theta;
-    QVector3D rotAngle = geometryEngine->getRotation(theta);
+    const QQuaternion &quat = selectedData->rotation;
+    QVector4D rot4 = quat.toVector4D();
+    float theta = rot4.w();
+    QVector3D rotAngle = rot4.toVector3D();  //geometryEngine->getRotation(theta);
     ui->doubleSpinRotAngle->setRange(-180, 180);
     ui->doubleSpinRotAngle->setValue(theta);
     ui->hSliderRotAngle->setValue(theta/PI * 180);
@@ -111,7 +121,20 @@ void EditObjectDialog::on_hSliderPosZ_sliderMoved(int position)
 
 void EditObjectDialog::setTranslation(EditObjectDialog::Axis ax, double amt)
 {
-    QVector3D translation = geometryEngine->getTranslation();
+    const QVector3D *translationp = getSelectedTranslation(); // selectedData->scale;
+
+    if (!translationp) {
+        return;
+    }
+    QVector3D translation = *translationp;
+
+//    //QVector3D translation = geometryEngine->getTranslation();
+//    GlData *selectedData = parent->getTvWindow()->getGlDataAtSelection();
+//    if (!selectedData) {
+//        qDebug() << "setTranslation failed: No data at selection!!";
+//        return;
+//    }
+//    const QVector3D &translation = selectedData->translation;
     switch(ax) {
     case X:
         translation.setX(amt);
@@ -129,13 +152,26 @@ void EditObjectDialog::setTranslation(EditObjectDialog::Axis ax, double amt)
         ui->hSliderPosZ->setValue(amt*SLIDER_NOTCHES_PER_UNIT_SPACE);
         break;
     }
-    geometryEngine->setTranslation(translation);
-    ((PerspectiveWindow*)parent)->updateChildren();
+    parent->getTvWindow()->setTranslationAtSel(translation);
+    //geometryEngine->setTranslation(translation);
+    //((PerspectiveWindow*)parent)->updateChildren();
 }
 
 void EditObjectDialog::setScale(EditObjectDialog::Axis ax, double amt)
 {
-    QVector3D scale = geometryEngine->getScale();
+//    GlData *selectedData = parent->getTvWindow()->getGlDataAtSelection();
+//    if (!selectedData) {
+//        qDebug() << "setScale failed: No data at selection!!";
+//        return;
+//    }
+    const QVector3D *scalep = getSelectedScale(); // selectedData->scale;
+
+    if (!scalep) {
+        return;
+    }
+    QVector3D scale = *scalep;
+
+    //QVector3D scale = geometryEngine->getScale();
     switch(ax) {
     case X:
         scale.setX(amt);
@@ -153,14 +189,25 @@ void EditObjectDialog::setScale(EditObjectDialog::Axis ax, double amt)
         ui->hSliderScaleZ->setValue(amt * SLIDER_NOTCHES_PER_UNIT_SPACE);
         break;
     }
-    geometryEngine->setScale(scale);
-    ((PerspectiveWindow*)parent)->updateChildren();
+    parent->getTvWindow()->setScaleAtSel(scale);
+    //geometryEngine->setScale(scale);
+    //((PerspectiveWindow*)parent)->updateChildren();
 }
 
 void EditObjectDialog::setRotation(EditObjectDialog::Axis ax, double amt)
 {
+//    GlData *selectedData = parent->getTvWindow()->getGlDataAtSelection();
+//    if (!selectedData) {
+//        qDebug() << "setScale failed: No data at selection!!";
+//        return;
+//    }
+//    const QQuaternion &quat = selectedData->rotation;
+//    QVector4D rot4 = quat.toVector4D();
+//    float theta = rot4.w();
+//    QVector3D rotAxis = rot4.toVector3D();  //geometryEngine->getRotation(theta);
+
     float theta;
-    QVector3D rotAxis = geometryEngine->getRotation(theta);
+    QVector3D rotAxis = getSelectedRotation(theta);
     switch(ax) {
     case X:
         rotAxis.setX(amt);
@@ -175,8 +222,50 @@ void EditObjectDialog::setRotation(EditObjectDialog::Axis ax, double amt)
         ui->doubleSpinRotZ->setValue(amt/SLIDER_NOTCHES_PER_UNIT_SPACE);
         break;
     }
-    geometryEngine->setRotation(rotAxis, theta);
-    ((PerspectiveWindow*)parent)->updateChildren();
+    parent->getTvWindow()->setRotationAtSel(rotAxis, theta);
+    //geometryEngine->setRotation(rotAxis, theta);
+    //((PerspectiveWindow*)parent)->updateChildren();
+}
+
+const QVector3D *EditObjectDialog::getSelectedTranslation() const
+{
+    const GlData *selectedData = parent->getTvWindow()->getGlDataAtSelection();
+    if (!selectedData) {
+        qDebug() << "getSelectedTranslation failed: No data at selection!!";
+        return NULL;
+    }
+    qDebug() << "Got GlData=" << selectedData->toString();
+    return &selectedData->translation;
+}
+
+const QVector3D *EditObjectDialog::getSelectedScale() const
+{
+    const GlData *selectedData = parent->getTvWindow()->getGlDataAtSelection();
+    if (!selectedData) {
+        qDebug() << "getSelectedScale failed: No data at selection!!";
+        return NULL;
+    }
+    return &selectedData->scale;
+}
+
+QVector3D EditObjectDialog::getSelectedRotation(float &theta) const {
+    const GlData *selectedData = parent->getTvWindow()->getGlDataAtSelection();
+    if (!selectedData) {
+        qDebug() << "getSelectedRotation failed: No data at selection!!";
+        theta = -1;
+        return QVector3D();
+    }
+    qDebug() << "Selected data is: " << selectedData->toString();
+
+    const QQuaternion *quat = &selectedData->rotation;
+    if (quat) {
+        QVector4D rot4 = quat->toVector4D();
+        theta = rot4.w();
+        return rot4.toVector3D();
+    } else {
+        qDebug() << "There's no quaternion there.";
+        return QVector3D();
+    }
 }
 
 void EditObjectDialog::on_hSliderScaleX_sliderMoved(int position)
@@ -212,19 +301,22 @@ void EditObjectDialog::on_hSliderRotZ_sliderMoved(int position)
 void EditObjectDialog::on_hSliderRotAngle_sliderMoved(int position)
 {
     float theta;
-    QVector3D rotAxis = geometryEngine->getRotation(theta);
-    geometryEngine->setRotation(rotAxis, (float)position);
+    QVector3D rotAxis = getSelectedRotation(theta); //geometryEngine->getRotation(theta);
+    parent->getTvWindow()->setRotationAtSel(rotAxis, (float)position);
+
+    //geometryEngine->setRotation(rotAxis, (float)position);
     ui->doubleSpinRotAngle->setValue(position);
-    ((PerspectiveWindow*)parent)->updateChildren();
+    //((PerspectiveWindow*)parent)->updateChildren();
 }
 
 void EditObjectDialog::on_doubleSpinRotAngle_valueChanged(double arg1)
 {
     float theta;
-    QVector3D rotAxis = geometryEngine->getRotation(theta);
-    geometryEngine->setRotation(rotAxis, (float)arg1);
+    QVector3D rotAxis = getSelectedRotation(theta); //geometryEngine->getRotation(theta);
+    parent->getTvWindow()->setRotationAtSel(rotAxis, (float)arg1);
+    //geometryEngine->setRotation(rotAxis, (float)arg1);
     ui->hSliderRotAngle->setValue(arg1);
-    ((PerspectiveWindow*)parent)->updateChildren();
+    //((PerspectiveWindow*)parent)->updateChildren();
 }
 
 void EditObjectDialog::on_doubleSpinPosX_valueChanged(double arg1)

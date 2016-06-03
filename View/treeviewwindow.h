@@ -11,6 +11,8 @@ namespace Ui {
 class MainWindow;
 }
 
+class GlData;
+
 class TreeViewWindow : public QMainWindow
 {
     Q_OBJECT
@@ -21,7 +23,16 @@ public:
                             TreeModel *model = NULL);
     ~TreeViewWindow();
 
+    const GlData *getGlDataAtSelection() const;
+    void setTranslationAtSel(const QVector3D &t);
+    void setScaleAtSel(const QVector3D &s);
+    void setRotationAtSel(const QVector3D &r, float theta);
+
+
+    const TreeModel *getTreeModel() const {return treeModel;}
+
 signals:
+    void model_changed();
 
 public slots:
 

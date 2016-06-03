@@ -44,14 +44,14 @@ public:
     void paintGL() Q_DECL_OVERRIDE;
 
     void initShaders();
-    void setTreeModel(TreeModel * model) {this->model = model; }
+    void setTreeModel(const TreeModel * model) {this->model = model; }
     //void initTextures();
 
     GeometryEngine* getGeometryEngine() {
         qDebug() << "Geometries: " << geometries;
         return geometries;}
 
-    void changeObject(PrimitiveDefinition::Types);
+//    void changeObject(PrimitiveDefinition::Types);
 
     const QVector3D& getCameraPos() const { return cameraPosition; }
     void setCameraPos(const QVector3D& pos) { cameraPosition = pos; update(); }
@@ -61,7 +61,7 @@ public:
 private:
     QOpenGLShaderProgram program;
     GeometryEngine *geometries;
-    TreeModel *model;
+    const TreeModel *model;
 
     QOpenGLTexture *texture;
 

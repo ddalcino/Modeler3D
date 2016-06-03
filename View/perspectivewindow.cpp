@@ -5,22 +5,22 @@
 #include <QResizeEvent>
 #include <QSize>
 
-PerspectiveWindow::PerspectiveWindow(TreeModel *model, QWidget *parent) :
+PerspectiveWindow::PerspectiveWindow(TreeViewWindow *parent) :
     QMainWindow(parent),
     ui(new Ui::PerspectiveWindow),
     editCameraDlg(new EditCameraDialog(this)),
     editObjectDlg(new EditObjectDialog(this)),
-    model(model)
+    tvWindow(parent)
 
 {
+    if (!parent) {
+        throw "PerspectiveWindow must be a child of a TreeViewWindow to communicate with the model.";
+    }
     ui->setupUi(this);
-    ui->perspectiveGLWidget->setTreeModel(model);
+    ui->perspectiveGLWidget->setTreeModel(tvWindow->getTreeModel());
 
-    QObject::connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)),
-                     this, SLOT(updateChildren()));
-    QObject::connect(model, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
-                     this, SLOT(updateChildren()));
-    QObject::connect(model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+    // Any time the model changes in an important way, notify this object and update it
+    QObject::connect(tvWindow, SIGNAL(model_changed()),
                      this, SLOT(updateChildren()));
 }
 
@@ -39,13 +39,25 @@ void PerspectiveWindow::updateChildren()
     ui->perspectiveGLWidget->update();
 }
 
-const QVector3D &PerspectiveWindow::getCameraPos() const { return ui->perspectiveGLWidget->getCameraPos(); }
+const QVector3D &PerspectiveWindow::getCameraPos() const {
+    return ui->perspectiveGLWidget->getCameraPos();
+}
 
-void PerspectiveWindow::setCameraPos(const QVector3D &pos) { ui->perspectiveGLWidget->setCameraPos(pos); }
+void PerspectiveWindow::setCameraPos(const QVector3D &pos) {
+    ui->perspectiveGLWidget->setCameraPos(pos);
+}
 
-float PerspectiveWindow::getFov() const { return ui->perspectiveGLWidget->getFov(); }
+float PerspectiveWindow::getFov() const {
+    return ui->perspectiveGLWidget->getFov();
+}
 
-void PerspectiveWindow::setFov(float f) { ui->perspectiveGLWidget->setFov(f); }
+void PerspectiveWindow::setFov(float f) {
+    ui->perspectiveGLWidget->setFov(f);
+}
+
+TreeViewWindow *PerspectiveWindow::getTvWindow() {
+    return (TreeViewWindow *)this->parent();
+}
 
 void PerspectiveWindow::on_actionEdit_Camera_triggered()
 {
@@ -64,26 +76,26 @@ void PerspectiveWindow::on_actionEdit_Object_triggered()
 
 }
 
-void PerspectiveWindow::on_action_Cube_triggered()
-{
-    ui->perspectiveGLWidget->changeObject(PrimitiveDefinition::CUBE);
-    updateChildren();
-}
+//void PerspectiveWindow::on_action_Cube_triggered()
+//{
+//    ui->perspectiveGLWidget->changeObject(PrimitiveDefinition::CUBE);
+//    updateChildren();
+//}
 
-void PerspectiveWindow::on_action_Sphere_triggered()
-{
-    ui->perspectiveGLWidget->changeObject(PrimitiveDefinition::SPHERE);
-    updateChildren();
-}
+//void PerspectiveWindow::on_action_Sphere_triggered()
+//{
+//    ui->perspectiveGLWidget->changeObject(PrimitiveDefinition::SPHERE);
+//    updateChildren();
+//}
 
-void PerspectiveWindow::on_actionC_ylinder_triggered()
-{
-    ui->perspectiveGLWidget->changeObject(PrimitiveDefinition::CYLINDER);
-    updateChildren();
-}
+//void PerspectiveWindow::on_actionC_ylinder_triggered()
+//{
+//    ui->perspectiveGLWidget->changeObject(PrimitiveDefinition::CYLINDER);
+//    updateChildren();
+//}
 
-void PerspectiveWindow::on_actionC_one_triggered()
-{
-    ui->perspectiveGLWidget->changeObject(PrimitiveDefinition::CONE);
-    updateChildren();
-}
+//void PerspectiveWindow::on_actionC_one_triggered()
+//{
+//    ui->perspectiveGLWidget->changeObject(PrimitiveDefinition::CONE);
+//    updateChildren();
+//}
