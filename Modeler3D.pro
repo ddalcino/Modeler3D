@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     Model/globject.cpp \
 #    Model/scenegraph.cpp \
     Model/treemodel.cpp \
-    View/treeviewwindow.cpp
+    View/treeviewwindow.cpp \
+    Model/scenexmlhandler.cpp \
+    global_structs.cpp
 #    View/scenegl.cpp
 #    View/mainwindow.cpp
 
@@ -38,7 +40,8 @@ HEADERS  += \
 #    Model/scenegraph.h \
     Model/treemodel.h \
     View/treeviewwindow.h \
-    shared_structs.h
+    Model/scenexmlhandler.h \
+    global_structs.h
 #    View/scenegl.h
 #    View/mainwindow.h
 

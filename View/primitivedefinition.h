@@ -5,7 +5,7 @@
 #include <QVector3D>
 #include <QOpenGLFunctions>
 
-#include "../shared_structs.h"
+#include "../global_structs.h"
 
 struct VertexData {
     QVector3D position, normal;
@@ -33,12 +33,12 @@ private:
     std::vector<VertexData> vertices;
     std::vector<GLushort> indices;
     std::vector<DrawData> drawingPrimitives;
-    GlData::Types primType;
+    PrimTypes::Types primType;
 
 public:
 
-    PrimitiveDefinition(GlData::Types t, int numVerticesPerCircle=20,
-                        float radius=1, float height=1);
+    PrimitiveDefinition(PrimTypes::Types t, int numVerticesPerCircle=20,
+                        float radius=0.5, float height=0.5);
 
 //    const std::vector<VertexData>* getVertices() const { return &vertices; }
 //    const std::vector<GLushort>* getIndices() const { return &indices; }
@@ -47,15 +47,15 @@ public:
 
     int getNumVertices() const { return vertices.size(); }
     int getNumIndices() const { return indices.size(); }
-    GlData::Types getType() const { return primType; }
+    PrimTypes::Types getType() const { return primType; }
 
 //    static const char *toString(Types t) {
 //        switch (t) {
-//        case GlData::CUBE: return "Cube";
-//        case GlData::CYLINDER: return "Cylinder";
-//        case GlData::CONE: return "Cone";
-//        case GlData::SPHERE: return "Sphere";
-//        case GlData::GRID: return "Grid";
+//        case PrimTypes::CUBE: return "Cube";
+//        case PrimTypes::CYLINDER: return "Cylinder";
+//        case PrimTypes::CONE: return "Cone";
+//        case PrimTypes::SPHERE: return "Sphere";
+//        case PrimTypes::GRID: return "Grid";
 //        default: return "Default";
 //        }
 //    }

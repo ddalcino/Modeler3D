@@ -2,7 +2,7 @@
 #include "ui_editobjectdialog.h"
 #include "perspectivewindow.h"
 //#include "../Model/globject.h"
-#include "../shared_structs.h"
+#include "../global_structs.h"
 
 #define PI 3.14159265
 
@@ -18,7 +18,7 @@ EditObjectDialog::EditObjectDialog(PerspectiveWindow *parent) :
 
     connect(parent->getTvWindow()->getSelectionModel(),
             SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            this, SLOT(setSliders()));
+            this, SLOT(setSliderPositions()));
 }
 
 EditObjectDialog::~EditObjectDialog()
@@ -26,6 +26,10 @@ EditObjectDialog::~EditObjectDialog()
     delete ui;
 }
 
+/**
+ * @brief EditObjectDialog::init
+ * initializes sliders
+ */
 void EditObjectDialog::init()
 {
 
@@ -66,7 +70,11 @@ void EditObjectDialog::init()
 
 }
 
-void EditObjectDialog::setSliders()
+/**
+ * @brief EditObjectDialog::setSliderPositions
+ * sets slider positions to the values corresponding to the currently selected object
+ */
+void EditObjectDialog::setSliderPositions()
 {
     const GlData *selectedData = parent->getTvWindow()->getGlDataAtSelection();
     if (!selectedData) {
@@ -75,40 +83,58 @@ void EditObjectDialog::setSliders()
     }
 
     const QVector3D &translation = selectedData->translation; //geometryEngine->getTranslation();
-    ui->hSliderPosX->setValue((int)translation.x());
-    ui->doubleSpinPosX->setValue(translation.x());
+    setUiControls(PosX, translation.x(), NULL);
+    setUiControls(PosY, translation.y(), NULL);
+    setUiControls(PosZ, translation.z(), NULL);
 
-    ui->hSliderPosY->setValue((int)translation.y());
-    ui->doubleSpinPosY->setValue(translation.y());
 
-    ui->hSliderPosZ->setValue((int)translation.z());
-    ui->doubleSpinPosZ->setValue(translation.z());
+//    ui->hSliderPosX->setValue((int)translation.x());
+//    ui->doubleSpinPosX->setValue(translation.x());
+
+//    ui->hSliderPosY->setValue((int)translation.y());
+//    ui->doubleSpinPosY->setValue(translation.y());
+
+//    ui->hSliderPosZ->setValue((int)translation.z());
+//    ui->doubleSpinPosZ->setValue(translation.z());
 
     const QVector3D &scale = selectedData->scale; //geometryEngine->getScale();
-    ui->doubleSpinScaleX->setValue(scale.x());
-    ui->hSliderScaleX->setValue((int)scale.x()* SLIDER_NOTCHES_PER_UNIT_SPACE);
 
-    ui->doubleSpinScaleY->setValue(scale.y());
-    ui->hSliderScaleY->setValue((int)scale.y()* SLIDER_NOTCHES_PER_UNIT_SPACE);
+    setUiControls(ScaleX, scale.x(), NULL);
+    setUiControls(ScaleY, scale.y(), NULL);
+    setUiControls(ScaleZ, scale.z(), NULL);
 
-    ui->doubleSpinScaleZ->setValue(scale.z());
-    ui->hSliderScaleZ->setValue((int)scale.z()* SLIDER_NOTCHES_PER_UNIT_SPACE);
+
+//    ui->doubleSpinScaleX->setValue(scale.x());
+//    ui->hSliderScaleX->setValue((int)scale.x()* SLIDER_NOTCHES_PER_UNIT_SPACE);
+
+//    ui->doubleSpinScaleY->setValue(scale.y());
+//    ui->hSliderScaleY->setValue((int)scale.y()* SLIDER_NOTCHES_PER_UNIT_SPACE);
+
+//    ui->doubleSpinScaleZ->setValue(scale.z());
+//    ui->hSliderScaleZ->setValue((int)scale.z()* SLIDER_NOTCHES_PER_UNIT_SPACE);
 
     const QQuaternion &quat = selectedData->rotation;
     QVector4D rot4 = quat.toVector4D();
-    float theta = rot4.w();
-    QVector3D rotAngle = rot4.toVector3D();  //geometryEngine->getRotation(theta);
-    ui->doubleSpinRotAngle->setValue(theta);
-    ui->hSliderRotAngle->setValue(theta/PI * 180);
 
-    ui->doubleSpinRotX->setValue(rotAngle.x()* 180.0 / PI);
-    ui->hSliderRotX->setValue((int)(rotAngle.x()* 180.0 / PI));
+    setUiControls(RotX, rot4.x(), NULL);
+    setUiControls(RotY, rot4.y(), NULL);
+    setUiControls(RotZ, rot4.z(), NULL);
+    setUiControls(RotTheta, rot4.w(), NULL);
 
-    ui->doubleSpinRotY->setValue(rotAngle.y()* 180.0 / PI);
-    ui->hSliderRotY->setValue((int)(rotAngle.y()* 180.0 / PI));
 
-    ui->doubleSpinRotZ->setValue(rotAngle.z()* 180.0 / PI);
-    ui->hSliderRotZ->setValue((int)(rotAngle.z()* 180.0 / PI));
+//    float theta = rot4.w();
+//    QVector3D rotAngle = rot4.toVector3D();  //geometryEngine->getRotation(theta);
+//    ui->doubleSpinRotAngle->setValue(theta);
+//    ui->hSliderRotAngle->setValue(theta/PI * 180);
+
+//    ui->doubleSpinRotX->setValue(rotAngle.x()* 180.0 / PI);
+//    ui->hSliderRotX->setValue((int)(rotAngle.x()* 180.0 / PI));
+
+//    ui->doubleSpinRotY->setValue(rotAngle.y()* 180.0 / PI);
+//    ui->hSliderRotY->setValue((int)(rotAngle.y()* 180.0 / PI));
+
+//    ui->doubleSpinRotZ->setValue(rotAngle.z()* 180.0 / PI);
+//    ui->hSliderRotZ->setValue((int)(rotAngle.z()* 180.0 / PI));
 
 }
 
@@ -359,42 +385,52 @@ void EditObjectDialog::setUiControls(EditObjectDialog::EditVals v, double amt,
     //ScaleX, ScaleY, ScaleZ, PosX, PosY, PosZ, RotX, RotY, RotZ, RotTheta
     switch(v) {
     case ScaleX:
-        vec->setX(amt);
+        if (vec) { vec->setX(amt); }
         ui->doubleSpinScaleX->setValue(amt);
         ui->hSliderScaleX->setValue(amt * SLIDER_NOTCHES_PER_UNIT_SPACE);
         break;
     case ScaleY:
-        vec->setY(amt);
+        if (vec) { vec->setY(amt); }
         ui->doubleSpinScaleY->setValue(amt);
         ui->hSliderScaleY->setValue(amt * SLIDER_NOTCHES_PER_UNIT_SPACE);
         break;
     case ScaleZ:
-        vec->setZ(amt);
+        if (vec) { vec->setZ(amt); }
         ui->doubleSpinScaleZ->setValue(amt);
         ui->hSliderScaleZ->setValue(amt * SLIDER_NOTCHES_PER_UNIT_SPACE);
         break;
     case PosX:
-        vec->setX(amt);
+        if (vec) { vec->setX(amt); }
         ui->doubleSpinPosX->setValue(amt);
         ui->hSliderPosX->setValue(amt*SLIDER_NOTCHES_PER_UNIT_SPACE);
         break;
     case PosY:
-        vec->setY(amt);
+        if (vec) { vec->setY(amt); }
         ui->doubleSpinPosY->setValue(amt);
         ui->hSliderPosY->setValue(amt*SLIDER_NOTCHES_PER_UNIT_SPACE);
         break;
     case PosZ:
-        vec->setZ(amt);
+        if (vec) { vec->setZ(amt); }
         ui->doubleSpinPosZ->setValue(amt);
         ui->hSliderPosZ->setValue(amt*SLIDER_NOTCHES_PER_UNIT_SPACE);
         break;
     case RotX:
+        ui->doubleSpinRotX->setValue(amt);
+        ui->hSliderRotX->setValue((int)(amt * SLIDER_NOTCHES_PER_UNIT_SPACE));
         break;
     case RotY:
+        ui->doubleSpinRotY->setValue(amt);
+        ui->hSliderRotY->setValue((int)(amt * SLIDER_NOTCHES_PER_UNIT_SPACE));
         break;
     case RotZ:
+        ui->doubleSpinRotZ->setValue(amt);
+        ui->hSliderRotZ->setValue((int)(amt * SLIDER_NOTCHES_PER_UNIT_SPACE));
         break;
     case RotTheta:
+        ui->doubleSpinRotAngle->setValue(amt);
+        ui->hSliderRotAngle->setValue(amt);
+        break;
+    default:
         break;
     }
 }
@@ -433,7 +469,7 @@ void EditObjectDialog::on_hSliderRotAngle_sliderMoved(int position)
 {
     float theta;
     QVector3D rotAxis = getSelectedRotation(theta); //geometryEngine->getRotation(theta);
-    parent->getTvWindow()->setRotationAtSel(rotAxis, (float)position);
+    parent->getTvWindow()->setRotationAtSel(rotAxis, (double)position * PI / 180.0);
 
     //geometryEngine->setRotation(rotAxis, (float)position);
     ui->doubleSpinRotAngle->setValue(position);

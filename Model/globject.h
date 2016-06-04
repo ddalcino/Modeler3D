@@ -11,7 +11,7 @@
 #include <QTextStream>
 
 //#include "../View/primitivedefinition.h"
-#include "../shared_structs.h"
+#include "../global_structs.h"
 
 #ifndef NULL
 #define NULL 0
@@ -70,6 +70,7 @@ public:
     void addChild(GlObject* newChild);
     void removeChild(GlObject* childToRemove, bool deleteChild=true);
     bool removeChild(size_t childIndex, bool deleteChild=true);
+    void clearChildren();
     void reparentChildren();
 
     // required for use in TreeModel

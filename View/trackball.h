@@ -32,14 +32,16 @@ class Trackball {
     bool invertYAxis;
 
 public:
-    Trackball ( float cx=400, float cy=280, float radius=280.0 )
+    Trackball (bool invertYAxis=true, float cx=400, float cy=280, float radius=280.0 )
         : center(cx,cy),
           radius (radius),
           dragStart(),
           qdown(),
           qnow(),
-          invertYAxis(true)
+          invertYAxis(invertYAxis)
     {}
+
+    void setInvertYAxis(bool b) { invertYAxis = b; }
 
     void startMouse (const QPoint& pos) {
         QPoint relative = (pos - center);
@@ -67,6 +69,7 @@ public:
     }
 
     QQuaternion getQnow() const { return qnow; }
+    void setQnow(const QQuaternion &quat) { qnow = quat; }
 
     /**
      * @brief getMat4

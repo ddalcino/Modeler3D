@@ -9,12 +9,12 @@
 // TODO: The Cone normals are not normal to the plane of the triangles. This
 // should be fixed.
 
-PrimitiveDefinition::PrimitiveDefinition(GlData::Types t, int numVerticesPerCircle,
+PrimitiveDefinition::PrimitiveDefinition(PrimTypes::Types t, int numVerticesPerCircle,
                                          float radius, float height) :
     primType(t)
 {
     switch (t) {
-    case GlData::CYLINDER:
+    case PrimTypes::CYLINDER:
         // start by defining the curved surface
         for (int i = 0; i <= numVerticesPerCircle; ++i) {
             float startAngle = (2*PI * i) / numVerticesPerCircle;
@@ -75,7 +75,7 @@ PrimitiveDefinition::PrimitiveDefinition(GlData::Types t, int numVerticesPerCirc
 //                        DrawData(GL_TRIANGLE_FAN, indices.size()));
         }
         break;
-    case GlData::CONE:
+    case PrimTypes::CONE:
         // start by defining the curved surface
         for (int i = 0; i <= numVerticesPerCircle; ++i) {
             float startAngle = (2*PI * i) / numVerticesPerCircle;
@@ -86,7 +86,8 @@ PrimitiveDefinition::PrimitiveDefinition(GlData::Types t, int numVerticesPerCirc
 
             // Both normals should be: normal( tangent (to circle, in xz plane) cross QVector3D(-x, y, -z) )
             // But since it's a 45 degree angle, we can take the shortcut:
-            QVector3D normal(x, radius, z); normal.normalize();
+            QVector3D normal = //(x, radius, z); normal.normalize();
+                    QVector3D::crossProduct(QVector3D(-z,0,x), QVector3D(-x, y, -z));
 
             vertices.push_back(VertexData(QVector3D(x, 0, z),
                                           normal));
@@ -100,7 +101,7 @@ PrimitiveDefinition::PrimitiveDefinition(GlData::Types t, int numVerticesPerCirc
         indices.push_back(vertices.size()-1);
         addCircularFace(numVerticesPerCircle, 0, radius, QVector3D(0,-1,0));
         break;
-    case GlData::SPHERE:
+    case PrimTypes::SPHERE:
         // each i represents an 'orange wedge' shaped triangle strip, from top to bottom
         for (int i = 0; i < numVerticesPerCircle; ++i) {
             double startAngle = (2*PI * i) / numVerticesPerCircle;
@@ -117,8 +118,8 @@ PrimitiveDefinition::PrimitiveDefinition(GlData::Types t, int numVerticesPerCirc
             indices.push_back(vertices.size()-1);
 
             for (int j = 1; j < numVerticesPerCircle/2; ++j) {
-                float sliceRadius = sin((PI * j) / (numVerticesPerCircle/2));
-                float height = cos((PI *j) / (numVerticesPerCircle/2));
+                float sliceRadius = radius * sin((PI * j) / (numVerticesPerCircle/2));
+                float height = radius * cos((PI *j) / (numVerticesPerCircle/2));
                 QVector3D first(cosTheta[0]*sliceRadius, height, sinTheta[0]*sliceRadius);
                 QVector3D second(cosTheta[1]*sliceRadius, height, sinTheta[1]*sliceRadius);
                 vertices.push_back(VertexData(first, first.normalized()));
@@ -135,7 +136,7 @@ PrimitiveDefinition::PrimitiveDefinition(GlData::Types t, int numVerticesPerCirc
             indices.push_back(vertices.size()-1);
         }
         break;
-    case GlData::GRID:
+    case PrimTypes::GRID:
         static const float gridDensity = 0.25f;
         static const int numRows = 32;
         static const int numHorizontalRepeats = numRows >> 1;
@@ -162,7 +163,7 @@ PrimitiveDefinition::PrimitiveDefinition(GlData::Types t, int numVerticesPerCirc
             indices.push_back(vertices.size()-1);
         }
         break;
-    case GlData::LINE_ARROW:
+    case PrimTypes::LINE_ARROW:
         static const float arrowLength = 0.75f;
         static const float tipHalfWidth = 0.25f;
 
@@ -178,46 +179,46 @@ PrimitiveDefinition::PrimitiveDefinition(GlData::Types t, int numVerticesPerCirc
 
         break;
     default:
-    case GlData::CUBE:
+    case PrimTypes::CUBE:
             // For cube we would need only 8 vertices but we have to
             // duplicate vertex for each face because texture coordinate
             // is different.
 //            _VertexData vertices[] = {
                 // Vertex data for face 0
-                vertices.push_back(VertexData(QVector3D(-1.0f, -1.0f,  1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
-                vertices.push_back(VertexData(QVector3D( 1.0f, -1.0f,  1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
-                vertices.push_back(VertexData(QVector3D(-1.0f,  1.0f,  1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
-                vertices.push_back(VertexData(QVector3D( 1.0f,  1.0f,  1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
+                vertices.push_back(VertexData(QVector3D(-radius, -radius,  radius), QVector3D(0.0f, 0.0f, radius)));
+                vertices.push_back(VertexData(QVector3D( radius, -radius,  radius), QVector3D(0.0f, 0.0f, radius)));
+                vertices.push_back(VertexData(QVector3D(-radius,  radius,  radius), QVector3D(0.0f, 0.0f, radius)));
+                vertices.push_back(VertexData(QVector3D( radius,  radius,  radius), QVector3D(0.0f, 0.0f, radius)));
 
                 // Vertex data for face 1
-                vertices.push_back(VertexData(QVector3D( 1.0f, -1.0f,  1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
-                vertices.push_back(VertexData(QVector3D( 1.0f, -1.0f, -1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
-                vertices.push_back(VertexData(QVector3D( 1.0f,  1.0f,  1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
-                vertices.push_back(VertexData(QVector3D( 1.0f,  1.0f, -1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
+                vertices.push_back(VertexData(QVector3D( radius, -radius,  radius), QVector3D(radius, 0.0f, 0.0f)));
+                vertices.push_back(VertexData(QVector3D( radius, -radius, -radius), QVector3D(radius, 0.0f, 0.0f)));
+                vertices.push_back(VertexData(QVector3D( radius,  radius,  radius), QVector3D(radius, 0.0f, 0.0f)));
+                vertices.push_back(VertexData(QVector3D( radius,  radius, -radius), QVector3D(radius, 0.0f, 0.0f)));
 
                 // Vertex data for face 2
-                vertices.push_back(VertexData(QVector3D( 1.0f, -1.0f, -1.0f), QVector3D(0.0f, 0.0f, -1.0f)));
-                vertices.push_back(VertexData(QVector3D(-1.0f, -1.0f, -1.0f), QVector3D(0.0f, 0.0f, -1.0f)));
-                vertices.push_back(VertexData(QVector3D( 1.0f,  1.0f, -1.0f), QVector3D(0.0f, 0.0f, -1.0f)));
-                vertices.push_back(VertexData(QVector3D(-1.0f,  1.0f, -1.0f), QVector3D(0.0f, 0.0f, -1.0f)));
+                vertices.push_back(VertexData(QVector3D( radius, -radius, -radius), QVector3D(0.0f, 0.0f, -radius)));
+                vertices.push_back(VertexData(QVector3D(-radius, -radius, -radius), QVector3D(0.0f, 0.0f, -radius)));
+                vertices.push_back(VertexData(QVector3D( radius,  radius, -radius), QVector3D(0.0f, 0.0f, -radius)));
+                vertices.push_back(VertexData(QVector3D(-radius,  radius, -radius), QVector3D(0.0f, 0.0f, -radius)));
 
                 // Vertex data for face 3
-                vertices.push_back(VertexData(QVector3D(-1.0f, -1.0f, -1.0f), QVector3D(-1.0f, 0.0f, 0.0f)));
-                vertices.push_back(VertexData(QVector3D(-1.0f, -1.0f,  1.0f), QVector3D(-1.0f, 0.0f, 0.0f)));
-                vertices.push_back(VertexData(QVector3D(-1.0f,  1.0f, -1.0f), QVector3D(-1.0f, 0.0f, 0.0f)));
-                vertices.push_back(VertexData(QVector3D(-1.0f,  1.0f,  1.0f), QVector3D(-1.0f, 0.0f, 0.0f)));
+                vertices.push_back(VertexData(QVector3D(-radius, -radius, -radius), QVector3D(-radius, 0.0f, 0.0f)));
+                vertices.push_back(VertexData(QVector3D(-radius, -radius,  radius), QVector3D(-radius, 0.0f, 0.0f)));
+                vertices.push_back(VertexData(QVector3D(-radius,  radius, -radius), QVector3D(-radius, 0.0f, 0.0f)));
+                vertices.push_back(VertexData(QVector3D(-radius,  radius,  radius), QVector3D(-radius, 0.0f, 0.0f)));
 
                 // Vertex data for face 4
-                vertices.push_back(VertexData(QVector3D(-1.0f, -1.0f, -1.0f), QVector3D(0.0f, -1.0f, 0.0f)));
-                vertices.push_back(VertexData(QVector3D( 1.0f, -1.0f, -1.0f), QVector3D(0.0f, -1.0f, 0.0f)));
-                vertices.push_back(VertexData(QVector3D(-1.0f, -1.0f,  1.0f), QVector3D(0.0f, -1.0f, 0.0f)));
-                vertices.push_back(VertexData(QVector3D( 1.0f, -1.0f,  1.0f), QVector3D(0.0f, -1.0f, 0.0f)));
+                vertices.push_back(VertexData(QVector3D(-radius, -radius, -radius), QVector3D(0.0f, -radius, 0.0f)));
+                vertices.push_back(VertexData(QVector3D( radius, -radius, -radius), QVector3D(0.0f, -radius, 0.0f)));
+                vertices.push_back(VertexData(QVector3D(-radius, -radius,  radius), QVector3D(0.0f, -radius, 0.0f)));
+                vertices.push_back(VertexData(QVector3D( radius, -radius,  radius), QVector3D(0.0f, -radius, 0.0f)));
 
                 // Vertex data for face 5
-                vertices.push_back(VertexData(QVector3D(-1.0f,  1.0f,  1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
-                vertices.push_back(VertexData(QVector3D( 1.0f,  1.0f,  1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
-                vertices.push_back(VertexData(QVector3D(-1.0f,  1.0f, -1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
-                vertices.push_back(VertexData(QVector3D( 1.0f,  1.0f, -1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
+                vertices.push_back(VertexData(QVector3D(-radius,  radius,  radius), QVector3D(0.0f, radius, 0.0f)));
+                vertices.push_back(VertexData(QVector3D( radius,  radius,  radius), QVector3D(0.0f, radius, 0.0f)));
+                vertices.push_back(VertexData(QVector3D(-radius,  radius, -radius), QVector3D(0.0f, radius, 0.0f)));
+                vertices.push_back(VertexData(QVector3D( radius,  radius, -radius), QVector3D(0.0f, radius, 0.0f)));
 //            };
 
             // Indices for drawing cube faces using triangle strips.

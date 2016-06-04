@@ -119,6 +119,18 @@ bool GlObject::removeChild(size_t childIndex, bool deleteChild) {
     }
 }
 
+void GlObject::clearChildren() {
+    for (GlObject* child : children) {
+        if (child == NULL) {
+            qDebug() << "GlObject::clearChildren() for " << this << " found null child";
+        } else {
+            child->setParent(NULL);
+            delete child;
+            child = NULL;
+        }
+    }
+}
+
 /**
  * @brief GlObject::reparentChildren
  * Moves all of this object's children into the list of children maintained by

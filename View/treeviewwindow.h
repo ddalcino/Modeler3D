@@ -6,7 +6,7 @@
 #include <QModelIndexList>
 
 #include "../Model/treemodel.h"
-#include "../shared_structs.h"
+#include "../global_structs.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,14 +21,16 @@ class TreeViewWindow : public QMainWindow
 
 
 public:
-    explicit TreeViewWindow(QWidget *parent = NULL,
-                            TreeModel *model = NULL);
+    explicit TreeViewWindow(QWidget *parent = NULL);
     ~TreeViewWindow();
+
+    void init();
 
     const GlData *getGlDataAtSelection() const;
     void setTranslationAtSel(const QVector3D &t);
     void setScaleAtSel(const QVector3D &s);
     void setRotationAtSel(const QVector3D &r, float theta);
+    void setRotationAtSel(const QQuaternion &quat);
 
 
     const TreeModel *getTreeModel() const {return treeModel;}
@@ -38,6 +40,7 @@ public:
 
 signals:
     void model_changed();
+//    void selectionChanged(QModelIndex);
 
 public slots:
 
@@ -60,7 +63,15 @@ private slots:
 
     void on_action_Delete_triggered();
 
+    void on_selection_changed(const QItemSelection &current, const QItemSelection&);
+
 //    void on_action_New_Perspective_Window_triggered();
+
+    void on_action_Open_Scene_triggered();
+
+    void on_action_Save_Scene_triggered();
+
+    void on_action_New_Scene_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -68,6 +79,8 @@ private:
     GeometryEngine *gEngine;
     QItemSelectionModel selectionModel;
     QModelIndexList itemsToMove;
+
+    QModelIndex selectedQIndex;
 
     QModelIndex getFirstSelectedIndex(bool noPrimitives=true) const;
 };

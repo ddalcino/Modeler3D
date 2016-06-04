@@ -23,9 +23,9 @@ int main(int argc, char *argv[])
 //    a.setApplicationVersion("0.0.1");
 #ifndef QT_NO_OPENGL
 
-    TreeModel model;
+//    TreeModel model;
 
-    TreeViewWindow tw(NULL, &model);
+    TreeViewWindow tw(NULL);
     tw.show();
 
 //    PerspectiveWindow w(&tw);

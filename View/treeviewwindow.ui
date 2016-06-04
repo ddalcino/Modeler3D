@@ -38,6 +38,12 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="action_Open_Scene"/>
+    <addaction name="action_Import_Scene"/>
+    <addaction name="action_Save_Scene"/>
+    <addaction name="action_New_Scene"/>
+    <addaction name="separator"/>
+    <addaction name="action_Quit"/>
    </widget>
    <widget class="QMenu" name="menuObject">
     <property name="title">
@@ -140,7 +146,61 @@
     <string>&amp;New Perspective Window</string>
    </property>
   </action>
+  <action name="action_Open_Scene">
+   <property name="text">
+    <string>&amp;Open Scene ...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="action_Import_Scene">
+   <property name="text">
+    <string>&amp;Import Scene ...</string>
+   </property>
+  </action>
+  <action name="action_Save_Scene">
+   <property name="text">
+    <string>&amp;Save Scene ...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="action_New_Scene">
+   <property name="text">
+    <string>&amp;New Scene</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="action_Quit">
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>action_Quit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

@@ -1,6 +1,6 @@
 #include "geometryengine.h"
 //#include "../Model/globject.h" // for DrawDirections
-#include "../shared_structs.h" // for DrawDirections
+#include "../global_structs.h" // for DrawDirections
 #include "primitivedefinition.h"
 #include <QVector2D>
 #include <QVector3D>
@@ -117,7 +117,7 @@ GeometryEngine::~GeometryEngine()
 //}
 */
 
-void Vbos::initPrimGeometry(GlData::Types t)
+void Vbos::initPrimGeometry(PrimTypes::Types t)
 {
     PrimitiveDefinition prim(t);
 
@@ -275,12 +275,12 @@ void GeometryEngine::init()
         //initializeOpenGLFunctions();
 
         // set up gpuData to have references to all the geometry we could possibly need
-        gpuData.insert(std::pair<QString, Vbos *>(QString("Cube"), new Vbos(GlData::CUBE) ));
-        gpuData.insert(std::pair<QString, Vbos *>(QString("Cylinder"), new Vbos(GlData::CYLINDER) ));
-        gpuData.insert(std::pair<QString, Vbos *>(QString("Sphere"), new Vbos(GlData::SPHERE) ));
-        gpuData.insert(std::pair<QString, Vbos *>(QString("Cone"), new Vbos(GlData::CONE) ));
-        gpuData.insert(std::pair<QString, Vbos *>(QString("Grid"), new Vbos(GlData::GRID) ));
-        gpuData.insert(std::pair<QString, Vbos *>(QString("Line Arrow"), new Vbos(GlData::LINE_ARROW) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Cube"), new Vbos(PrimTypes::CUBE) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Cylinder"), new Vbos(PrimTypes::CYLINDER) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Sphere"), new Vbos(PrimTypes::SPHERE) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Cone"), new Vbos(PrimTypes::CONE) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Grid"), new Vbos(PrimTypes::GRID) ));
+        gpuData.insert(std::pair<QString, Vbos *>(QString("Line Arrow"), new Vbos(PrimTypes::LINE_ARROW) ));
     }
     initialized = true;
 }

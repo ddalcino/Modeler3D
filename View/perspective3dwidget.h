@@ -85,7 +85,7 @@ private:
     QQuaternion rotation;
 
     Trackball trackballCam;
-    Trackball obj;
+    Trackball trackballObj;
 
     bool isWireframeMode;
     bool showGrid;

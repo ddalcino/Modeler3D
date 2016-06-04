@@ -11,7 +11,7 @@
 #include <map>
 
 
-#include "../shared_structs.h" //"primitivedefinition.h"
+#include "../global_structs.h" //"primitivedefinition.h"
 
 struct DrawDirections;
 
@@ -20,9 +20,9 @@ struct Vbos {
     QOpenGLBuffer indexBuf;
     int numIndices;
 
-    void initPrimGeometry(GlData::Types t);
+    void initPrimGeometry(PrimTypes::Types t);
 
-    Vbos(GlData::Types t) : indexBuf(QOpenGLBuffer::IndexBuffer) {
+    Vbos(PrimTypes::Types t) : indexBuf(QOpenGLBuffer::IndexBuffer) {
         arrayBuf.create();
         indexBuf.create();
         initPrimGeometry(t);

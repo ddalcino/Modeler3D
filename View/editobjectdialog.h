@@ -22,7 +22,7 @@ public:
     void init();
 
 public slots:
-    void setSliders();
+    void setSliderPositions();
 
 private slots:
     void on_hSliderPosX_sliderMoved(int position);

@@ -1,21 +1,24 @@
 #include "treeviewwindow.h"
 #include "perspectivewindow.h"
 #include "ui_treeviewwindow.h"
+#include "../Model/scenexmlhandler.h"
 #include "../Model/treemodel.h"
 //#include "../Model/globject.h"
 
 #include <QItemSelectionModel>
 #include <QDebug>
+#include <QFileDialog>
 
-TreeViewWindow::TreeViewWindow(QWidget *parent, TreeModel *model)
+TreeViewWindow::TreeViewWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
-      treeModel(model),
+      treeModel(new TreeModel(this)),
       gEngine(NULL),
-      selectionModel(model)
+      selectionModel(treeModel)
 {
     ui->setupUi(this);
 
+    //treeModel = new TreeModel(this);
     ui->treeView->setModel(treeModel);
 
     ui->treeView->setSelectionModel(&selectionModel);
@@ -28,6 +31,9 @@ TreeViewWindow::TreeViewWindow(QWidget *parent, TreeModel *model)
     PerspectiveWindow *p = new PerspectiveWindow(this);
     p->show();
 
+    connect(&selectionModel, SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+            this, SLOT(on_selection_changed(const QItemSelection &, const QItemSelection &)));
+
     // Connect selectionModel, selectionChanged to editobjectdialog
 }
 
@@ -37,76 +43,107 @@ TreeViewWindow::~TreeViewWindow()
     delete gEngine;
 }
 
+void TreeViewWindow::init()
+{
+    ui->treeView->setModel(treeModel);
+    ui->treeView->setSelectionModel(&selectionModel);
+    ui->treeView->setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(&selectionModel, SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+            this, SLOT(on_selection_changed(const QItemSelection &, const QItemSelection &)));
+}
+
 const GlData *TreeViewWindow::getGlDataAtSelection() const {
 //    qDebug() << "TreeViewWindow::getGlDataAtSelection(): "
 //             << "hasSelection()=" << selectionModel.hasSelection()
 //             << "currentIndex()=" << selectionModel.currentIndex();
 
 
-    if (selectionModel.hasSelection()) {
-        const QModelIndex index = selectionModel.currentIndex(); // selectionModel.selectedRows().first();
-        if (index.isValid()) {
-            const GlData *data = treeModel->getGlDataAt(index);
+//    if (selectionModel.hasSelection()) {
+//        const QModelIndex index = selectionModel.currentIndex(); // selectionModel.selectedRows().first();
+        if (selectedQIndex.isValid()) {
+            const GlData *data = treeModel->getGlDataAt(selectedQIndex);
 //            qDebug() << "Selected data is: " << data->toString();
             return data;  //  ->getItem(index)
         }
-    }
+//    }
     return NULL;
 }
 
 void TreeViewWindow::setTranslationAtSel(const QVector3D &t) {
-    if (selectionModel.hasSelection()) {
-        const QModelIndex index = selectionModel.selectedRows().first();
-        if (index.isValid()) {
-            treeModel->setTranslationAt(index, t);
-        }
+    qDebug() << "TreeViewWindow::setTranslationAtSel()";
+//    if (selectionModel.hasSelection()) {
+//        const QModelIndex index = selectionModel.selectedRows().first();
+    if (selectedQIndex.isValid()) {
+        treeModel->setTranslationAt(selectedQIndex, t);
+//        }
+    } else {
+        qDebug() << "selection invalid";
     }
     emit model_changed();
 }
 
 void TreeViewWindow::setScaleAtSel(const QVector3D &s)
 {
-    if (selectionModel.hasSelection()) {
-        const QModelIndex index = selectionModel.selectedRows().first();
-        if (index.isValid()) {
-            treeModel->setScaleAt(index, s);
+//    if (selectionModel.hasSelection()) {
+//        const QModelIndex index = selectionModel.selectedRows().first();
+        if (selectedQIndex.isValid()) {
+            treeModel->setScaleAt(selectedQIndex, s);
         }
-    }
+//    }
     emit model_changed();
 }
 
 void TreeViewWindow::setRotationAtSel(const QVector3D &r, float theta)
 {
-    if (selectionModel.hasSelection()) {
-        const QModelIndex index = selectionModel.selectedRows().first();
-        if (index.isValid()) {
-            treeModel->setRotationAt(index, r, theta);
+//    if (selectionModel.hasSelection()) {
+//        const QModelIndex index = selectionModel.selectedRows().first();
+        if (selectedQIndex.isValid()) {
+            treeModel->setRotationAt(selectedQIndex, r, theta);
         }
+    //}
+    emit model_changed();
+}
+
+void TreeViewWindow::setRotationAtSel(const QQuaternion &quat) {
+    qDebug() << "TreeViewWindow::setRotationAtSel()";
+    if (selectedQIndex.isValid()) {
+        treeModel->setRotationAt(selectedQIndex, quat);
+
+    } else {
+        qDebug() << "Selection invalid";
     }
+//    //if (selectionModel.hasSelection())
+//    {
+//        const QModelIndex index = selectionModel.currentIndex();
+//                //selectionModel.selectedRows().first();
+//        if (index.isValid()) {
+//            treeModel->setRotationAt(index, quat);
+//        }
+//    }
     emit model_changed();
 }
 
 void TreeViewWindow::on_action_Cube_triggered() {
     QModelIndex parent = getFirstSelectedIndex();
-    treeModel->addObject(GlData::CUBE, parent);
+    treeModel->addObject(PrimTypes::CUBE, parent);
     emit model_changed();
 }
 
 void TreeViewWindow::on_actionC_ylinder_triggered() {
     QModelIndex parent = getFirstSelectedIndex();
-    treeModel->addObject(GlData::CYLINDER, parent);
+    treeModel->addObject(PrimTypes::CYLINDER, parent);
     emit model_changed();
 }
 
 void TreeViewWindow::on_action_Sphere_triggered() {
     QModelIndex parent = getFirstSelectedIndex();
-    treeModel->addObject(GlData::SPHERE, parent);
+    treeModel->addObject(PrimTypes::SPHERE, parent);
     emit model_changed();
 }
 
 void TreeViewWindow::on_actionC_one_triggered() {
     QModelIndex parent = getFirstSelectedIndex();
-    treeModel->addObject(GlData::CONE, parent);
+    treeModel->addObject(PrimTypes::CONE, parent);
     emit model_changed();
 }
 
@@ -212,6 +249,15 @@ void TreeViewWindow::on_action_Delete_triggered()
     }
 }
 
+void TreeViewWindow::on_selection_changed(const QItemSelection &current, const QItemSelection &) {
+    qDebug() << "TreeViewWindow::on_selection_changed()";
+    if (!current.isEmpty() && !current.indexes().isEmpty()) {
+        selectedQIndex = current.indexes().first();
+    } else {
+        selectedQIndex = QModelIndex();
+    }
+}
+
 //    while (selectionModel.hasSelection()) { //selectedIndexes().isEmpty()) {
 //        const QModelIndex& index = selectionModel.selectedIndexes().first();
 //        //index.data()
@@ -225,3 +271,34 @@ void TreeViewWindow::on_action_Delete_triggered()
 //    PerspectiveWindow *p = new PerspectiveWindow(this);
 //    p->show();
 //}
+
+void TreeViewWindow::on_action_Open_Scene_triggered()
+{
+    QString inFileName = QFileDialog::getOpenFileName(this,
+        tr("Open SceneGraphXML File"), QString(), tr("SceneGraphXML Files (*.xml *.sgXML)"));
+
+    SceneGraphXMLHandler xmlReader(NULL);
+    if (xmlReader.readFile(inFileName) && treeModel) {
+        // success
+        treeModel->clear();
+        treeModel->addToRoot(xmlReader.getRoot());
+    }
+
+
+}
+
+void TreeViewWindow::on_action_Save_Scene_triggered()
+{
+    QString outFileName = QFileDialog::getSaveFileName(this,
+        tr("Save SceneGraphXML File"), QString(), tr("SceneGraphXML Files (*.xml *.sgXML)"));
+    if (treeModel && treeModel->getRoot()) {
+        SceneGraphXMLHandler::writeXml(outFileName, treeModel->getRoot());
+    }
+
+}
+
+void TreeViewWindow::on_action_New_Scene_triggered()
+{
+    treeModel->clear();
+
+}

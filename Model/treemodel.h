@@ -7,7 +7,7 @@
 #include <QVariant>
 
 //#include "../View/primitivedefinition.h"
-#include "../shared_structs.h"
+#include "../global_structs.h"
 
 class GlObject;
 struct GlData;
@@ -50,9 +50,12 @@ public:
 //    bool removeRows(int position, int rows,
 //                    const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
 
-    void addObject(GlData::Types t,
+    void addObject(PrimTypes::Types t,
                    QModelIndex &parentIndex);
     void addToRoot(GlObject *item);
+
+    void clear();
+
     QModelIndex addGroupToRoot();
 
     bool moveItems(const QModelIndexList& toMove, const QModelIndex& dest);
@@ -68,6 +71,7 @@ public:
     void setTranslationAt(const QModelIndex &index, const QVector3D &t);
     void setScaleAt(const QModelIndex &index, const QVector3D &s);
     void setRotationAt(const QModelIndex &index, const QVector3D &rAxis, float theta);
+    void setRotationAt(const QModelIndex &index, const QQuaternion &quat);
 
 //    std::vector<DrawDirections> dirs;
 //    DrawDirections next;

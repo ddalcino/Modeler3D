@@ -5,7 +5,7 @@
 #include <QPoint>
 
 //#include "../Model/globject.h" // for DrawingDirections
-#include "../shared_structs.h" // for DrawingDirections
+#include "../global_structs.h" // for DrawingDirections
 
 Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     QOpenGLWidget(parent),
@@ -14,10 +14,12 @@ Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     cameraPosition(0, 0, -5),
     fov(45.0),
     lightPosition(-5, 5, -5, 1.0),
-    trackballCam(),
+    trackballCam(true),
+    trackballObj(true),
     isWireframeMode(false),
     showGrid(true),
-    showAxes(false)
+    showAxes(false),
+    dragType(RotCam)
 {
 //    qDebug() << "Perspective3DWidget constructor called";
 }
@@ -32,7 +34,19 @@ Perspective3DWidget::~Perspective3DWidget()
 
 void Perspective3DWidget::mouseMoveEvent(QMouseEvent *e) {
     if (e->buttons() & Qt::LeftButton) {
-        trackballCam.dragMouse(e->pos());
+        switch (dragType) {
+        case RotCam:
+            trackballCam.dragMouse(e->pos());
+            break;
+        case RotObj:
+            trackballObj.dragMouse(e->pos());
+            // now copy qnow to the selected object
+            ((PerspectiveWindow *)(this->parent()->parent()))->getTvWindow()
+                    ->setRotationAtSel(trackballObj.getQnow());
+            break;
+        default:
+            break;
+        }
         update();
     }
 }
@@ -40,7 +54,16 @@ void Perspective3DWidget::mouseMoveEvent(QMouseEvent *e) {
 void Perspective3DWidget::mousePressEvent(QMouseEvent *e) {
 
     if (e->buttons() & Qt::LeftButton) {
-        trackballCam.startMouse(e->pos());
+        switch (dragType) {
+        case RotCam:
+            trackballCam.startMouse(e->pos());
+            break;
+        case RotObj:
+            trackballObj.startMouse(e->pos());
+            break;
+        default:
+            break;
+        }
     }
 }
 

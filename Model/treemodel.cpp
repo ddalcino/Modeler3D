@@ -94,6 +94,12 @@ void TreeModel::setRotationAt(const QModelIndex &index, const QVector3D &rAxis, 
     }
 }
 
+void TreeModel::setRotationAt(const QModelIndex &index, const QQuaternion &quat) {
+    if (index.isValid()) {
+        getItem(index)->setRotation(quat);
+    }
+}
+
 void TreeModel::getDrawingDirections(std::vector<DrawDirections> &dirs,
                                      DrawDirections &next) const {
     rootItem->getDrawingDirections(dirs, next);
@@ -220,7 +226,7 @@ bool TreeModel::setHeaderData(int section, Qt::Orientation orientation,
     return result;
 }
 
-void TreeModel::addObject(GlData::Types t, QModelIndex& parentIndex)
+void TreeModel::addObject(PrimTypes::Types t, QModelIndex& parentIndex)
 {
     //    beginInsertRows(parent, position, position + rows - 1);
     //    success = parentItem->insertChildren(position, rows, 1);
@@ -231,7 +237,7 @@ void TreeModel::addObject(GlData::Types t, QModelIndex& parentIndex)
     beginInsertRows(parentIndex, newChildIndex,
                     newChildIndex);
     parent->addChild(new GlPrimitiveObject(
-                         GlData::toQString(t), parent));
+                         PrimTypes::toQString(t), parent));
     endInsertRows();
 }
 
@@ -243,6 +249,12 @@ void TreeModel::addToRoot(GlObject *item)
         item->setParent(rootItem);
         endInsertRows();
     }
+}
+
+void TreeModel::clear() {
+    beginRemoveRows(QModelIndex(), 0, rootItem ->getNumChildren()-1);
+    rootItem->clearChildren();
+    endRemoveRows();
 }
 
 QModelIndex TreeModel::addGroupToRoot()
