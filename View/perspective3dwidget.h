@@ -47,24 +47,22 @@ public:
     void paintGL() Q_DECL_OVERRIDE;
 
     void initShaders();
-    void setTreeModel(const TreeModel * model) {this->model = model; }
+    void setTreeModel(const TreeModel * model);
     //void initTextures();
 
-    GeometryEngine* getGeometryEngine() {
-        qDebug() << "Geometries: " << geometries;
-        return geometries;}
+    GeometryEngine* getGeometryEngine();
 
 //    void changeObject(PrimitiveDefinition::Types);
 
-    const QVector3D& getCameraPos() const { return cameraPosition; }
-    void setCameraPos(const QVector3D& pos) { cameraPosition = pos; update(); }
-    float getFov() const { return fov; }
-    void setFov(float f) { fov = f; resizeGL(width(), height()); update(); }
-    void setWireframeMode(bool b) { isWireframeMode = b; }
-    void setShowGrid(bool b) { showGrid = b; }
-    void setShowAxes(bool b) { showAxes = b; }
-    void setMouseDragType(MouseDragType t) { dragType = t;  qDebug() << "Set mousedragtype to " << t;}
-    MouseDragType getMouseDragType() const { return dragType; }
+    const QVector3D& getCameraPos() const;
+    void setCameraPos(const QVector3D& pos);
+    float getFov() const;
+    void setFov(float f);
+    void setWireframeMode(bool b);
+    void setShowGrid(bool b);
+    void setShowAxes(bool b);
+    void setMouseDragType(MouseDragType t);
+    MouseDragType getMouseDragType() const;
 
 private:
     QOpenGLShaderProgram program;

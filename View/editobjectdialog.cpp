@@ -16,8 +16,8 @@ EditObjectDialog::EditObjectDialog(PerspectiveWindow *parent) :
 {
     ui->setupUi(this);
 
-    connect(parent->getTvWindow()->getSelectionModel(),
-            SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+    connect(parent->getTvWindow(),
+            SIGNAL(selectionChanged()),
             this, SLOT(setSliderPositions()));
 }
 

@@ -31,14 +31,17 @@ class Trackball {
 
     bool invertYAxis;
 
+    Trackball *trackballCam;
+
 public:
-    Trackball (bool invertYAxis=true, float cx=400, float cy=280, float radius=280.0 )
+    Trackball (bool invertYAxis=true, Trackball *trackballCam=NULL, float cx=400, float cy=280, float radius=280.0 )
         : center(cx,cy),
           radius (radius),
           dragStart(),
           qdown(),
           qnow(),
-          invertYAxis(invertYAxis)
+          invertYAxis(invertYAxis),
+          trackballCam(trackballCam)
     {}
 
     void setInvertYAxis(bool b) { invertYAxis = b; }
@@ -48,7 +51,11 @@ public:
         if (invertYAxis) {relative.setY(-relative.y());}
         dragStart = //mouseToSphere ( start / radius );
                 mouseToSphere ( QVector2D(relative) / radius );
-        qdown = qnow;
+//        if (trackballCam) {
+//            qdown = trackballCam->getQnow() * qnow;
+//        } else {
+            qdown = qnow;
+//        }
     }
 
     QQuaternion dragMouse (const QPoint& pos) {

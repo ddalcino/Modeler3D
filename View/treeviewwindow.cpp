@@ -9,47 +9,42 @@
 #include <QDebug>
 #include <QFileDialog>
 
+class GlObject;
+
 TreeViewWindow::TreeViewWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
+//      p(new PerspectiveWindow(this)),
       treeModel(new TreeModel(this)),
       gEngine(NULL),
-      selectionModel(treeModel)
+      selectionModel(new QItemSelectionModel(treeModel, this))
 {
     ui->setupUi(this);
-
-    //treeModel = new TreeModel(this);
-    ui->treeView->setModel(treeModel);
-
-    ui->treeView->setSelectionModel(&selectionModel);
-    ui->treeView->setSelectionMode(QAbstractItemView::SingleSelection);
+    init();
 
     gEngine = NULL; // new GeometryEngine(this);
 
-    //ui->setupUi(this);
-    //ui->
-    PerspectiveWindow *p = new PerspectiveWindow(this);
+    p = new PerspectiveWindow(this),
     p->show();
 
-    connect(&selectionModel, SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
-            this, SLOT(on_selection_changed(const QItemSelection &, const QItemSelection &)));
-
-    // Connect selectionModel, selectionChanged to editobjectdialog
 }
 
 TreeViewWindow::~TreeViewWindow()
 {
     delete ui;
-    delete gEngine;
+    if (treeModel) { delete treeModel; treeModel=NULL; }
+    //if (selectionModel) { delete selectionModel; selectionModel=NULL; }
+    if (gEngine) { delete gEngine; gEngine=NULL; }
 }
 
 void TreeViewWindow::init()
 {
     ui->treeView->setModel(treeModel);
-    ui->treeView->setSelectionModel(&selectionModel);
+    ui->treeView->setSelectionModel(selectionModel);
     ui->treeView->setSelectionMode(QAbstractItemView::SingleSelection);
-    connect(&selectionModel, SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+    connect(selectionModel, SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
             this, SLOT(on_selection_changed(const QItemSelection &, const QItemSelection &)));
+    emit selectionChanged();
 }
 
 const GlData *TreeViewWindow::getGlDataAtSelection() const {
@@ -123,6 +118,12 @@ void TreeViewWindow::setRotationAtSel(const QQuaternion &quat) {
     emit model_changed();
 }
 
+const TreeModel *TreeViewWindow::getTreeModel() const {return treeModel;}
+
+GeometryEngine *TreeViewWindow::getGEngine() { return gEngine; }
+
+const QItemSelectionModel *TreeViewWindow::getSelectionModel() const {return selectionModel; }
+
 void TreeViewWindow::on_action_Cube_triggered() {
     QModelIndex parent = getFirstSelectedIndex();
     treeModel->addObject(PrimTypes::CUBE, parent);
@@ -151,7 +152,7 @@ void TreeViewWindow::on_action_Copy_triggered()
 {
     qDebug() << "Copy";
     // figure out who's selected
-    const QModelIndex index = selectionModel.currentIndex();
+    const QModelIndex index = selectionModel->currentIndex();
     treeModel->addToRoot(treeModel->copyObjectAt(index));
 
 
@@ -172,7 +173,7 @@ void TreeViewWindow::on_action_Move_triggered()
     itemsToMove.push_back(getFirstSelectedIndex(false)); //selectionModel.selectedIndexes();
 
     // unselect everybody
-    selectionModel.clearSelection();
+    selectionModel->clearSelection();
 
     ui->action_Paste->setEnabled(true);
 
@@ -206,7 +207,7 @@ void TreeViewWindow::on_action_Group_triggered()
 
     // see who's selected
     itemsToMove.clear();
-    itemsToMove = selectionModel.selectedIndexes();
+    itemsToMove = selectionModel->selectedIndexes();
 
     // if there's one item selected, move it into the new group
     if (itemsToMove.size() == 1) {
@@ -219,7 +220,7 @@ void TreeViewWindow::on_action_Group_triggered()
 
 QModelIndex TreeViewWindow::getFirstSelectedIndex(bool noPrimitives) const
 {
-    QModelIndex index = selectionModel.currentIndex();
+    QModelIndex index = selectionModel->currentIndex();
     if (index.isValid()) {
         if (!(noPrimitives && treeModel->isItemPrimitive(index))) {
             return index;
@@ -232,7 +233,7 @@ void TreeViewWindow::on_action_Delete_triggered()
 {
     qDebug() << "Delete";
     // figure out who's selected
-    QModelIndexList selected = selectionModel.selectedIndexes();
+    QModelIndexList selected = selectionModel->selectedIndexes();
 
     //while (!selectionModel.selectedIndexes().isEmpty()) {
     if (!selected.isEmpty()) {
@@ -256,6 +257,7 @@ void TreeViewWindow::on_selection_changed(const QItemSelection &current, const Q
     } else {
         selectedQIndex = QModelIndex();
     }
+    emit selectionChanged();  //selectionChanged();
 }
 
 //    while (selectionModel.hasSelection()) { //selectedIndexes().isEmpty()) {
@@ -278,13 +280,22 @@ void TreeViewWindow::on_action_Open_Scene_triggered()
         tr("Open SceneGraphXML File"), QString(), tr("SceneGraphXML Files (*.xml *.sgXML)"));
 
     SceneGraphXMLHandler xmlReader(NULL);
-    if (xmlReader.readFile(inFileName) && treeModel) {
+    GlObject * newRoot = xmlReader.readFile(inFileName);
+    if (newRoot && treeModel) {
         // success
-        treeModel->clear();
-        treeModel->addToRoot(xmlReader.getRoot());
+
+        delete selectionModel;
+        selectionModel = NULL;
+        delete treeModel;
+        treeModel = new TreeModel(this, newRoot);
+        //treeModel->addToRoot();
+        selectionModel = new QItemSelectionModel(treeModel, this);
+        selectedQIndex = QModelIndex();
+
+        init();
+        update();
+        emit model_changed();
     }
-
-
 }
 
 void TreeViewWindow::on_action_Save_Scene_triggered()
@@ -299,6 +310,14 @@ void TreeViewWindow::on_action_Save_Scene_triggered()
 
 void TreeViewWindow::on_action_New_Scene_triggered()
 {
-    treeModel->clear();
+    delete selectionModel;
+    selectionModel = NULL;
+    delete treeModel;
+    treeModel = new TreeModel(this);
+    selectionModel = new QItemSelectionModel(treeModel, this);
+    selectedQIndex = QModelIndex();
 
-}
+    init();
+    update();
+    emit model_changed();
+ }

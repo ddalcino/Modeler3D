@@ -23,7 +23,7 @@ class SceneGraphXMLHandler
 public:
     SceneGraphXMLHandler(GlObject *root);
 
-    bool readFile(const QString &fileName);
+    GlObject * readFile(const QString &fileName);
     GlObject *getRoot() const;
 
     static bool writeXml(const QString& fileName, const GlObject *root);
@@ -60,6 +60,8 @@ private:
     //QTreeWidget *treeWidget;
     GlObject *root;
     QXmlStreamReader reader;
+    int numGroupsMade;
+    int numPrimsMade;
 };
 
 #endif // SCENEXMLHANDLER_H

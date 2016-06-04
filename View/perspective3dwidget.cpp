@@ -15,7 +15,7 @@ Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     fov(45.0),
     lightPosition(-5, 5, -5, 1.0),
     trackballCam(true),
-    trackballObj(true),
+    trackballObj(true, &trackballCam),
     isWireframeMode(false),
     showGrid(true),
     showAxes(false),
@@ -43,6 +43,9 @@ void Perspective3DWidget::mouseMoveEvent(QMouseEvent *e) {
             // now copy qnow to the selected object
             ((PerspectiveWindow *)(this->parent()->parent()))->getTvWindow()
                     ->setRotationAtSel(trackballObj.getQnow());
+            // we should actually apply this in a way that takes the ancestor
+            // rotations into account; as it is, this should only work on top
+            // level objects
             break;
         default:
             break;
@@ -152,6 +155,30 @@ void Perspective3DWidget::initShaders()
     qDebug() << "initShaders() finished successfully";
 }
 
+void Perspective3DWidget::setTreeModel(const TreeModel *model) {this->model = model; }
+
+GeometryEngine *Perspective3DWidget::getGeometryEngine() {
+    qDebug() << "Geometries: " << geometries;
+    return geometries;}
+
+const QVector3D &Perspective3DWidget::getCameraPos() const { return cameraPosition; }
+
+void Perspective3DWidget::setCameraPos(const QVector3D &pos) { cameraPosition = pos; update(); }
+
+float Perspective3DWidget::getFov() const { return fov; }
+
+void Perspective3DWidget::setFov(float f) { fov = f; resizeGL(width(), height()); update(); }
+
+void Perspective3DWidget::setWireframeMode(bool b) { isWireframeMode = b; }
+
+void Perspective3DWidget::setShowGrid(bool b) { showGrid = b; }
+
+void Perspective3DWidget::setShowAxes(bool b) { showAxes = b; }
+
+void Perspective3DWidget::setMouseDragType(Perspective3DWidget::MouseDragType t) { dragType = t;  qDebug() << "Set mousedragtype to " << t;}
+
+Perspective3DWidget::MouseDragType Perspective3DWidget::getMouseDragType() const { return dragType; }
+
 //void Perspective3DWidget::changeObject(PrimitiveDefinition::Types t)
 //{
 ////    delete geometries;
@@ -213,7 +240,7 @@ void Perspective3DWidget::paintGL()
     //const GlObject *root = model->getRoot();
     std::vector<DrawDirections> dirs;
     DrawDirections next;
-    model->getDrawingDirections(dirs, next);
+    if (model) { model->getDrawingDirections(dirs, next); }
 
     if (showGrid) {
         program.setUniformValue("wireframe_color", QVector4D(0.2f, 1.0f, 1.0f, 1.0f));

@@ -269,6 +269,20 @@ void GeometryEngine::drawAxes(const DrawDirections &dir,
 
 }
 
+void GeometryEngine::setScale(const QVector3D &s) {scale = s;}
+
+void GeometryEngine::setTranslation(const QVector3D &s) {translation = s;}
+
+void GeometryEngine::setRotation(const QVector3D &s, float theta) {rotation = s;
+                                                                   rotationAngle=theta;}
+
+const QVector3D &GeometryEngine::getScale() const {return scale;}
+
+const QVector3D &GeometryEngine::getTranslation() const {return translation;}
+
+const QVector3D &GeometryEngine::getRotation(float &theta) const {theta=rotationAngle;
+                                                                  return rotation;}
+
 void GeometryEngine::init()
 {
     if (!initialized) {

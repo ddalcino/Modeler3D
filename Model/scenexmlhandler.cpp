@@ -3,6 +3,7 @@
 #include <QQuaternion>
 #include <QStringRef>
 #include <QTextStream>
+#include <QDebug>
 
 #include "scenexmlhandler.h"
 #include "globject.h"
@@ -22,28 +23,31 @@ const char* SceneGraphXMLHandler::VAL_FALSE = "false";
 
 
 SceneGraphXMLHandler::SceneGraphXMLHandler(GlObject *root)
-    : root(root) {
-    if (!root) {
-        root = new GlObject("Root", NULL, false);
-//        throw "SceneGraphXMLHandler(): ctor needs a root!";
-    }
+    : root(root), numGroupsMade(0), numPrimsMade(0) {
 }
 
-bool SceneGraphXMLHandler::readFile(const QString &fileName) {
+GlObject *SceneGraphXMLHandler::readFile(const QString &fileName) {
+    if (!root) {
+        root = new GlObject("Root", NULL, false);
+    }
+
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         qDebug() << "Error: Cannot read file " << fileName << ": "
                  << file.errorString();
-        return false;
+        return NULL;
     }
     reader.setDevice(&file);
 
     reader.readNext();
+
     while (!reader.atEnd()) {
         if (reader.isStartElement()) {
-            if (reader.name() == ELEMENT_SCENEGRAPH_ROOT) {
+            if (reader.name().toString() == ELEMENT_SCENEGRAPH_ROOT) {
+                qDebug() << "Reading root start element: " << reader.name().toString();
                 readSceneGraphRootElement();
             } else {
+                qDebug() << "Error reading start element: " << reader.name().toString();
                 reader.raiseError(QObject::tr("Not a SceneGraphXML file"));
             }
         } else {
@@ -55,13 +59,15 @@ bool SceneGraphXMLHandler::readFile(const QString &fileName) {
     if (reader.hasError()) {
         qDebug() << "Error: Failed to parse file " << fileName << ": "
                  << reader.errorString();
-        return false;
+        return NULL;
     } else if (file.error() != QFile::NoError) {
         qDebug() << "Error: Cannot read file " << fileName << ": "
                  << file.errorString();
-        return false;
+        return NULL;
     }
-    return true;
+    qDebug() << "File read successfully. Made" << numGroupsMade
+             << " groups and " << numPrimsMade << " primitives.";
+    return root;
 }
 
 GlObject *SceneGraphXMLHandler::getRoot() const {
@@ -126,8 +132,8 @@ void SceneGraphXMLHandler::readSceneGraphRootElement() {
             break;
         }
 
-        if (reader.isStartDocument()) {
-            if (reader.name() == ELEMENT_GLOBJECT) {
+        if (reader.isStartElement()) {
+            if (reader.name().toString() == ELEMENT_GLOBJECT) {
                 readGlObjectElement(root);
             } else {
                 skipUnknownElement();
@@ -140,6 +146,7 @@ void SceneGraphXMLHandler::readSceneGraphRootElement() {
 
 void SceneGraphXMLHandler::readGlObjectElement(GlObject *parent) {
     GlObject *child = NULL;
+
 
     ////////////////////////////////////////////////////////////////
     /// Read Attributes
@@ -181,7 +188,7 @@ void SceneGraphXMLHandler::readGlObjectElement(GlObject *parent) {
 
         if (reader.attributes().hasAttribute(ATTR_IS_PRIMITIVE)) {
             sRef = reader.attributes().value(ATTR_IS_PRIMITIVE);
-            if (*sRef.string() == VAL_TRUE) {
+            if (sRef.string() && sRef == VAL_TRUE) {
                 isPrimitive = true;
                 if (reader.attributes().hasAttribute(ATTR_DEFINITION)) {
                     sRef = reader.attributes().value(ATTR_DEFINITION);
@@ -191,6 +198,10 @@ void SceneGraphXMLHandler::readGlObjectElement(GlObject *parent) {
                         child = new GlPrimitiveObject(definition, parent);
                     }
                 }
+            } else {
+                sRef = reader.attributes().value(ATTR_IS_PRIMITIVE);
+                qDebug() << "isPrim != true: *(sRef.string()) =" << *(sRef.string())
+                         << "sRef=" << sRef << "sRef.string()=" << sRef.string();
             }
         }
 
@@ -201,6 +212,8 @@ void SceneGraphXMLHandler::readGlObjectElement(GlObject *parent) {
         child->setRotation(rot);
         child->setScale(scale);
         child->setTranslation(pos);
+        qDebug() << "Child has name=" << name <<", isPrim=" << isPrimitive
+                 <<", gldata=" << child->getGlData()->toString();
     }
     ///////////////////////////////////////////////////////////////////////
     /// add the node's children
@@ -214,7 +227,7 @@ void SceneGraphXMLHandler::readGlObjectElement(GlObject *parent) {
             }
 
             if (reader.isStartElement()) {
-                if (reader.name() == ELEMENT_GLOBJECT) {
+                if (reader.name().toString() == ELEMENT_GLOBJECT) {
                     readGlObjectElement(child);
                 } else {
                     skipUnknownElement();
@@ -229,10 +242,14 @@ void SceneGraphXMLHandler::readGlObjectElement(GlObject *parent) {
     /// decide whether to keep the node or throw it away
     ///
     if (child) {
+        qDebug() << "child->getNumChildren()=" << child->getNumChildren()
+                 << ", child->isPrimitive()=" << child->isPrimitive();
         if (child->getNumChildren() > 0 && !child->isPrimitive()) {
             parent->addChild(child);
+            numGroupsMade++;
         } else if (child->getNumChildren() == 0 && child->isPrimitive()) {
             parent->addChild(child);
+            numPrimsMade++;
         } else {
             delete child;
             child = NULL;

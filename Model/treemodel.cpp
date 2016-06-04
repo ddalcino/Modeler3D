@@ -3,12 +3,15 @@
 #include "globject.h"
 #include "treemodel.h"
 
-TreeModel::TreeModel(QObject *parent)
-    : QAbstractItemModel(parent) {
+TreeModel::TreeModel(QObject *parent, GlObject *root)
+    : QAbstractItemModel(parent),
+      rootItem( root ? root : new GlObject("Root")) {
 
-    rootItem = new GlObject("Root");
-    rootItem->addChild(new GlPrimitiveObject("Cube", rootItem));
-    //setupModelData(data.split(QString("\n")), rootItem);
+    // add a default object if there's nothing there
+    if (rootItem->getNumChildren() == 0) {
+        qDebug() << "TreeModel() ctor adding a default object";
+        rootItem->addChild(new GlPrimitiveObject("Cube", rootItem));
+    }
 }
 
 TreeModel::~TreeModel() {
@@ -102,7 +105,9 @@ void TreeModel::setRotationAt(const QModelIndex &index, const QQuaternion &quat)
 
 void TreeModel::getDrawingDirections(std::vector<DrawDirections> &dirs,
                                      DrawDirections &next) const {
-    rootItem->getDrawingDirections(dirs, next);
+    if (rootItem) {
+        rootItem->getDrawingDirections(dirs, next);
+    }
 }
 
 QVariant TreeModel::headerData(int, Qt::Orientation orientation,

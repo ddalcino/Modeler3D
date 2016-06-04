@@ -53,14 +53,12 @@ public:
     void drawGrid(QOpenGLShaderProgram *program);
     void drawAxes(const DrawDirections &dir, QOpenGLShaderProgram *program);
 
-    void setScale(const QVector3D& s) {scale = s;}
-    void setTranslation(const QVector3D& s) {translation = s;}
-    void setRotation(const QVector3D& s, float theta) {rotation = s;
-                                                       rotationAngle=theta;}
-    const QVector3D& getScale() const {return scale;}
-    const QVector3D& getTranslation() const {return translation;}
-    const QVector3D& getRotation(float& theta) const {theta=rotationAngle;
-                                                return rotation;}
+    void setScale(const QVector3D& s);
+    void setTranslation(const QVector3D& s);
+    void setRotation(const QVector3D& s, float theta);
+    const QVector3D& getScale() const;
+    const QVector3D& getTranslation() const;
+    const QVector3D& getRotation(float& theta) const;
 
     static void init();
 

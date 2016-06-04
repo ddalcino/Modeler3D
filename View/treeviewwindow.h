@@ -14,6 +14,7 @@ class MainWindow;
 
 class GlData;
 class GeometryEngine;
+class PerspectiveWindow;
 
 class TreeViewWindow : public QMainWindow
 {
@@ -33,14 +34,14 @@ public:
     void setRotationAtSel(const QQuaternion &quat);
 
 
-    const TreeModel *getTreeModel() const {return treeModel;}
-    GeometryEngine *getGEngine() { return gEngine; }
+    const TreeModel *getTreeModel() const;
+    GeometryEngine *getGEngine();
 
-    const QItemSelectionModel *getSelectionModel() const {return &selectionModel; }
+    const QItemSelectionModel *getSelectionModel() const;
 
 signals:
     void model_changed();
-//    void selectionChanged(QModelIndex);
+    void selectionChanged();
 
 public slots:
 
@@ -75,9 +76,10 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    PerspectiveWindow *p;
     TreeModel *treeModel;
     GeometryEngine *gEngine;
-    QItemSelectionModel selectionModel;
+    QItemSelectionModel *selectionModel;
     QModelIndexList itemsToMove;
 
     QModelIndex selectedQIndex;
