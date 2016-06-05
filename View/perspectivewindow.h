@@ -13,7 +13,7 @@ namespace Ui {
 class PerspectiveWindow;
 }
 class EditCameraDialog;
-class EditObjectDialog;
+class EditObjectDialog2;
 
 class PerspectiveWindow : public QMainWindow
 {
@@ -36,7 +36,7 @@ public:
 private:
     Ui::PerspectiveWindow *ui;
     EditCameraDialog *editCameraDlg;
-    EditObjectDialog *editObjectDlg;
+    EditObjectDialog2 *editObjectDlg;
 
     //TreeModel *model;
     TreeViewWindow *tvWindow;

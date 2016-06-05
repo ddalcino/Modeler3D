@@ -1,7 +1,8 @@
 #include "perspectivewindow.h"
 #include "ui_perspectivewindow.h"
 #include "editcameradialog.h"
-#include "editobjectdialog.h"
+//#include "editobjectdialog.h"
+#include "editobjectdialog2.h"
 #include <QResizeEvent>
 #include <QSize>
 
@@ -9,7 +10,7 @@ PerspectiveWindow::PerspectiveWindow(TreeViewWindow *parent) :
     QMainWindow(parent),
     ui(new Ui::PerspectiveWindow),
     editCameraDlg(new EditCameraDialog(this)),
-    editObjectDlg(new EditObjectDialog(this)),
+    editObjectDlg(new EditObjectDialog2(this, parent)),
     tvWindow(parent)
 
 {
