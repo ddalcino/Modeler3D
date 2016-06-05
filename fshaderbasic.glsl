@@ -12,6 +12,7 @@ uniform vec4 DiffuseProduct;
 uniform vec4 SpecularProduct;
 uniform float Shininess;
 uniform vec4 wireframe_color;
+uniform vec4 add_color;
 
 // inputs from the vertex shader code
 // these are all in eye coords
@@ -44,7 +45,7 @@ void main()
             specular = vec4(0.0, 0.0, 0.0, 1.0);
         }
 
-        gl_FragColor = ambient + diffuse + specular;
+        gl_FragColor = ambient + diffuse + specular + add_color;
     }
 }
 

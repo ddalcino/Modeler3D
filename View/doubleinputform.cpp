@@ -3,6 +3,8 @@
 
 #include <QString>
 
+#define MAX_D 100000
+
 DoubleInputForm::DoubleInputForm(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DoubleInputForm)
@@ -18,7 +20,7 @@ DoubleInputForm::~DoubleInputForm()
 void DoubleInputForm::init(const char *name, double hardMax, double hardMin,
                            double initMin, double initMax, double initValue,
                            bool isFixedMin, bool isFixedMax,
-                           unsigned int granularity) {
+                           unsigned int granularity, double stepSize) {
     if (hardMax < hardMin || initMax < initMin) {
         throw "Invalid ranges given";
     }
@@ -30,22 +32,35 @@ void DoubleInputForm::init(const char *name, double hardMax, double hardMin,
     realValue = initValue;
     ui->doubleSpinBoxValue->setMinimum(0);
     ui->doubleSpinBoxValue->setMaximum(granularity);
+    ui->doubleSpinBoxValue->setSingleStep(stepSize);
     if (isFixedMax) {
         ui->doubleSpinBoxMax->setValue(hardMax);
+        ui->doubleSpinBoxMax->setMaximum(hardMax);
+        ui->doubleSpinBoxMin->setMaximum(hardMax);
         ui->doubleSpinBoxMax->setEnabled(false);
+        ui->doubleSpinBoxValue->setMaximum(hardMax);
         max = hardMax;
     } else {
         ui->doubleSpinBoxMax->setValue(initMax);
+        ui->doubleSpinBoxMax->setMaximum(MAX_D);
+        ui->doubleSpinBoxMin->setMaximum(MAX_D);
         ui->doubleSpinBoxMax->setEnabled(true);
+        ui->doubleSpinBoxValue->setMaximum(MAX_D);
         max = initMax;
     }
     if (isFixedMin) {
         ui->doubleSpinBoxMin->setValue(hardMin);
+        ui->doubleSpinBoxMin->setMinimum(hardMin);
+        ui->doubleSpinBoxMax->setMinimum(hardMin);
         ui->doubleSpinBoxMin->setEnabled(false);
+        ui->doubleSpinBoxValue->setMinimum(hardMin);
         min = hardMin;
     } else {
         ui->doubleSpinBoxMin->setValue(initMin);
+        ui->doubleSpinBoxMin->setMinimum(-MAX_D);
+        ui->doubleSpinBoxMax->setMinimum(-MAX_D);
         ui->doubleSpinBoxMin->setEnabled(true);
+        ui->doubleSpinBoxValue->setMinimum(-MAX_D);
         min = initMin;
     }
     ui->labelName->setText(QString(name));
@@ -96,7 +111,7 @@ bool DoubleInputForm::setMax(double newMax, bool fixSlider) {
 }
 
 bool DoubleInputForm::setMin(double newMin, bool fixSlider) {
-    if (newMin < hardMin && !isFixedMin && newMin < max) {
+    if (newMin > hardMin && !isFixedMin && newMin < max) {
         ui->doubleSpinBoxMin->setValue(newMin);
         min = newMin;
         if (fixSlider) {
@@ -133,4 +148,18 @@ void DoubleInputForm::on_horizontalSlider_sliderMoved(int position) {
     double translatedValue = ((double)position * (max - min)) / granularity + min;
     setValue(translatedValue, Spinner);
     emit changed_value();
+}
+
+void DoubleInputForm::on_doubleSpinBoxValue_valueChanged(double arg1) {
+    setValue(arg1, Slider);
+    emit changed_value();
+}
+
+void DoubleInputForm::on_doubleSpinBoxMin_valueChanged(double arg1) {
+    setMin(arg1, true);
+
+}
+
+void DoubleInputForm::on_doubleSpinBoxMax_valueChanged(double arg1) {
+    setMax(arg1, true);
 }

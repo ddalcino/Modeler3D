@@ -18,7 +18,8 @@ public:
     ~DoubleInputForm();
     void init(const char* name, double hardMax, double hardMin,
               double initMin, double initMax, double initValue,
-              bool isFixedMin, bool isFixedMax, unsigned int granularity=200);
+              bool isFixedMin, bool isFixedMax, unsigned int granularity=200,
+              double stepSize=0.1);
     void setValue(double newVal, ControlType controlType);
     bool setMax(double newMax, bool fixSlider=false);
     bool setMin(double newMin, bool fixSlider=false);
@@ -35,6 +36,12 @@ private slots:
     void on_doubleSpinBoxMax_editingFinished();
 
     void on_horizontalSlider_sliderMoved(int position);
+
+    void on_doubleSpinBoxValue_valueChanged(double arg1);
+
+    void on_doubleSpinBoxMin_valueChanged(double arg1);
+
+    void on_doubleSpinBoxMax_valueChanged(double arg1);
 
 private:
     Ui::DoubleInputForm *ui;

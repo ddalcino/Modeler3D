@@ -18,9 +18,7 @@ SOURCES += main.cpp\
     View/primitivedefinition.cpp \
     View/perspectivewindow.cpp \
     View/editcameradialog.cpp \
-#    View/editobjectdialog.cpp \
     Model/globject.cpp \
-#    Model/scenegraph.cpp \
     Model/treemodel.cpp \
     View/treeviewwindow.cpp \
     Model/scenexmlhandler.cpp \
@@ -37,9 +35,7 @@ HEADERS  += \
     View/perspectivewindow.h \
     View/trackball.h \
     View/editcameradialog.h \
-#    View/editobjectdialog.h \
     Model/globject.h \
-#    Model/scenegraph.h \
     Model/treemodel.h \
     View/treeviewwindow.h \
     Model/scenexmlhandler.h \
@@ -48,6 +44,9 @@ HEADERS  += \
     View/editobjectdialog2.h
 #    View/scenegl.h
 #    View/mainwindow.h
+
+INCLUDEPATH += View/
+
 
 #FORMS    += mainwindow.ui
 
@@ -63,6 +62,6 @@ FORMS += \
     View/editcameradialog.ui \
     View/editobjectdialog.ui \
     View/treeviewwindow.ui \
-    View/doubleinputform.ui \
-    View/editobjectdialog2.ui
+    View/editobjectdialog2.ui \
+    View/doubleinputform.ui
 
