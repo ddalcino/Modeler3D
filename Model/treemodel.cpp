@@ -46,6 +46,15 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
         return QAbstractItemModel::flags(index);
     }
 }
+const GlObject *TreeModel::getConstItem(const QModelIndex &index) const {
+    if (index.isValid()) {
+        const GlObject *item = static_cast<GlObject*>(index.internalPointer());
+        if (item)
+            return item;
+    }
+    return NULL;
+}
+
 
 GlObject *TreeModel::getItem(const QModelIndex &index) const {
 //    qDebug() << "getItem(): Index is: " << index << ", and it's valid=" << index.isValid();
@@ -104,9 +113,11 @@ void TreeModel::setRotationAt(const QModelIndex &index, const QQuaternion &quat)
 }
 
 void TreeModel::getDrawingDirections(std::vector<DrawDirections> &dirs,
-                                     DrawDirections &next) const {
+                                     DrawDirections &next, const GlObject *selected) const {
     if (rootItem) {
-        rootItem->getDrawingDirections(dirs, next);
+        //const GlObject *selected = NULL;
+
+        rootItem->getDrawingDirections(dirs, next, selected);
     }
 }
 

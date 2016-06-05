@@ -77,7 +77,9 @@ public:
 //    DrawDirections next;
 //    root->getDrawingDirections(dirs, next);
     void getDrawingDirections(std::vector<DrawDirections> &dirs,
-                              DrawDirections &next) const;
+                              DrawDirections &next, const GlObject *selected) const;
+
+    const GlObject *getConstItem(const QModelIndex &index) const;
 
 
 private:

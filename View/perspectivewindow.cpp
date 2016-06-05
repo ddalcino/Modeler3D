@@ -22,6 +22,8 @@ PerspectiveWindow::PerspectiveWindow(TreeViewWindow *parent) :
     // Any time the model changes in an important way, notify this object and update it
     QObject::connect(tvWindow, SIGNAL(model_changed()),
                      this, SLOT(updateChildren()));
+    QObject::connect(tvWindow, SIGNAL(selectionChanged()),
+                     this, SLOT(updateChildren()));
 }
 
 PerspectiveWindow::~PerspectiveWindow()

@@ -104,7 +104,11 @@ public:
     //const GlObject* getParent() { return parent; }
 
     virtual void getDrawingDirections(std::vector<DrawDirections>& dir,
-                                      const DrawDirections& next) const;
+                                      const DrawDirections& next,
+                                      const GlObject *selected) const;
+
+    DrawDirections makeDrawDirection(const DrawDirections& next,
+                            const GlObject *selected) const;
 
 };
 
@@ -119,7 +123,8 @@ public:
 
     const PrimDefinition getDefinition() const {return definition;}
     virtual void getDrawingDirections(std::vector<DrawDirections>& dir,
-                                      const DrawDirections& next) const;
+                                      const DrawDirections& next,
+                                      const GlObject *selected) const;
 };
 
 #endif // GLOBJECT_H

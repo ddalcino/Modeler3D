@@ -161,14 +161,14 @@ void GeometryEngine::drawPrimGeometry(const DrawDirections &dir,
         program->enableAttributeArray(normalLocation);
         program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(_VertexData));
 
-        const QMatrix4x4 &mat = dir.mat;
+//        QMatrix4x4 mat; // = dir.mat;
 //        mat.setToIdentity();
-//        mat.rotate(rotationAngle, rotation);
-//        mat.translate(translation);
-//        mat.scale(scale);
+//        mat.translate(dir.glData.translation);
+//        mat.rotate(dir.glData.rotation);  //rotationAngle, rotation);
+//        mat.scale(dir.glData.scale);
 //        qDebug() << "Model matrix:" << mat;
 
-        program->setUniformValue("mModel", mat);
+        program->setUniformValue("mModel", dir.matModel);
         // Draw cube geometry using indices from VBO 1
         glDrawElements(isWireframeMode ? GL_LINE_STRIP : GL_TRIANGLE_STRIP,
                        vbo->numIndices, GL_UNSIGNED_SHORT, 0);
@@ -249,21 +249,31 @@ void GeometryEngine::drawAxes(const DrawDirections &dir,
     program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(_VertexData));
 
     // the X axis
-    program->setUniformValue("mModel", dir.rot);
+    QMatrix4x4 mat;
+    mat.translate(dir.glData.translation);
+    mat.rotate(dir.glData.rotation);
+    program->setUniformValue("mModel", mat);
     program->setUniformValue("wireframe_color", QVector4D(1.0f, 0.0f, 0.0f, 1.0f));
     glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
 
     // the Y axis
-    QMatrix4x4 matRot;
-    matRot.rotate(90.0f, 0,0,1);
-    program->setUniformValue("mModel", matRot * dir.rot);
+    mat.setToIdentity();
+    mat.translate(dir.glData.translation);
+    mat.rotate(dir.glData.rotation);
+    mat.rotate(90.0f, 0,0,1);
+
+
+    program->setUniformValue("mModel", mat);
     program->setUniformValue("wireframe_color", QVector4D(0.0f, 1.0f, 0.0f, 1.0f));
     glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
 
     // the Z axis
-    matRot.setToIdentity();
-    matRot.rotate(90.0f, 0,1,0);
-    program->setUniformValue("mModel", matRot * dir.rot);
+    mat.setToIdentity();
+    mat.translate(dir.glData.translation);
+    mat.rotate(dir.glData.rotation);
+    mat.rotate(90.0f, 0,1,0);
+
+    program->setUniformValue("mModel", mat);
     program->setUniformValue("wireframe_color", QVector4D(0.0f, 0.0f, 1.0f, 1.0f));
     glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
 

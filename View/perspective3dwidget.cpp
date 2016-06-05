@@ -236,36 +236,50 @@ void Perspective3DWidget::paintGL()
     program.setUniformValue("Shininess", 200.0f);
 
 
+    //figure out the address of the selected GlObject
+    const GlObject *selected = ((PerspectiveWindow *)(this->parent()->parent()))
+            ->getTvWindow()->getSelectedObject();
+
+
     // get list of directions
     //const GlObject *root = model->getRoot();
     std::vector<DrawDirections> dirs;
     DrawDirections next;
-    if (model) { model->getDrawingDirections(dirs, next); }
+    if (model) { model->getDrawingDirections(dirs, next, selected); }
 
     if (showGrid) {
         program.setUniformValue("wireframe_color", QVector4D(0.2f, 1.0f, 1.0f, 1.0f));
         geometries->drawGrid(&program);
     }
 
+    DrawDirections axes;
     for (const DrawDirections &dir : dirs) {
-        // Draw geometry
-        if (isWireframeMode) {
-            program.setUniformValue("wireframe_color", QVector4D(1.0f, 1.0f, 1.0f, 1.0f));
-            geometries->drawPrimGeometry(dir, &program, isWireframeMode);
+        // save axes for drawing in later
+        if (dir.isAxesOnly && dir.isSelected) {
+            axes = dir;
         } else {
-            program.setUniformValue("wireframe_color", QVector4D());
-            geometries->drawPrimGeometry(dir, &program, isWireframeMode);
+            // Draw geometry
+            if (isWireframeMode) {
+                program.setUniformValue("wireframe_color", QVector4D(1.0f, 1.0f, 1.0f, 1.0f));
+                geometries->drawPrimGeometry(dir, &program, isWireframeMode);
+            } else {
+                program.setUniformValue("wireframe_color", QVector4D());
+                geometries->drawPrimGeometry(dir, &program, isWireframeMode);
+            }
+            if (dir.isSelected) {
+                axes = dir;
+            }
         }
-        if (showAxes) {
-            // Disable depth buffer
-            glDisable(GL_DEPTH_TEST);
+    }
+    if (showAxes && axes.isSelected) {
+        // Disable depth buffer
+        glDisable(GL_DEPTH_TEST);
 
-            // Draw axes on top of objects
-            geometries->drawAxes(dir, &program);
+        // Draw axes on top of objects
+        geometries->drawAxes(axes, &program);
 
-            // Enable depth buffer
-            glEnable(GL_DEPTH_TEST);
-        }
+        // Enable depth buffer
+        glEnable(GL_DEPTH_TEST);
     }
 
 

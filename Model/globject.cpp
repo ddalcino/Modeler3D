@@ -196,38 +196,57 @@ bool GlObject::hasAncestor(const GlObject *other) const
 //}
 
 void GlObject::getDrawingDirections(std::vector<DrawDirections> &dir,
-                                    const DrawDirections &next) const {
-    // copy the draw directions for the next item
-    DrawDirections current = next;
+                                    const DrawDirections &next, const GlObject *selected) const {
+    DrawDirections current = makeDrawDirection(next, selected);
 
-    // apply rotation, translation, and scale transformations
-    current.mat.rotate(glData.rotation);
-    current.rot.rotate(glData.rotation);
-    current.mat.translate(glData.translation);
-    current.rot.translate(glData.translation);
-    current.mat.scale(glData.scale);
+    if (current.isSelected) {
+        // add directions to dir for drawing axes
+        current.isAxesOnly = true;
+        dir.push_back(current);
+        current.isAxesOnly = false;
+    }
 
     // loop through all the children and call getDrawingDirections on them
     for (const GlObject* child : children) {
         if (child) {
-            child->getDrawingDirections(dir, current);
+            child->getDrawingDirections(dir, current, selected);
         } else {
             qDebug() << "Called getDrawingDirections on null child";
         }
     }
 }
 
-void GlPrimitiveObject::getDrawingDirections(std::vector<DrawDirections> &dir,
-                                             const DrawDirections &next) const {
+
+DrawDirections GlObject::makeDrawDirection(const DrawDirections &next,
+                                           const GlObject *selected) const {
     // copy the draw directions for the next item
     DrawDirections current = next;
 
     // apply rotation, translation, and scale transformations
-    current.mat.rotate(glData.rotation);
-    current.rot.rotate(glData.rotation);
-    current.mat.translate(glData.translation);
-    current.rot.translate(glData.translation);
-    current.mat.scale(glData.scale);
+    current.glData.apply(&glData);
+    current.matModel.translate(glData.translation);
+    current.matModel.rotate(glData.rotation);
+    current.matModel.scale(glData.scale);
+
+//    current.mat.rotate(glData.rotation);
+//    current.rot.rotate(glData.rotation);
+//    current.mat.translate(glData.translation);
+//    current.rot.translate(glData.translation);
+//    current.mat.scale(glData.scale);
+
+    if (current.isSelected) {
+        current.isSelected = false;
+        current.isParentSelected = true;
+    } else if (selected == this) {
+        current.isSelected = true;
+    }
+    return current;
+}
+
+void GlPrimitiveObject::getDrawingDirections(std::vector<DrawDirections> &dir,
+                                             const DrawDirections &next,
+                                             const GlObject *selected) const {
+    DrawDirections current = makeDrawDirection(next, selected);
 
     // set definition to whatever this object if defined as
     current.def = this->definition;

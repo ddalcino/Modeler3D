@@ -16,6 +16,18 @@ QString GlData::toString() const {
     return str;
 }
 
+void GlData::apply(const GlData* other) {
+    if (other) {
+        rotation = other->rotation * rotation;
+        rotation.normalize();
+        translation += other->translation;
+        for (int i = 0; i < 3; ++i) {
+            scale[i] *= other->scale[i];
+        }
+    }
+}
+
+
 const char *PrimTypes::toString(PrimTypes::Types t) {
     switch (t) {
     case CUBE: return "Cube";

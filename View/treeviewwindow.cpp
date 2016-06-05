@@ -61,6 +61,15 @@ const GlData *TreeViewWindow::getGlDataAtSelection() const {
             return data;  //  ->getItem(index)
         }
 //    }
+        return NULL;
+}
+
+const GlObject *TreeViewWindow::getSelectedObject() const
+{
+    if (selectedQIndex.isValid()) {
+        const GlObject *data = treeModel->getConstItem(selectedQIndex);
+        return data;
+    }
     return NULL;
 }
 

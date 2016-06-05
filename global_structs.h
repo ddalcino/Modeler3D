@@ -11,19 +11,24 @@ typedef QString PrimDefinition;
 
 #define NUM_PRIMITIVE_TYPES 6
 
-
-struct DrawDirections {
-    QMatrix4x4 mat, rot;
-    PrimDefinition def;
-//    DrawDirections() : mat(), rot(), def() {}
-};
-
 struct GlData {
     QVector3D translation, scale;
     QQuaternion rotation;
     GlData();
     QString toString() const;
+    void apply(const GlData *other);
 };
+
+struct DrawDirections {
+    GlData glData;
+    QMatrix4x4 matModel;
+    PrimDefinition def;
+    bool isSelected=false;
+    bool isParentSelected=false;
+    bool isAxesOnly=false;
+//    DrawDirections() : mat(), rot(), def() {}
+};
+
 
 struct PrimTypes {
     enum Types { CUBE, CYLINDER, CONE, SPHERE, GRID, LINE_ARROW };

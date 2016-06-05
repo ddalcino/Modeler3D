@@ -28,6 +28,7 @@ public:
     void init();
 
     const GlData *getGlDataAtSelection() const;
+    const GlObject *getSelectedObject() const;
     void setTranslationAtSel(const QVector3D &t);
     void setScaleAtSel(const QVector3D &s);
     void setRotationAtSel(const QVector3D &r, float theta);
