@@ -66,7 +66,7 @@ public:
     GlObject* copyObjectAt(const QModelIndex &index);
     bool isItemPrimitive(const QModelIndex &index) const;
 
-    const GlObject *getRoot() const { return rootItem; }
+    GlObject *getRoot() const { return rootItem; }
     const GlData *getGlDataAt(const QModelIndex &index) const;
     void setTranslationAt(const QModelIndex &index, const QVector3D &t);
     void setScaleAt(const QModelIndex &index, const QVector3D &s);

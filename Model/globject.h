@@ -118,6 +118,7 @@ public:
     GlPrimitiveObject(const PrimDefinition def = "",
                       GlObject* parent = NULL)
         : GlObject(def, parent, true), definition(def) {}
+    GlPrimitiveObject(const GlPrimitiveObject& other);
     virtual ~GlPrimitiveObject() {}
     void setDef(PrimDefinition def) {definition=def;}
 

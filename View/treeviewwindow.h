@@ -27,7 +27,7 @@ public:
 
     void init();
 
-    const GlData *getGlDataAtSelection() const;
+    GlData getGlDataAtSelection() const;
     const GlObject *getSelectedObject() const;
     void setTranslationAtSel(const QVector3D &t);
     void setScaleAtSel(const QVector3D &s);
@@ -74,6 +74,8 @@ private slots:
     void on_action_Save_Scene_triggered();
 
     void on_action_New_Scene_triggered();
+
+    void on_action_Import_Scene_triggered();
 
 private:
     Ui::MainWindow *ui;

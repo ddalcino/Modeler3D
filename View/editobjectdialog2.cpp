@@ -46,16 +46,19 @@ EditObjectDialog2::~EditObjectDialog2()
 }
 
 void EditObjectDialog2::init() {
-    // get selected GlData from tvWindow
-    const GlData *inData = tvWindow->getGlDataAtSelection();
-    if (inData) {
-        ui->posXSlider->setValue(inData->translation.x(), DoubleInputForm::Both);
-        ui->posYSlider->setValue(inData->translation.y(), DoubleInputForm::Both);
-        ui->posZSlider->setValue(inData->translation.z(), DoubleInputForm::Both);
-        ui->scaleXSlider->setValue(inData->scale.x(), DoubleInputForm::Both);
-        ui->scaleYSlider->setValue(inData->scale.y(), DoubleInputForm::Both);
-        ui->scaleZSlider->setValue(inData->scale.z(), DoubleInputForm::Both);
+    try {
+        // get selected GlData from tvWindow
+        const GlData inData = tvWindow->getGlDataAtSelection();
+        //if (inData) {
+        ui->posXSlider->setValue(inData.translation.x(), DoubleInputForm::Both);
+        ui->posYSlider->setValue(inData.translation.y(), DoubleInputForm::Both);
+        ui->posZSlider->setValue(inData.translation.z(), DoubleInputForm::Both);
+        ui->scaleXSlider->setValue(inData.scale.x(), DoubleInputForm::Both);
+        ui->scaleYSlider->setValue(inData.scale.y(), DoubleInputForm::Both);
+        ui->scaleZSlider->setValue(inData.scale.z(), DoubleInputForm::Both);
         update();
+    } catch (const char *msg) {
+        qDebug() << "Error: " << msg;
     }
 }
 
@@ -76,17 +79,23 @@ void EditObjectDialog2::updateScale()
 void EditObjectDialog2::updateRotation(EditObjectDialog2::Axis axis,
                                        bool isNegative)
 {
-    // get selected GlData from tvWindow
-    const GlData *inData = tvWindow->getGlDataAtSelection();
-    if (inData) {
-        float scalar = ((axis == X) ? ui->doubleSpinBoxRotX->value() :
-                                      (axis == Y) ? ui->doubleSpinBoxRotY->value() :
-                                                    ui->doubleSpinBoxRotZ->value());
-        QQuaternion quat(scalar * (isNegative ? -1 : 1),
-                         (axis == X) ? 1 : 0,
-                         (axis == Y) ? 1 : 0,
-                         (axis == Z) ? 1 : 0);
-        tvWindow->setRotationAtSel((quat * inData->rotation).normalized());
+    try {
+        // get selected GlData from tvWindow
+        const GlData inData = tvWindow->getGlDataAtSelection();
+        //if (inData) {
+        float theta = (isNegative ? -1 : 1) *
+                ((axis == X) ? ui->doubleSpinBoxRotX->value() :
+                 (axis == Y) ? ui->doubleSpinBoxRotY->value() :
+                 ui->doubleSpinBoxRotZ->value());
+
+        QQuaternion quat = QQuaternion::fromAxisAndAngle((axis == X) ? 1 : 0,
+                                                         (axis == Y) ? 1 : 0,
+                                                         (axis == Z) ? 1 : 0,
+                                                         theta);
+
+        tvWindow->setRotationAtSel((quat * inData.rotation).normalized());
+    } catch (const char *msg) {
+        qDebug() << "Error: " << msg;
     }
 }
 

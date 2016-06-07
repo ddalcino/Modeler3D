@@ -3,7 +3,7 @@
 #include "ui_treeviewwindow.h"
 #include "../Model/scenexmlhandler.h"
 #include "../Model/treemodel.h"
-//#include "../Model/globject.h"
+#include "../Model/globject.h"
 
 #include <QItemSelectionModel>
 #include <QDebug>
@@ -47,7 +47,7 @@ void TreeViewWindow::init()
     emit selectionChanged();
 }
 
-const GlData *TreeViewWindow::getGlDataAtSelection() const {
+GlData TreeViewWindow::getGlDataAtSelection() const {
 //    qDebug() << "TreeViewWindow::getGlDataAtSelection(): "
 //             << "hasSelection()=" << selectionModel.hasSelection()
 //             << "currentIndex()=" << selectionModel.currentIndex();
@@ -58,10 +58,11 @@ const GlData *TreeViewWindow::getGlDataAtSelection() const {
         if (selectedQIndex.isValid()) {
             const GlData *data = treeModel->getGlDataAt(selectedQIndex);
 //            qDebug() << "Selected data is: " << data->toString();
-            return data;  //  ->getItem(index)
+            return GlData(*data);  //  ->getItem(index)
         }
 //    }
-        return NULL;
+        throw "Nothing selected yet";
+        return GlData();
 }
 
 const GlObject *TreeViewWindow::getSelectedObject() const
@@ -88,6 +89,7 @@ void TreeViewWindow::setTranslationAtSel(const QVector3D &t) {
 
 void TreeViewWindow::setScaleAtSel(const QVector3D &s)
 {
+    qDebug() << "TreeViewWindow::setScaleAtSel()";
 //    if (selectionModel.hasSelection()) {
 //        const QModelIndex index = selectionModel.selectedRows().first();
         if (selectedQIndex.isValid()) {
@@ -99,6 +101,7 @@ void TreeViewWindow::setScaleAtSel(const QVector3D &s)
 
 void TreeViewWindow::setRotationAtSel(const QVector3D &r, float theta)
 {
+    qDebug() << "TreeViewWindow::setRotationAtSel(qvector3d, theta)";
 //    if (selectionModel.hasSelection()) {
 //        const QModelIndex index = selectionModel.selectedRows().first();
         if (selectedQIndex.isValid()) {
@@ -109,7 +112,7 @@ void TreeViewWindow::setRotationAtSel(const QVector3D &r, float theta)
 }
 
 void TreeViewWindow::setRotationAtSel(const QQuaternion &quat) {
-    qDebug() << "TreeViewWindow::setRotationAtSel()";
+    qDebug() << "TreeViewWindow::setRotationAtSel(quat)";
     if (selectedQIndex.isValid()) {
         treeModel->setRotationAt(selectedQIndex, quat);
 
@@ -330,3 +333,30 @@ void TreeViewWindow::on_action_New_Scene_triggered()
     update();
     emit model_changed();
  }
+
+void TreeViewWindow::on_action_Import_Scene_triggered()
+{
+    QString inFileName = QFileDialog::getOpenFileName(this,
+        tr("Import From SceneGraphXML File"), QString(), tr("SceneGraphXML Files (*.xml *.sgXML)"));
+
+    SceneGraphXMLHandler xmlReader(NULL);
+    GlObject * importedRoot = xmlReader.readFile(inFileName);
+    if (importedRoot && treeModel) {
+        // success
+        importedRoot->setName(inFileName);
+        treeModel->addToRoot(importedRoot);
+        GlObject *root = treeModel->getRoot();
+
+        delete selectionModel;
+        selectionModel = NULL;
+        delete treeModel;
+        treeModel = new TreeModel(this, root);
+        selectionModel = new QItemSelectionModel(treeModel, this);
+        selectedQIndex = QModelIndex();
+
+        init();
+        update();
+        emit model_changed();
+    }
+
+}

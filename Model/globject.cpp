@@ -2,16 +2,24 @@
 
 #include <QDebug>
 
+// TODO: Fix this copy constructor, using a factory and virtual methods,
+// instead of this weird crap
 GlObject::GlObject(const GlObject &other)
     : parent(NULL), glData(other.glData),
-      // translation(other.translation), scale(other.scale), rotation(other.rotation),
       _isPrimitive(other._isPrimitive),
       _isSelected(false),
       name(other.name) {
     // make new copies of all the children
     for (const GlObject *c : other.children) {
-        GlObject *newChild = new GlObject(*c);
-        newChild->setParent(this);
+        if (c) {
+            if (c->isPrimitive()) {
+                GlObject *newChild = new GlPrimitiveObject(*(GlPrimitiveObject*)c);
+                newChild->setParent(this);
+            } else {
+                GlObject *newChild = new GlObject(*c);
+                newChild->setParent(this);
+            }
+        }
         //children.push_back(newChild);
     }
 }
@@ -242,6 +250,11 @@ DrawDirections GlObject::makeDrawDirection(const DrawDirections &next,
     }
     return current;
 }
+
+GlPrimitiveObject::GlPrimitiveObject(const GlPrimitiveObject &other)
+    : GlObject(other),
+      definition(other.definition)
+{}
 
 void GlPrimitiveObject::getDrawingDirections(std::vector<DrawDirections> &dir,
                                              const DrawDirections &next,

@@ -50,6 +50,11 @@ void PerspectiveWindow::setCameraPos(const QVector3D &pos) {
     ui->perspectiveGLWidget->setCameraPos(pos);
 }
 
+void PerspectiveWindow::setCameraRot(const QQuaternion &rot)
+{
+    ui->perspectiveGLWidget->setCameraRot(rot);
+}
+
 float PerspectiveWindow::getFov() const {
     return ui->perspectiveGLWidget->getFov();
 }

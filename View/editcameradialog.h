@@ -2,7 +2,7 @@
 #define EDITCAMERADIALOG_H
 
 #include <QDialog>
-
+#include <QVector3D>
 
 
 namespace Ui {
@@ -27,11 +27,20 @@ private slots:
 
     void on_hSliderPosZ_sliderMoved(int position);
 
+    void on_lookXAxis_clicked();
+
+    void on_lookYAxis_clicked();
+
+    void on_lookZAxis_clicked();
+
 private:
     Ui::EditCameraDialog *ui;
+    PerspectiveWindow *parent;
 
     enum Dim {X, Y, Z};
     void setCamPos(Dim d, float amt);
+    void setCamRot(Dim axis);
+    QVector3D makePosOnAxis(Dim d, float distance);
 };
 
 #endif // EDITCAMERADIALOG_H

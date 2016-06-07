@@ -56,6 +56,7 @@ public:
 
     const QVector3D& getCameraPos() const;
     void setCameraPos(const QVector3D& pos);
+    void setCameraRot(const QQuaternion& rot) { trackballCam.setQnow(rot);}
     float getFov() const;
     void setFov(float f);
     void setWireframeMode(bool b);
