@@ -39,7 +39,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Modeler 3D&lt;/span&gt;&lt;br/&gt;v. 1.0&lt;/p&gt;&lt;p&gt;June 8, 2016&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;by David Dalcino&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;written for CS 6865&lt;/p&gt;&lt;p&gt;Prof. Roger Doering&lt;/p&gt;&lt;p&gt;CSU Eastbay&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Modeler 3D&lt;/span&gt;&lt;br/&gt;v. 1.0&lt;/p&gt;&lt;p&gt;June 8, 2016&lt;br/&gt;by David Dalcino&lt;/p&gt;&lt;br/&gt;&lt;br/&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/ddalcino/Modeler3D&quot;&gt;Github: https://github.com/ddalcino/Modeler3D&lt;/a&gt;&lt;/p&gt;&lt;p&gt;written for CS 6865&lt;br/&gt;Prof. Roger Doering&lt;br/&gt;CSU Eastbay&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

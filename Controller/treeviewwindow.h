@@ -15,6 +15,8 @@ class MainWindow;
 class GlData;
 class GeometryEngine;
 class PerspectiveWindow;
+class HelpDialog;
+class AboutDialog;
 
 /**
  * @brief The TreeViewWindow class
@@ -88,9 +90,15 @@ private slots:
 
     void on_action_Import_Scene_triggered();
 
+    void on_action_Instructions_triggered();
+
+    void on_actionAbout_triggered();
+
 private:
     Ui::MainWindow *ui;
     PerspectiveWindow *p;
+    AboutDialog *aboutDialog;
+    HelpDialog *helpDialog;
     TreeModel *treeModel;
     GeometryEngine *gEngine;
     QItemSelectionModel *selectionModel;

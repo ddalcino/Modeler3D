@@ -15,6 +15,8 @@ class PerspectiveWindow;
 }
 class EditCameraDialog;
 class EditObjectDialog2;
+class AboutDialog;
+class HelpDialog;
 
 class PerspectiveWindow : public QMainWindow
 {
@@ -41,6 +43,8 @@ private:
     Ui::PerspectiveWindow *ui;
     EditCameraDialog *editCameraDlg;
     EditObjectDialog2 *editObjectDlg;
+    AboutDialog *aboutDialog;
+    HelpDialog *helpDialog;
 
     //TreeModel *model;
     TreeViewWindow *tvWindow;
@@ -62,6 +66,8 @@ private slots:
     void on_action_Rotate_Selected_Object_toggled(bool arg1);
     void on_actionRotate_Camera_toggled(bool arg1);
     void on_actionTranslate_Obj_ect_XY_toggled(bool arg1);
+    void on_actionInstructions_triggered();
+    void on_actionAbout_triggered();
 };
 
 #endif // PERSPECTIVEWINDOW_H

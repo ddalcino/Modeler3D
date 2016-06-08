@@ -1,5 +1,7 @@
 #include "Controller/treeviewwindow.h"
 #include "../View/perspectivewindow.h"
+#include "../View/aboutdialog.h"
+#include "../View/helpdialog.h"
 #include "ui_treeviewwindow.h"
 #include "../Model/scenexmlhandler.h"
 #include "../Model/treemodel.h"
@@ -15,6 +17,8 @@ TreeViewWindow::TreeViewWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
 //      p(new PerspectiveWindow(this)),
+      aboutDialog(new AboutDialog(this)),
+      helpDialog(new HelpDialog(this)),
       treeModel(new TreeModel(this)),
       gEngine(NULL),
       selectionModel(new QItemSelectionModel(treeModel, this))
@@ -365,4 +369,12 @@ void TreeViewWindow::on_action_Import_Scene_triggered()
         emit model_changed();
     }
 
+}
+
+void TreeViewWindow::on_action_Instructions_triggered() {
+    helpDialog->show();
+}
+
+void TreeViewWindow::on_actionAbout_triggered() {
+    aboutDialog->show();
 }

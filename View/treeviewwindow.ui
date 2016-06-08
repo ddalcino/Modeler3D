@@ -73,9 +73,17 @@
     </property>
     <addaction name="action_New_Perspective_Window"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+    <addaction name="action_Instructions"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menuObject"/>
    <addaction name="menuView"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_Cube">
@@ -226,6 +234,16 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>&amp;About ...</string>
+   </property>
+  </action>
+  <action name="action_Instructions">
+   <property name="text">
+    <string>&amp;Instructions ...</string>
    </property>
   </action>
  </widget>

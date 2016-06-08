@@ -3,6 +3,8 @@
 #include "editcameradialog.h"
 //#include "editobjectdialog.h"
 #include "editobjectdialog2.h"
+#include "aboutdialog.h"
+#include "helpdialog.h"
 #include <QResizeEvent>
 #include <QSize>
 
@@ -11,6 +13,8 @@ PerspectiveWindow::PerspectiveWindow(TreeViewWindow *parent) :
     ui(new Ui::PerspectiveWindow),
     editCameraDlg(new EditCameraDialog(this)),
     editObjectDlg(new EditObjectDialog2(this, parent)),
+    aboutDialog(new AboutDialog(this)),
+    helpDialog(new HelpDialog(this)),
     tvWindow(parent)
 
 {
@@ -202,4 +206,14 @@ void PerspectiveWindow::on_actionTranslate_Obj_ect_XY_toggled(bool arg1)
         validateMouseBehaviorType(Perspective3DWidget::TrCamXY);
         ui->perspectiveGLWidget->setMouseDragType(Perspective3DWidget::TrCamXY);
     }
+}
+
+void PerspectiveWindow::on_actionInstructions_triggered()
+{
+    helpDialog->show();
+}
+
+void PerspectiveWindow::on_actionAbout_triggered()
+{
+    aboutDialog->show();
 }

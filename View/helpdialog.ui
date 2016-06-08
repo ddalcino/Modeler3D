@@ -7,17 +7,17 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>538</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Instructions</string>
   </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>260</y>
+     <y>500</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -35,26 +35,98 @@
      <x>10</x>
      <y>10</y>
      <width>371</width>
-     <height>241</height>
+     <height>491</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
-   <widget class="QWidget" name="tab">
+   <widget class="QWidget" name="tabEditCamera">
     <attribute name="title">
-     <string>Camera</string>
+     <string>Edit Camera</string>
     </attribute>
+    <widget class="QLabel" name="labelEditCamera">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>361</width>
+       <height>461</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Under the Perspective Window, you can change the camera's properties in two ways: the 'Edit Camera' dialog box, or through mouse dragging.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Edit Camera Dialog Box&lt;/span&gt;&lt;br/&gt;In the Perspective Window, click 'Edit&amp;gt;Edit Camera'. This will bring up a dialog box with controls for field of view, camera positioning, draw distance, and grid scale. &lt;/p&gt;&lt;p&gt;In the areas marked Camera Pos X, Camera Pos Y, and Camera Pos Z, you can drag the sliders to move the camera's relative position around the environment. The ranges of each slider can be adjusted with the two spin boxes below the sliders, marked Min and Max. The spin box to the far left allows you to type in a value manually. The buttons below the sliders, marked 'Pos X=Y', 'Pos X=Z', and so forth, allow you to set the value in one slider equal to the value in another.&lt;/p&gt;&lt;p&gt;The 'Camera FOV' control changes the camera's field of view, much like a zoom lens. The maximum value for FOV is 180 degrees; this corresponds to a camera with a fisheye lens.&lt;/p&gt;&lt;p&gt;The 'Draw Distance' field allows you to set how deep into the screen objects will be drawn. A shorter draw distance will allow less powerful hardware to display more complicated scenes.&lt;/p&gt;&lt;p&gt;The 'Grid Scale' field allows you to change the density of the squares displayed in the grids on the XY, XZ, and YZ planes.&lt;/p&gt;&lt;p&gt;At the bottom of the dialog box, you can set the camera to look directly down the X, Y, and Z axes.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Mouse Dragging&lt;/span&gt;&lt;br/&gt;Click 'Mouse Behavior&amp;gt;Rotate Camera' in the Perspective Window. Now, when you click and drag across the 3D viewport in the Perspective Window, you will be rotating the camera about the origin of the environment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
-   <widget class="QWidget" name="tab_2">
+   <widget class="QWidget" name="tabEditObject">
     <attribute name="title">
-     <string>Object</string>
+     <string>Edit Object</string>
     </attribute>
+    <widget class="QLabel" name="labelEditObject">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>361</width>
+       <height>461</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Under the Perspective Window, you can edit objects in two ways: the 'Edit Object' dialog box, or through mouse dragging.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Edit Object Dialog Box&lt;/span&gt;&lt;br/&gt;In the Perspective Window, click 'Edit&amp;gt;Edit Object'. This will bring up a dialog box with controls for positioning, scaling, and rotating the currently selected object. &lt;/p&gt;&lt;p&gt;In the areas marked Pos X, Pos Y, and Pos Z, you can drag the sliders to move the origin of the selected object around the environment. The ranges of each slider can be adjusted with the two spin boxes below the sliders, marked Min and Max. The spin box to the far left allows you to type in a value manually. The buttons below the sliders, marked 'Pos X=Y', 'Pos X=Z', and so forth, allow you to set the value in one slider equal to the value in another.&lt;/p&gt;&lt;p&gt;At the bottom of the dialog box, you can rotate objects about the X, Y, or Z axis. Simply select the number of degrees you wish to rotate, and click the button next to it.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Mouse Dragging&lt;/span&gt;&lt;br/&gt;Select an object using the Hierarchy View window, and click 'Mouse Behavior&amp;gt;Rotate Selected Object' in the Perspective Window. Now, when you click and drag across the 3D viewport in the Perspective Window, you will be rotating the currently selected object.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
-   <widget class="QWidget" name="tab_3">
+   <widget class="QWidget" name="tabTreeHierarchy">
     <attribute name="title">
-     <string>Hierarchy</string>
+     <string>Tree Hierarchy</string>
     </attribute>
+    <widget class="QLabel" name="labelTreeHierarchy">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>361</width>
+       <height>461</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The 'Hierarchy View' window is usually behind the 'Perspective View' window, so you may need to move it out of the way if you initially can't see it. This window will allow you to create groups of objects, arranged in a hierarchical tree structure, and rename the groups to whatever you want them to be.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Creating new objects:&lt;/span&gt;&lt;br/&gt;To add a new primitive object to the scene, click 'Object&amp;gt;New&amp;gt;', and then click on one of the options that appears in the menu. At present, the available primitives include Cube, Cone, Cylinder, and Sphere. The object will appear as a child of the group you have currently selected, or a child of the root object if nothing is selected. Primitives may not have any children, so if you have a primitive selected when you try to add a new object, it will be added to the root instead.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Grouping objects:&lt;/span&gt;&lt;br/&gt;To add a new group, click 'Object&amp;gt;New&amp;gt;Group'. When you make a new group, any groups or objects you have selected will be added as children to that group. The new group will be added as a child of the root node.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Copying objects:&lt;/span&gt;&lt;br/&gt;To copy an object, select an object and click 'Object&amp;gt;Copy'. This will make a new copy of the selected object, and add it as a child of the root node. You can also press 'Ctrl-C' to get this to work; be aware that the 'paste' operation will occur automatically.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Moving objects: &lt;/span&gt;&lt;br/&gt;To move an object, select an object and click 'Object&amp;gt;Move'. After this, select a group that you would like to move this object into, and click 'Object&amp;gt;Paste'. This object will become the parent of the object you moved.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Deleting objects:&lt;/span&gt;&lt;br/&gt;Select an object and press 'Delete', or click 'Object&amp;gt;Delete'. This will delete the object and all of its children.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tabFiles">
+    <attribute name="title">
+     <string>Files</string>
+    </attribute>
+    <widget class="QLabel" name="labelFiles">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>361</width>
+       <height>461</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;File saving and loading functions exist in the 'Hierarchy View' window, under 'File'. The 'Hierarchy View' window is usually behind the 'Perspective View' window, so you may need to move it out of the way if you initially can't see it. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;File Saving: &lt;/span&gt;&lt;br/&gt;To save the scene you are currently working on, click 'File&amp;gt;Save Scene'. A dialog box will allow you to select a path and filename for your saved file.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;File Loading:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Import Scene:&lt;/span&gt;&lt;br/&gt;To import the contents of an existing scene into the scene you are currently working on, click 'File&amp;gt;Import Scene'. A dialog box will allow you to select a path and filename for the file you would like to import. This option only recognizes XML files produced by this program.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Open Scene:&lt;/span&gt;&lt;br/&gt;This option will close the scene you are working with and open an existing scene. Click 'File&amp;gt;Open Scene'. A dialog box will allow you to select a path and filename for the file you would like to open. This option only recognizes XML files produced by this program.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;New Scene:&lt;/span&gt;&lt;br/&gt;This option will close the scene you are working with and create a new one. It will be populated with a cube at the origin of the environment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>
