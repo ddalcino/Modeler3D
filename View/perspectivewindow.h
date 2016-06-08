@@ -4,7 +4,7 @@
 #include <QMainWindow>
 
 #include "geometryengine.h"
-#include "treeviewwindow.h"
+#include "Controller/treeviewwindow.h"
 #include "perspective3dwidget.h"
 
 #include <QQuaternion>
@@ -32,6 +32,7 @@ public:
     void setCameraRot(const QQuaternion& rot);
     float getFov() const;
     void setFov(float f);
+    float getDrawDist() const;
 
     TreeViewWindow *getTvWindow();
 
@@ -49,14 +50,11 @@ private:
 
 public slots:
     void updateChildren();
+    void setDrawDist(double d);
 
 private slots:
     void on_actionEdit_Camera_triggered();
     void on_actionEdit_Object_triggered();
-//    void on_action_Cube_triggered();
-//    void on_action_Sphere_triggered();
-//    void on_actionC_ylinder_triggered();
-//    void on_actionC_one_triggered();
     void on_action_Wireframe_toggled(bool arg1);
     void on_actionShow_Grid_toggled(bool arg1);
     void on_actionShow_Axes_toggled(bool arg1);

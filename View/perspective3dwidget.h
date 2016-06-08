@@ -65,6 +65,12 @@ public:
     void setMouseDragType(MouseDragType t);
     MouseDragType getMouseDragType() const;
 
+    float getNearDrawDistance() const;
+    void setNearDrawDistance(float value);
+
+    float getFarDrawDistance() const;
+    void setFarDrawDistance(float value);
+
 private:
     QOpenGLShaderProgram program;
     //QOpenGLShaderProgram wireProgram;
@@ -90,6 +96,7 @@ private:
     bool isWireframeMode;
     bool showGrid;
     bool showAxes;
+    float nearDrawDistance, farDrawDistance;
 
     MouseDragType dragType;
 signals:

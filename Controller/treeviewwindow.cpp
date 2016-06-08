@@ -1,5 +1,5 @@
-#include "treeviewwindow.h"
-#include "perspectivewindow.h"
+#include "Controller/treeviewwindow.h"
+#include "../View/perspectivewindow.h"
 #include "ui_treeviewwindow.h"
 #include "../Model/scenexmlhandler.h"
 #include "../Model/treemodel.h"
@@ -99,17 +99,17 @@ void TreeViewWindow::setScaleAtSel(const QVector3D &s)
     emit model_changed();
 }
 
-void TreeViewWindow::setRotationAtSel(const QVector3D &r, float theta)
-{
-    qDebug() << "TreeViewWindow::setRotationAtSel(qvector3d, theta)";
-//    if (selectionModel.hasSelection()) {
-//        const QModelIndex index = selectionModel.selectedRows().first();
-        if (selectedQIndex.isValid()) {
-            treeModel->setRotationAt(selectedQIndex, r, theta);
-        }
-    //}
-    emit model_changed();
-}
+//void TreeViewWindow::setRotationAtSel(const QVector3D &r, float theta)
+//{
+//    qDebug() << "TreeViewWindow::setRotationAtSel(qvector3d, theta)";
+////    if (selectionModel.hasSelection()) {
+////        const QModelIndex index = selectionModel.selectedRows().first();
+//        if (selectedQIndex.isValid()) {
+//            treeModel->setRotationAt(selectedQIndex, r, theta);
+//        }
+//    //}
+//    emit model_changed();
+//}
 
 void TreeViewWindow::setRotationAtSel(const QQuaternion &quat) {
     qDebug() << "TreeViewWindow::setRotationAtSel(quat)";
@@ -349,19 +349,19 @@ void TreeViewWindow::on_action_Import_Scene_triggered()
     GlObject * importedRoot = xmlReader.readFile(inFileName);
     if (importedRoot && treeModel) {
         // success
-        importedRoot->setName(inFileName);
+        //importedRoot->setName(inFileName);
         treeModel->addToRoot(importedRoot);
-        GlObject *root = treeModel->getRoot();
+//        GlObject *root = treeModel->getRoot();
 
-        delete selectionModel;
-        selectionModel = NULL;
-        delete treeModel;
-        treeModel = new TreeModel(this, root);
-        selectionModel = new QItemSelectionModel(treeModel, this);
-        selectedQIndex = QModelIndex();
+//        delete selectionModel;
+//        selectionModel = NULL;
+//        delete treeModel;
+//        treeModel = new TreeModel(this, root);
+//        selectionModel = new QItemSelectionModel(treeModel, this);
+//        selectedQIndex = QModelIndex();
 
-        init();
-        update();
+//        init();
+//        update();
         emit model_changed();
     }
 

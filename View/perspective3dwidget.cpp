@@ -1,6 +1,6 @@
 #include "perspective3dwidget.h"
 #include "perspectivewindow.h"
-#include "treeviewwindow.h"
+#include "Controller/treeviewwindow.h"
 #include <QMouseEvent>
 #include <QDebug>
 #include <QPoint>
@@ -20,6 +20,8 @@ Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     isWireframeMode(false),
     showGrid(true),
     showAxes(true),
+    nearDrawDistance(0.1),
+    farDrawDistance(10.0),
     dragType(RotCam)
 {
 //    qDebug() << "Perspective3DWidget constructor called";
@@ -179,6 +181,28 @@ void Perspective3DWidget::setMouseDragType(Perspective3DWidget::MouseDragType t)
 
 Perspective3DWidget::MouseDragType Perspective3DWidget::getMouseDragType() const { return dragType; }
 
+float Perspective3DWidget::getNearDrawDistance() const
+{
+    return nearDrawDistance;
+}
+
+void Perspective3DWidget::setNearDrawDistance(float value)
+{
+    nearDrawDistance = value;
+}
+
+float Perspective3DWidget::getFarDrawDistance() const
+{
+    return farDrawDistance;
+}
+
+void Perspective3DWidget::setFarDrawDistance(float value)
+{
+    farDrawDistance = value;
+    this->resizeGL(this->width(), this->height());
+    //resizeGl(width(), height());
+}
+
 //void Perspective3DWidget::changeObject(PrimitiveDefinition::Types t)
 //{
 ////    delete geometries;
@@ -191,14 +215,11 @@ void Perspective3DWidget::resizeGL(int w, int h)
     // Calculate aspect ratio
     qreal aspect = qreal(w) / qreal(h ? h : 1);
 
-    // Set near plane to 3.0, far plane to 7.0, field of view 45 degrees
-    static const qreal zNear = 0.1, zFar = 10.0; //, fov = 45.0;
-
     // Reset projection
     projection.setToIdentity();
 
     // Set perspective projection
-    projection.perspective(fov, aspect, zNear, zFar);
+    projection.perspective(fov, aspect, nearDrawDistance, farDrawDistance);
 
     this->resize(w, h);
     trackballCam.recenter(this->size());

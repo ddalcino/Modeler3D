@@ -52,6 +52,7 @@ void PerspectiveWindow::setCameraPos(const QVector3D &pos) {
 
 void PerspectiveWindow::setCameraRot(const QQuaternion &rot)
 {
+    qDebug() << "rot=" << rot;
     ui->perspectiveGLWidget->setCameraRot(rot);
 }
 
@@ -61,6 +62,17 @@ float PerspectiveWindow::getFov() const {
 
 void PerspectiveWindow::setFov(float f) {
     ui->perspectiveGLWidget->setFov(f);
+}
+
+float PerspectiveWindow::getDrawDist() const
+{
+    return ui->perspectiveGLWidget->getFarDrawDistance();
+}
+
+void PerspectiveWindow::setDrawDist(double d)
+{
+    ui->perspectiveGLWidget->setFarDrawDistance(d);
+    updateChildren();
 }
 
 TreeViewWindow *PerspectiveWindow::getTvWindow() {

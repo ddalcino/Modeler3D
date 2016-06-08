@@ -133,7 +133,7 @@ double DoubleInputForm::getVal() const {
 
 void DoubleInputForm::on_doubleSpinBoxValue_editingFinished() {
     setValue(ui->doubleSpinBoxValue->value(), Slider);
-    emit changed_value();
+    emit changed_value(realValue);
 }
 
 void DoubleInputForm::on_doubleSpinBoxMin_editingFinished() {
@@ -147,12 +147,12 @@ void DoubleInputForm::on_doubleSpinBoxMax_editingFinished() {
 void DoubleInputForm::on_horizontalSlider_sliderMoved(int position) {
     double translatedValue = ((double)position * (max - min)) / granularity + min;
     setValue(translatedValue, Spinner);
-    emit changed_value();
+    emit changed_value(realValue);
 }
 
 void DoubleInputForm::on_doubleSpinBoxValue_valueChanged(double arg1) {
     setValue(arg1, Slider);
-    emit changed_value();
+    emit changed_value(realValue);
 }
 
 void DoubleInputForm::on_doubleSpinBoxMin_valueChanged(double arg1) {

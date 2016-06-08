@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>414</width>
-    <height>600</height>
+    <height>668</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>411</width>
-      <height>561</height>
+      <height>621</height>
      </rect>
     </property>
    </widget>
@@ -82,25 +82,40 @@
    <property name="text">
     <string>&amp;Cube</string>
    </property>
+   <property name="toolTip">
+    <string>Inserts a cube as a child of the selected group, or as a child of the root node if the the selected item is a primitive.</string>
+   </property>
   </action>
   <action name="actionC_ylinder">
    <property name="text">
     <string>C&amp;ylinder</string>
+   </property>
+   <property name="toolTip">
+    <string>Inserts a cylinder as a child of the selected group, or as a child of the root node if the the selected item is a primitive.</string>
    </property>
   </action>
   <action name="action_Sphere">
    <property name="text">
     <string>&amp;Sphere</string>
    </property>
+   <property name="toolTip">
+    <string>Inserts a sphere as a child of the selected group, or as a child of the root node if the the selected item is a primitive.</string>
+   </property>
   </action>
   <action name="actionC_one">
    <property name="text">
     <string>C&amp;one</string>
    </property>
+   <property name="toolTip">
+    <string>Inserts a cone as a child of the selected group, or as a child of the root node if the the selected item is a primitive.</string>
+   </property>
   </action>
   <action name="action_Delete">
    <property name="text">
     <string>&amp;Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Deletes the selected object.</string>
    </property>
    <property name="shortcut">
     <string>Del</string>
@@ -110,6 +125,9 @@
    <property name="text">
     <string>&amp;Copy</string>
    </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copies the selected object, and inserts it as a child of the root node. The copy will have all the position, rotation, and scale data as the original, so it will be superimposed over the original. Move the object to the side if you can't see it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
    </property>
@@ -118,6 +136,9 @@
    <property name="text">
     <string>&amp;Move</string>
    </property>
+   <property name="toolTip">
+    <string>Allows you to choose  the selected item so that it can be moved into another group. The move will not occur until you select a destination and click 'Paste.'</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+X</string>
    </property>
@@ -125,6 +146,9 @@
   <action name="action_Group">
    <property name="text">
     <string>&amp;Group</string>
+   </property>
+   <property name="toolTip">
+    <string>This option makes a new group, pulling any seleced items into it as its children.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -137,18 +161,30 @@
    <property name="text">
     <string>&amp;Paste</string>
    </property>
+   <property name="toolTip">
+    <string>Pastes an item you chose with 'Move' into the selected group.</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
    </property>
   </action>
   <action name="action_New_Perspective_Window">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;New Perspective Window</string>
+   </property>
+   <property name="toolTip">
+    <string>Not working</string>
    </property>
   </action>
   <action name="action_Open_Scene">
    <property name="text">
     <string>&amp;Open Scene ...</string>
+   </property>
+   <property name="toolTip">
+    <string>This option allows you to open a SceneGraph XML file.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -158,10 +194,16 @@
    <property name="text">
     <string>&amp;Import Scene ...</string>
    </property>
+   <property name="toolTip">
+    <string>This option allows you to import the contents of a SceneGraph XML file into the current scene.</string>
+   </property>
   </action>
   <action name="action_Save_Scene">
    <property name="text">
     <string>&amp;Save Scene ...</string>
+   </property>
+   <property name="toolTip">
+    <string>This option allows you to save the contents of the current scene as a SceneGraph XML file.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
@@ -179,6 +221,9 @@
    <property name="text">
     <string>&amp;Quit</string>
    </property>
+   <property name="toolTip">
+    <string>Quits the program.</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
    </property>
@@ -193,8 +238,8 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>206</x>
-     <y>299</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>206</x>

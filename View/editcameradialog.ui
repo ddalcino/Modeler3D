@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>189</height>
+    <width>455</width>
+    <height>416</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>160</y>
+     <x>60</x>
+     <y>380</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -37,117 +37,33 @@
     <rect>
      <x>-1</x>
      <y>-1</y>
-     <width>401</width>
-     <height>161</height>
+     <width>451</width>
+     <height>381</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QHBoxLayout" name="hLayoutFOV">
-      <item>
-       <widget class="QLabel" name="lblCameraFOV">
-        <property name="text">
-         <string>Camera FOV</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="hSliderFOV">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>180</number>
-        </property>
-        <property name="value">
-         <number>45</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="DoubleInputForm" name="doubleInputCamFov" native="true"/>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="hLayoutPosX">
-      <item>
-       <widget class="QLabel" name="lblCameraPosX">
-        <property name="text">
-         <string>Camera Pos X</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="hSliderPosX">
-        <property name="minimum">
-         <number>-1000</number>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="DoubleInputForm" name="doubleInputCamPosX" native="true"/>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="hLayoutPosY">
-      <item>
-       <widget class="QLabel" name="lblCameraPosY">
-        <property name="text">
-         <string>Camera Pos Y</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="hSliderPosY">
-        <property name="minimum">
-         <number>-1000</number>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="DoubleInputForm" name="doubleInputCamPosY" native="true"/>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="hLayoutPosZ">
-      <item>
-       <widget class="QLabel" name="lblCameraPosZ">
-        <property name="text">
-         <string>Camera Pos Z</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="hSliderPosZ">
-        <property name="minimum">
-         <number>-1000</number>
-        </property>
-        <property name="maximum">
-         <number>0</number>
-        </property>
-        <property name="value">
-         <number>-250</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="DoubleInputForm" name="doubleInputCamPosZ" native="true"/>
+    </item>
+    <item>
+     <widget class="DoubleInputForm" name="doubleInputFarDrawDist" native="true"/>
     </item>
     <item>
      <layout class="QHBoxLayout" name="hLayoutRotZ">
       <item>
        <widget class="QPushButton" name="lookXAxis">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="text">
          <string>Look Down X Axis</string>
         </property>
@@ -155,6 +71,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="lookYAxis">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="text">
          <string>Look Down Y Axis</string>
         </property>
@@ -172,6 +91,14 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DoubleInputForm</class>
+   <extends>QWidget</extends>
+   <header>doubleinputform.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

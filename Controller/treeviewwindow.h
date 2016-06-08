@@ -16,10 +16,22 @@ class GlData;
 class GeometryEngine;
 class PerspectiveWindow;
 
+/**
+ * @brief The TreeViewWindow class
+ * This class is used as a proxy for the controller. Given that this program
+ * uses QTreeView as a means of interacting with the central data structure,
+ * which uses a Delegate pattern, it is impossible to implement a true MVC
+ * pattern here. Instead, I am using the TreeViewWindow class as a controller
+ * that sits between the model classes and view classes in general, and
+ * manages all interactions between the two. However, the TreeViewWindow
+ * class contains model classes and view classes as data members, and they are
+ * allowed to interact with each other, as required by Qt's implementation
+ * of the Delegate pattern, so this cannot be considered a real 'controller',
+ * although it is used as such.
+ */
 class TreeViewWindow : public QMainWindow
 {
     Q_OBJECT
-
 
 public:
     explicit TreeViewWindow(QWidget *parent = NULL);
@@ -28,10 +40,9 @@ public:
     void init();
 
     GlData getGlDataAtSelection() const;
-    const GlObject *getSelectedObject() const;
     void setTranslationAtSel(const QVector3D &t);
     void setScaleAtSel(const QVector3D &s);
-    void setRotationAtSel(const QVector3D &r, float theta);
+//    void setRotationAtSel(const QVector3D &r, float theta);
     void setRotationAtSel(const QQuaternion &quat);
 
     void getDrawingDirections(std::vector<DrawDirections>& dir) const;
@@ -87,6 +98,7 @@ private:
 
     QModelIndex selectedQIndex;
 
+    const GlObject *getSelectedObject() const;
     QModelIndex getFirstSelectedIndex(bool noPrimitives=true) const;
 };
 

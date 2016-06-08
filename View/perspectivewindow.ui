@@ -42,7 +42,7 @@
    </property>
    <widget class="QMenu" name="menu_File">
     <property name="title">
-     <string>&amp;File</string>
+     <string>&amp;View</string>
     </property>
    </widget>
    <widget class="QMenu" name="menu_Edit">
@@ -82,10 +82,16 @@
    <property name="text">
     <string>Edit &amp;Camera...</string>
    </property>
+   <property name="toolTip">
+    <string>This dialog box provides options for moving the camera about the scene, adjusting the field of view, and adjusting the draw distance.</string>
+   </property>
   </action>
   <action name="actionEdit_Object">
    <property name="text">
     <string>Edit &amp;Object...</string>
+   </property>
+   <property name="toolTip">
+    <string>This dialog box provides options to modify a selected object's positional data, scale, and rotation.</string>
    </property>
   </action>
   <action name="action_Wireframe">
@@ -94,6 +100,9 @@
    </property>
    <property name="text">
     <string>&amp;Wireframe</string>
+   </property>
+   <property name="toolTip">
+    <string>This option toggles between a wireframe view and a Phong shaded view.</string>
    </property>
   </action>
   <action name="actionShow_Grid">
@@ -106,6 +115,9 @@
    <property name="text">
     <string>Show &amp;Grid</string>
    </property>
+   <property name="toolTip">
+    <string>This option displays a grid in the XY, XZ, and YZ planes.</string>
+   </property>
   </action>
   <action name="actionShow_Axes">
    <property name="checkable">
@@ -116,6 +128,9 @@
    </property>
    <property name="text">
     <string>Show &amp;Axes</string>
+   </property>
+   <property name="toolTip">
+    <string>This option displays three arrows, positioned at the origin of a selected object, pointed in the direction of the three axes from the object's perspective. the red arrow points in the X direction, green is Y, and blue is Z.</string>
    </property>
   </action>
   <action name="actionRotate_Camera">
@@ -133,13 +148,22 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Translate Camera &amp;XY</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When this item is selected, you can click and drag on the 3D viewport below to rotate the camera's view of the scene.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </action>
   <action name="actionTranslate_Camera_YZ">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Translate Camera &amp;YZ</string>
@@ -148,6 +172,9 @@
   <action name="actionTranslate_Camera_X_Z">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Translate Camera X&amp;Z</string>
@@ -160,10 +187,16 @@
    <property name="text">
     <string>&amp;Rotate Selected Object</string>
    </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When this item is selected, you can click and drag on the 3D viewport below to rotate the selected object about its origin.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
   </action>
   <action name="actionScale_Object_XY">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Scale &amp;Object XY</string>
@@ -173,6 +206,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Scale O&amp;bject YZ</string>
    </property>
@@ -180,6 +216,9 @@
   <action name="actionScale_Ob_ject_XZ">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Scale Ob&amp;ject XZ</string>
@@ -189,6 +228,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Translate Obj&amp;ect XY</string>
    </property>
@@ -197,6 +239,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Translate Obje&amp;ct YZ</string>
    </property>
@@ -204,6 +249,9 @@
   <action name="actionTranslate_Objec_t_XZ">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Translate Objec&amp;t XZ</string>

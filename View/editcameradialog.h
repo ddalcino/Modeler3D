@@ -19,13 +19,15 @@ public:
     ~EditCameraDialog();
 
 private slots:
-    void on_hSliderFOV_sliderMoved(int position);
+    void on_doubleInputCamFov_changed_value(double val);
 
-    void on_hSliderPosX_sliderMoved(int position);
+    void on_doubleInputCamPosX_changed_value(double val);
 
-    void on_hSliderPosY_sliderMoved(int position);
+    void on_doubleInputCamPosY_changed_value(double val);
 
-    void on_hSliderPosZ_sliderMoved(int position);
+    void on_doubleInputCamPosZ_changed_value(double val);
+
+    void on_doubleInputFarDrawDist_changed_value(double val);
 
     void on_lookXAxis_clicked();
 

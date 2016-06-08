@@ -1,6 +1,6 @@
 #include "editobjectdialog2.h"
 #include "ui_editobjectdialog2.h"
-#include "treeviewwindow.h"
+#include "Controller/treeviewwindow.h"
 #include "doubleinputform.h"
 #include "global_structs.h"
 
@@ -25,17 +25,17 @@ EditObjectDialog2::EditObjectDialog2(QWidget *parent, TreeViewWindow *tvWin) :
     ui->scaleYSlider->init("Scale Y", MAX, 0, 0, 2, 1, true, false);
     ui->scaleZSlider->init("Scale Z", MAX, 0, 0, 2, 1, true, false);
 
-    connect(ui->posXSlider, SIGNAL(changed_value()),
+    connect(ui->posXSlider, SIGNAL(changed_value(double)),
             this, SLOT(updateTranslation()));
-    connect(ui->posYSlider, SIGNAL(changed_value()),
+    connect(ui->posYSlider, SIGNAL(changed_value(double)),
             this, SLOT(updateTranslation()));
-    connect(ui->posZSlider, SIGNAL(changed_value()),
+    connect(ui->posZSlider, SIGNAL(changed_value(double)),
             this, SLOT(updateTranslation()));
-    connect(ui->scaleXSlider, SIGNAL(changed_value()),
+    connect(ui->scaleXSlider, SIGNAL(changed_value(double)),
             this, SLOT(updateScale()));
-    connect(ui->scaleYSlider, SIGNAL(changed_value()),
+    connect(ui->scaleYSlider, SIGNAL(changed_value(double)),
             this, SLOT(updateScale()));
-    connect(ui->scaleZSlider, SIGNAL(changed_value()),
+    connect(ui->scaleZSlider, SIGNAL(changed_value(double)),
             this, SLOT(updateScale()));
     connect(tvWindow, SIGNAL(selectionChanged()), this, SLOT(init()));
 }
@@ -159,7 +159,7 @@ void EditObjectDialog2::on_setScaleYZ_clicked() {
 
 
 void EditObjectDialog2::on_setScaleZX_clicked() {
-    ui->scaleZSlider->setValue(ui->scaleZSlider->getVal(), DoubleInputForm::Both);
+    ui->scaleZSlider->setValue(ui->scaleXSlider->getVal(), DoubleInputForm::Both);
     updateScale();
 }
 

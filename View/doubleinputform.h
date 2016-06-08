@@ -26,7 +26,7 @@ public:
     double getVal() const;
 
 signals:
-    void changed_value();
+    void changed_value(double);
 
 private slots:
     void on_doubleSpinBoxValue_editingFinished();

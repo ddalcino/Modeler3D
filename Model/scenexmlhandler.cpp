@@ -27,10 +27,6 @@ SceneGraphXMLHandler::SceneGraphXMLHandler(GlObject *root)
 }
 
 GlObject *SceneGraphXMLHandler::readFile(const QString &fileName) {
-    if (!root) {
-        root = new GlObject("Root", NULL, false);
-    }
-
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         qDebug() << "Error: Cannot read file " << fileName << ": "
@@ -38,6 +34,14 @@ GlObject *SceneGraphXMLHandler::readFile(const QString &fileName) {
         return NULL;
     }
     reader.setDevice(&file);
+
+    QString rootName = fileName.split('/', QString::SkipEmptyParts).last();
+    qDebug() << "Reading file " << rootName;
+    GlObject * newRoot = new GlObject(rootName, NULL, false);
+    if (!root) {
+        root = newRoot;
+    }
+
 
     reader.readNext();
 

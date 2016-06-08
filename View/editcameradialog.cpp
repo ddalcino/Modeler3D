@@ -9,7 +9,15 @@ EditCameraDialog::EditCameraDialog(PerspectiveWindow *parent) :
     ui(new Ui::EditCameraDialog),
     parent(parent)
 {
+    static const int MAX = 100000;
     ui->setupUi(this);
+    ui->doubleInputFarDrawDist->init("Draw Distance", MAX, 0, 0, 20, 10, true, false);
+    ui->doubleInputCamFov->init("Camera FOV", 180, 0, 10, 90, 45, true, true, 180, 1);
+    ui->doubleInputCamPosX->init("Camera X Pos", MAX, -MAX, -10, 10, 0, false, false);
+    ui->doubleInputCamPosY->init("Camera Y Pos", MAX, -MAX, -10, 10, 0, false, false);
+    ui->doubleInputCamPosZ->init("Camera Z Pos", MAX, -MAX, -20, 0, -5, false, false);
+//    connect(ui->doubleInputFarDrawDist, SIGNAL(changed_value(double)),
+//            this->parent, SLOT(setDrawDist(double)));
 }
 
 EditCameraDialog::~EditCameraDialog()
@@ -17,13 +25,13 @@ EditCameraDialog::~EditCameraDialog()
     delete ui;
 }
 
-void EditCameraDialog::on_hSliderFOV_sliderMoved(int position)
+void EditCameraDialog::on_doubleInputCamFov_changed_value(double val)
 {
-    parent->setFov((float)position);
+    parent->setFov(val);
 }
 
-void EditCameraDialog::on_hSliderPosX_sliderMoved(int position){
-    setCamPos(X, (float)position/50.0);
+void EditCameraDialog::on_doubleInputCamPosX_changed_value(double val){
+    setCamPos(X, val);
 }
 
 void EditCameraDialog::setCamPos(EditCameraDialog::Dim d, float amt){
@@ -39,11 +47,14 @@ void EditCameraDialog::setCamPos(EditCameraDialog::Dim d, float amt){
 void EditCameraDialog::setCamRot(Dim axis){
     switch (axis) {
     case X:
-        parent->setCameraRot(QQuaternion::fromAxisAndAngle(0, 1, 0, 180));
+        parent->setCameraRot(QQuaternion::fromAxisAndAngle(0, 1, 0, 90));
+        break;
     case Y:
-        parent->setCameraRot(QQuaternion::fromAxisAndAngle(1, 0, 0, -90));
+        parent->setCameraRot(QQuaternion::fromAxisAndAngle(1, 0, 0, 90));
+        break;
     case Z:
         parent->setCameraRot(QQuaternion());
+        break;
     }
 }
 
@@ -56,37 +67,36 @@ QVector3D EditCameraDialog::makePosOnAxis(EditCameraDialog::Dim d, float distanc
     return QVector3D();
 }
 
-void EditCameraDialog::on_hSliderPosY_sliderMoved(int position){
-    setCamPos(Y, (float)position/50.0);
+void EditCameraDialog::on_doubleInputCamPosY_changed_value(double val){
+    setCamPos(Y, val);
 }
 
-void EditCameraDialog::on_hSliderPosZ_sliderMoved(int position){
-    setCamPos(Z, (float)position/50.0);
+void EditCameraDialog::on_doubleInputCamPosZ_changed_value(double val){
+    setCamPos(Z, val);
+}
+
+void EditCameraDialog::on_doubleInputFarDrawDist_changed_value(double val)
+{
+    parent->setDrawDist(val);
 }
 
 void EditCameraDialog::on_lookXAxis_clicked()
 {
-    QVector3D pos = makePosOnAxis(X, 5);
-    setCamPos(X, pos.x());
-    setCamPos(Y, pos.y());
-    setCamPos(Z, pos.z());
+    setCamPos(X, 0);
+    setCamPos(Y, 0);
     setCamRot(X);
 }
 
 void EditCameraDialog::on_lookYAxis_clicked()
 {
-    QVector3D pos = makePosOnAxis(Y, 5);
-    setCamPos(X, pos.x());
-    setCamPos(Y, pos.y());
-    setCamPos(Z, pos.z());
+    setCamPos(X, 0);
+    setCamPos(Y, 0);
     setCamRot(Y);
 }
 
 void EditCameraDialog::on_lookZAxis_clicked()
 {
-    QVector3D pos = makePosOnAxis(Z, 5);
-    setCamPos(X, pos.x());
-    setCamPos(Y, pos.y());
-    setCamPos(Z, pos.z());
+    setCamPos(X, 0);
+    setCamPos(Y, 0);
     setCamRot(Z);
 }

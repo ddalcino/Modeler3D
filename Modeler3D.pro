@@ -20,13 +20,11 @@ SOURCES += main.cpp\
     View/editcameradialog.cpp \
     Model/globject.cpp \
     Model/treemodel.cpp \
-    View/treeviewwindow.cpp \
     Model/scenexmlhandler.cpp \
     global_structs.cpp \
     View/doubleinputform.cpp \
-    View/editobjectdialog2.cpp
-#    View/scenegl.cpp
-#    View/mainwindow.cpp
+    View/editobjectdialog2.cpp \
+    Controller/treeviewwindow.cpp
 
 HEADERS  += \
     View/perspective3dwidget.h \
@@ -37,18 +35,14 @@ HEADERS  += \
     View/editcameradialog.h \
     Model/globject.h \
     Model/treemodel.h \
-    View/treeviewwindow.h \
     Model/scenexmlhandler.h \
     global_structs.h \
     View/doubleinputform.h \
-    View/editobjectdialog2.h
-#    View/scenegl.h
-#    View/mainwindow.h
+    View/editobjectdialog2.h \
+    Controller/treeviewwindow.h
 
 INCLUDEPATH += View/
 
-
-#FORMS    += mainwindow.ui
 
 DISTFILES +=
 

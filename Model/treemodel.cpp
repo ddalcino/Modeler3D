@@ -339,7 +339,13 @@ GlObject *TreeModel::copyObjectAt(const QModelIndex &index) {
 
     const GlObject* toCopy = getItem(index);
     if (!toCopy) { return NULL; }
-    GlObject* copy = new GlObject(*toCopy);
+    GlObject* copy;
+    if (toCopy->isPrimitive()) {
+        copy = new GlPrimitiveObject(*((GlPrimitiveObject *)toCopy));
+
+    } else {
+        copy = new GlObject(*toCopy);
+    }
     return copy;
 }
 
