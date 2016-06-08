@@ -18,6 +18,8 @@ public:
     explicit EditCameraDialog(PerspectiveWindow *parent = 0);
     ~EditCameraDialog();
 
+    void init();
+
 private slots:
     void on_doubleInputCamFov_changed_value(double val);
 

@@ -73,36 +73,6 @@ void Perspective3DWidget::mousePressEvent(QMouseEvent *e) {
     }
 }
 
-//void Perspective3DWidget::mouseReleaseEvent(QMouseEvent *e) {
-//    qDebug() << "Buttons released: " << e->buttons();
-//    rotationAxis.setX(0);
-//    rotationAxis.setY(0);
-//    rotationAxis.setZ(0);
-//}
-
-//void Perspective3DWidget::keyPressEvent(QKeyEvent *e)
-//{
-//    float scale = 0.0;
-//    rotationAxis.setX(0);
-//    rotationAxis.setY(0);
-//    rotationAxis.setZ(0);
-//    if (e->key() == Qt::Key_Left) {
-//        rotationAxis.setY(1); scale = -1.0;
-//    } else if (e->key() == Qt::Key_Right) {
-//        rotationAxis.setY(1); scale = 1.0;
-//    } else if (e->key() == Qt::Key_Up) {
-//        rotationAxis.setX(1); scale = 1.0;
-//    } else if (e->key() == Qt::Key_Down) {
-//        rotationAxis.setX(1); scale = -1.0;
-//    }
-//    rotation = QQuaternion::fromAxisAndAngle(rotationAxis, scale*6) * rotation;
-//    qDebug() << "Buttons pressed: " << e->key() << ", rotationAxis: "
-//             << rotationAxis << ", rotation: " << rotation;
-//    update();
-
-//}
-
-
 void Perspective3DWidget::initializeGL()
 {
     qDebug() << "initializeGL() called";

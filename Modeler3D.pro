@@ -24,7 +24,9 @@ SOURCES += main.cpp\
     global_structs.cpp \
     View/doubleinputform.cpp \
     View/editobjectdialog2.cpp \
-    Controller/treeviewwindow.cpp
+    Controller/treeviewwindow.cpp \
+    View/aboutdialog.cpp \
+    View/helpdialog.cpp
 
 HEADERS  += \
     View/perspective3dwidget.h \
@@ -39,7 +41,9 @@ HEADERS  += \
     global_structs.h \
     View/doubleinputform.h \
     View/editobjectdialog2.h \
-    Controller/treeviewwindow.h
+    Controller/treeviewwindow.h \
+    View/aboutdialog.h \
+    View/helpdialog.h
 
 INCLUDEPATH += View/
 
@@ -57,5 +61,7 @@ FORMS += \
     View/editobjectdialog.ui \
     View/treeviewwindow.ui \
     View/editobjectdialog2.ui \
-    View/doubleinputform.ui
+    View/doubleinputform.ui \
+    View/aboutdialog.ui \
+    View/helpdialog.ui
 

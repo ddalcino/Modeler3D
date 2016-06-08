@@ -18,13 +18,15 @@ PerspectiveWindow::PerspectiveWindow(TreeViewWindow *parent) :
         throw "PerspectiveWindow must be a child of a TreeViewWindow to communicate with the model.";
     }
     ui->setupUi(this);
-//    ui->perspectiveGLWidget->setTreeModel(tvWindow->getTreeModel());
 
     // Any time the model changes in an important way, notify this object and update it
     QObject::connect(tvWindow, SIGNAL(model_changed()),
                      this, SLOT(updateChildren()));
     QObject::connect(tvWindow, SIGNAL(selectionChanged()),
                      this, SLOT(updateChildren()));
+
+    editCameraDlg->init();
+    //editObjectDlg->init();
 }
 
 PerspectiveWindow::~PerspectiveWindow()
@@ -191,5 +193,13 @@ void PerspectiveWindow::on_actionRotate_Camera_toggled(bool arg1) {
         ui->perspectiveGLWidget->setMouseDragType(Perspective3DWidget::RotCam);
     } else {
         //ui->actionRotate_Camera->setChecked(true);
+    }
+}
+
+void PerspectiveWindow::on_actionTranslate_Obj_ect_XY_toggled(bool arg1)
+{
+    if (arg1) {
+        validateMouseBehaviorType(Perspective3DWidget::TrCamXY);
+        ui->perspectiveGLWidget->setMouseDragType(Perspective3DWidget::TrCamXY);
     }
 }

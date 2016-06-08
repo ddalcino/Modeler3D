@@ -63,7 +63,7 @@ void DoubleInputForm::init(const char *name, double hardMax, double hardMin,
         ui->doubleSpinBoxValue->setMinimum(-MAX_D);
         min = initMin;
     }
-    //ui->doubleSpinBoxValue->setValue(realValue);
+    ui->doubleSpinBoxValue->setValue(realValue);
     ui->labelName->setText(QString(name));
 }
 

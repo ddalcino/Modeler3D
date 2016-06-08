@@ -61,6 +61,7 @@ private slots:
     void on_actionShow_Axes_toggled(bool arg1);
     void on_action_Rotate_Selected_Object_toggled(bool arg1);
     void on_actionRotate_Camera_toggled(bool arg1);
+    void on_actionTranslate_Obj_ect_XY_toggled(bool arg1);
 };
 
 #endif // PERSPECTIVEWINDOW_H

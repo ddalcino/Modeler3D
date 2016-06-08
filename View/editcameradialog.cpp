@@ -9,6 +9,15 @@ EditCameraDialog::EditCameraDialog(PerspectiveWindow *parent) :
     ui(new Ui::EditCameraDialog),
     parent(parent)
 {
+}
+
+EditCameraDialog::~EditCameraDialog()
+{
+    delete ui;
+}
+
+void EditCameraDialog::init()
+{
     static const int MAX = 100000;
     ui->setupUi(this);
     ui->doubleInputFarDrawDist->init("Draw Distance", MAX, 0, 0, 20, 10, true, false);
@@ -17,13 +26,6 @@ EditCameraDialog::EditCameraDialog(PerspectiveWindow *parent) :
     ui->doubleInputCamPosY->init("Camera Y Pos", MAX, -MAX, -10, 10, 0, false, false);
     ui->doubleInputCamPosZ->init("Camera Z Pos", MAX, -MAX, -20, 0, -5, false, false);
     ui->doubleInputGridScale->init("Grid Scale", MAX, 0, 0, 10, 1, true, false);
-//    connect(ui->doubleInputFarDrawDist, SIGNAL(changed_value(double)),
-//            this->parent, SLOT(setDrawDist(double)));
-}
-
-EditCameraDialog::~EditCameraDialog()
-{
-    delete ui;
 }
 
 void EditCameraDialog::on_doubleInputCamFov_changed_value(double val)
