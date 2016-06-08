@@ -130,11 +130,17 @@ void TreeViewWindow::setRotationAtSel(const QQuaternion &quat) {
     emit model_changed();
 }
 
-const TreeModel *TreeViewWindow::getTreeModel() const {return treeModel;}
+void TreeViewWindow::getDrawingDirections(std::vector<DrawDirections> &dir) const
+{
+    DrawDirections next;
+    return treeModel->getDrawingDirections(dir, next, getSelectedObject());
+}
 
-GeometryEngine *TreeViewWindow::getGEngine() { return gEngine; }
+//const TreeModel *TreeViewWindow::getTreeModel() const {return treeModel;}
 
-const QItemSelectionModel *TreeViewWindow::getSelectionModel() const {return selectionModel; }
+//GeometryEngine *TreeViewWindow::getGEngine() { return gEngine; }
+
+//const QItemSelectionModel *TreeViewWindow::getSelectionModel() const {return selectionModel; }
 
 void TreeViewWindow::on_action_Cube_triggered() {
     QModelIndex parent = getFirstSelectedIndex();

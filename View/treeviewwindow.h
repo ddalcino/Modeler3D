@@ -34,11 +34,11 @@ public:
     void setRotationAtSel(const QVector3D &r, float theta);
     void setRotationAtSel(const QQuaternion &quat);
 
+    void getDrawingDirections(std::vector<DrawDirections>& dir) const;
+//    const TreeModel *getTreeModel() const;
+//    GeometryEngine *getGEngine();
 
-    const TreeModel *getTreeModel() const;
-    GeometryEngine *getGEngine();
-
-    const QItemSelectionModel *getSelectionModel() const;
+//    const QItemSelectionModel *getSelectionModel() const;
 
 signals:
     void model_changed();

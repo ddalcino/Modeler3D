@@ -15,9 +15,9 @@
 #include <QGraphicsSceneMouseEvent>
 
 #include "geometryengine.h"
-#include "../Model/treemodel.h"
-//#include "primitivedefinition.h"
 #include "trackball.h"
+
+class TreeViewWindow;
 
 /**
  * @brief The Perspective3DWidget class
@@ -47,7 +47,7 @@ public:
     void paintGL() Q_DECL_OVERRIDE;
 
     void initShaders();
-    void setTreeModel(const TreeModel * model);
+//    void setTreeModel(const TreeModel * model);
     //void initTextures();
 
     GeometryEngine* getGeometryEngine();
@@ -69,7 +69,8 @@ private:
     QOpenGLShaderProgram program;
     //QOpenGLShaderProgram wireProgram;
     GeometryEngine *geometries;
-    const TreeModel *model;
+    TreeViewWindow *tvWindow;
+//    const TreeModel *model;
 
     QOpenGLTexture *texture;
 

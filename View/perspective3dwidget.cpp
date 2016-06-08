@@ -1,14 +1,15 @@
 #include "perspective3dwidget.h"
 #include "perspectivewindow.h"
+#include "treeviewwindow.h"
 #include <QMouseEvent>
 #include <QDebug>
 #include <QPoint>
 
-//#include "../Model/globject.h" // for DrawingDirections
 #include "../global_structs.h" // for DrawingDirections
 
 Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     QOpenGLWidget(parent),
+    tvWindow(((PerspectiveWindow *)(this->parent()->parent()))->getTvWindow()),
     texture(NULL),
     rotationAxis(0, 0, 0),
     cameraPosition(0, 0, -5),
@@ -18,7 +19,7 @@ Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     trackballObj(true, &trackballCam),
     isWireframeMode(false),
     showGrid(true),
-    showAxes(false),
+    showAxes(true),
     dragType(RotCam)
 {
 //    qDebug() << "Perspective3DWidget constructor called";
@@ -41,8 +42,7 @@ void Perspective3DWidget::mouseMoveEvent(QMouseEvent *e) {
         case RotObj:
             trackballObj.dragMouse(e->pos());
             // now copy qnow to the selected object
-            ((PerspectiveWindow *)(this->parent()->parent()))->getTvWindow()
-                    ->setRotationAtSel(trackballObj.getQnow());
+            tvWindow->setRotationAtSel(trackballObj.getQnow());
             // we should actually apply this in a way that takes the ancestor
             // rotations into account; as it is, this should only work on top
             // level objects
@@ -155,7 +155,7 @@ void Perspective3DWidget::initShaders()
     qDebug() << "initShaders() finished successfully";
 }
 
-void Perspective3DWidget::setTreeModel(const TreeModel *model) {this->model = model; }
+//void Perspective3DWidget::setTreeModel(const TreeModel *model) {this->model = model; }
 
 GeometryEngine *Perspective3DWidget::getGeometryEngine() {
     qDebug() << "Geometries: " << geometries;
@@ -236,16 +236,16 @@ void Perspective3DWidget::paintGL()
     program.setUniformValue("Shininess", 200.0f);
 
 
-    //figure out the address of the selected GlObject
-    const GlObject *selected = ((PerspectiveWindow *)(this->parent()->parent()))
-            ->getTvWindow()->getSelectedObject();
+//    //figure out the address of the selected GlObject
+//    const GlObject *selected = tvWindow->getSelectedObject();
 
 
     // get list of directions
     //const GlObject *root = model->getRoot();
     std::vector<DrawDirections> dirs;
-    DrawDirections next;
-    if (model) { model->getDrawingDirections(dirs, next, selected); }
+    tvWindow->getDrawingDirections(dirs);
+//    DrawDirections next;
+//    if (model) { model->getDrawingDirections(dirs, next, selected); }
 
     if (showGrid) {
         program.setUniformValue("wireframe_color", QVector4D(0.2f, 1.0f, 1.0f, 1.0f));

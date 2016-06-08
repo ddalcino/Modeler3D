@@ -18,7 +18,7 @@ PerspectiveWindow::PerspectiveWindow(TreeViewWindow *parent) :
         throw "PerspectiveWindow must be a child of a TreeViewWindow to communicate with the model.";
     }
     ui->setupUi(this);
-    ui->perspectiveGLWidget->setTreeModel(tvWindow->getTreeModel());
+//    ui->perspectiveGLWidget->setTreeModel(tvWindow->getTreeModel());
 
     // Any time the model changes in an important way, notify this object and update it
     QObject::connect(tvWindow, SIGNAL(model_changed()),

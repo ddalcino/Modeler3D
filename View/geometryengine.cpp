@@ -1,5 +1,4 @@
 #include "geometryengine.h"
-//#include "../Model/globject.h" // for DrawDirections
 #include "../global_structs.h" // for DrawDirections
 #include "primitivedefinition.h"
 #include <QVector2D>
