@@ -61,6 +61,9 @@ public:
 //    }
 //    static QString toQString(Types t) { return QString(toString(t)); }
 
+    static const float GRID_SIZE;
+    static const float GRID_DENSITY;
+
 protected:
     void addCircularFace(unsigned int numVerticesPerCircle, float y,
                          float radius, const QVector3D& normal);

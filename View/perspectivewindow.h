@@ -32,6 +32,7 @@ public:
     void setCameraRot(const QQuaternion& rot);
     float getFov() const;
     void setFov(float f);
+    void setGridScale(double f);
     float getDrawDist() const;
 
     TreeViewWindow *getTvWindow();

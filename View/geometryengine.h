@@ -50,7 +50,7 @@ public:
     void drawPrimGeometry(const DrawDirections &dir,
                           QOpenGLShaderProgram * program, bool isWireframeMode);
 
-    void drawGrid(QOpenGLShaderProgram *program);
+    void drawGrid(QOpenGLShaderProgram *program, float scale);
     void drawAxes(const DrawDirections &dir, QOpenGLShaderProgram *program);
 
     void setScale(const QVector3D& s);

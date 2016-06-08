@@ -22,6 +22,7 @@ Perspective3DWidget::Perspective3DWidget(QWidget *parent) :
     showAxes(true),
     nearDrawDistance(0.1),
     farDrawDistance(10.0),
+    gridScale(1.0f),
     dragType(RotCam)
 {
 //    qDebug() << "Perspective3DWidget constructor called";
@@ -203,6 +204,17 @@ void Perspective3DWidget::setFarDrawDistance(float value)
     //resizeGl(width(), height());
 }
 
+float Perspective3DWidget::getGridScale() const
+{
+    return gridScale;
+}
+
+void Perspective3DWidget::setGridScale(float value)
+{
+    qDebug() << "setGridScale= " << value;
+    gridScale = value;
+}
+
 //void Perspective3DWidget::changeObject(PrimitiveDefinition::Types t)
 //{
 ////    delete geometries;
@@ -270,7 +282,7 @@ void Perspective3DWidget::paintGL()
 
     if (showGrid) {
         program.setUniformValue("wireframe_color", QVector4D(0.2f, 1.0f, 1.0f, 1.0f));
-        geometries->drawGrid(&program);
+        geometries->drawGrid(&program, gridScale);
     }
 
     DrawDirections axes;

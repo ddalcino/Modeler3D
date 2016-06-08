@@ -29,6 +29,8 @@ private slots:
 
     void on_doubleInputFarDrawDist_changed_value(double val);
 
+    void on_doubleInputGridScale_changed_value(double val);
+
     void on_lookXAxis_clicked();
 
     void on_lookYAxis_clicked();

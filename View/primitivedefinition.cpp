@@ -3,6 +3,10 @@
 
 #define PI 3.14159265
 
+const float PrimitiveDefinition::GRID_SIZE = 8.0f;
+const float PrimitiveDefinition::GRID_DENSITY = 0.25f;
+
+
 // TODO: Most of these primitives waste video card memory by using a lot of
 // redundant normals, to simplify the drawing code. Optimize?
 
@@ -137,8 +141,7 @@ PrimitiveDefinition::PrimitiveDefinition(PrimTypes::Types t, int numVerticesPerC
         }
         break;
     case PrimTypes::GRID:
-        static const float gridDensity = 0.25f;
-        static const int numRows = 32;
+        static const int numRows = (GRID_SIZE / GRID_DENSITY);
         static const int numHorizontalRepeats = numRows >> 1;
         // horizontal rows
         for (int row = 0; row < numRows; ++row) {
@@ -147,19 +150,19 @@ PrimitiveDefinition::PrimitiveDefinition(PrimTypes::Types t, int numVerticesPerC
             //indices.push_back(vertices.size());
             for (int i = 0; i < numHorizontalRepeats; ++i) {
                 // Line strip: draw up, right, down, right
-                vertices.push_back(VertexData(QVector3D(gridDensity*2*i, gridDensity*row, 0.0f), QVector3D()));
+                vertices.push_back(VertexData(QVector3D(GRID_DENSITY*2*i, GRID_DENSITY*row, 0.0f), QVector3D()));
                 indices.push_back(vertices.size()-1);
-                vertices.push_back(VertexData(QVector3D(gridDensity*2*i, gridDensity*(row+1), 0.0f), QVector3D()));
+                vertices.push_back(VertexData(QVector3D(GRID_DENSITY*2*i, GRID_DENSITY*(row+1), 0.0f), QVector3D()));
                 indices.push_back(vertices.size()-1);
-                vertices.push_back(VertexData(QVector3D(gridDensity*(2*i+1), gridDensity*(row+1), 0.0f), QVector3D()));
+                vertices.push_back(VertexData(QVector3D(GRID_DENSITY*(2*i+1), GRID_DENSITY*(row+1), 0.0f), QVector3D()));
                 indices.push_back(vertices.size()-1);
-                vertices.push_back(VertexData(QVector3D(gridDensity*(2*i+1), gridDensity*row, 0.0f), QVector3D()));
+                vertices.push_back(VertexData(QVector3D(GRID_DENSITY*(2*i+1), GRID_DENSITY*row, 0.0f), QVector3D()));
                 indices.push_back(vertices.size()-1);
             }
             // end the segment
-            vertices.push_back(VertexData(QVector3D(gridDensity*(2*numHorizontalRepeats), gridDensity*row, 0.0f), QVector3D()));
+            vertices.push_back(VertexData(QVector3D(GRID_DENSITY*(2*numHorizontalRepeats), GRID_DENSITY*row, 0.0f), QVector3D()));
             indices.push_back(vertices.size()-1);
-            vertices.push_back(VertexData(QVector3D(gridDensity*(2*numHorizontalRepeats), gridDensity*(row+1), 0.0f), QVector3D()));
+            vertices.push_back(VertexData(QVector3D(GRID_DENSITY*(2*numHorizontalRepeats), GRID_DENSITY*(row+1), 0.0f), QVector3D()));
             indices.push_back(vertices.size()-1);
         }
         break;

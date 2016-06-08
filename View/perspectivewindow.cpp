@@ -64,6 +64,12 @@ void PerspectiveWindow::setFov(float f) {
     ui->perspectiveGLWidget->setFov(f);
 }
 
+void PerspectiveWindow::setGridScale(double f)
+{
+    ui->perspectiveGLWidget->setGridScale(f);
+    updateChildren();
+}
+
 float PerspectiveWindow::getDrawDist() const
 {
     return ui->perspectiveGLWidget->getFarDrawDistance();
@@ -71,7 +77,9 @@ float PerspectiveWindow::getDrawDist() const
 
 void PerspectiveWindow::setDrawDist(double d)
 {
-    ui->perspectiveGLWidget->setFarDrawDistance(d);
+    if (ui && ui->perspectiveGLWidget) {
+        ui->perspectiveGLWidget->setFarDrawDistance(d);
+    }
     updateChildren();
 }
 

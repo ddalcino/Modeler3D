@@ -177,7 +177,7 @@ void GeometryEngine::drawPrimGeometry(const DrawDirections &dir,
     }
 }
 
-void GeometryEngine::drawGrid(QOpenGLShaderProgram *program) {
+void GeometryEngine::drawGrid(QOpenGLShaderProgram *program, float scale) {
     Vbos *vbo = gpuData.at("Grid");
     vbo->arrayBuf.bind();
     vbo->indexBuf.bind();
@@ -198,22 +198,25 @@ void GeometryEngine::drawGrid(QOpenGLShaderProgram *program) {
     program->enableAttributeArray(normalLocation);
     program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(_VertexData));
 
-    QMatrix4x4 matRot, matPos;
+    QMatrix4x4 matRot, matPos, matScale;
+    matScale.scale(scale);
+
+    static const float gridSize = PrimitiveDefinition::GRID_SIZE;
 
     for (int i = 0; i < 3; ++i) {
         //matRot.rotate(90.0f, 1.0f, 0.0f, 0.0f);
-        program->setUniformValue("mModel", matRot * matPos);
+        program->setUniformValue("mModel", matScale * matRot * matPos);
         glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
-        matPos.translate(0.0f, -8.0f, 0.0f);
-        program->setUniformValue("mModel", matRot * matPos);
+        matPos.translate(0.0f, -gridSize, 0.0f);
+        program->setUniformValue("mModel",  matScale * matRot * matPos);
         glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
-        matPos.translate(-8.0f, 8.0f, 0.0f);
-        program->setUniformValue("mModel", matRot * matPos);
+        matPos.translate(-gridSize, gridSize, 0.0f);
+        program->setUniformValue("mModel",  matScale * matRot * matPos);
         glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
-        matPos.translate(0.0f, -8.0f, 0.0f);
-        program->setUniformValue("mModel", matRot * matPos);
+        matPos.translate(0.0f, -gridSize, 0.0f);
+        program->setUniformValue("mModel",  matScale * matRot * matPos);
         glDrawElements(GL_LINE_STRIP, vbo->numIndices, GL_UNSIGNED_SHORT, 0);
-        matPos.translate(8.0f, 8.0f, 0.0f);
+        matPos.translate(gridSize, gridSize, 0.0f);
 
 
         if (i == 0) {

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>455</width>
-    <height>416</height>
+    <height>499</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>380</y>
+     <y>470</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -38,7 +38,7 @@
      <x>-1</x>
      <y>-1</y>
      <width>451</width>
-     <height>381</height>
+     <height>461</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -56,6 +56,9 @@
     </item>
     <item>
      <widget class="DoubleInputForm" name="doubleInputFarDrawDist" native="true"/>
+    </item>
+    <item>
+     <widget class="DoubleInputForm" name="doubleInputGridScale" native="true"/>
     </item>
     <item>
      <layout class="QHBoxLayout" name="hLayoutRotZ">
